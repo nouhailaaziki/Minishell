@@ -1,0 +1,6 @@
+Makefile
+README.md
+a.txt
+coreutils
+main.c
+minishell.h
