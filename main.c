@@ -29,7 +29,6 @@ int ft_is_operator(int c)
 // 	size_t counter;
 // 	char *delimiters;
 // 	int *delimiters_counter;
-
 // 	delimiters_counter = malloc(sizeof(int));
 // 	if (delimiters)
 // 		return 0;
@@ -45,7 +44,6 @@ int ft_is_operator(int c)
 // 		return 0;
 // 	while (str)
 // 	{
-
 // 		counter++;
 // 		str++;
 // 		str = ft_strchr(str, ' ');
@@ -104,7 +102,7 @@ int token_counter(char *str)
 	int j = 0;
 	char *store;
 	if (!str)
-		return NULL;
+		return 0;
 	int token_count = 1;
 	while (str[i])
 	{
@@ -118,11 +116,13 @@ int token_counter(char *str)
 	}
 	return token_count;
 }
+
 char **token_slicer(char *str, int token_count)
 {
 	int i = 0;
 	int j = 0;
 	char *store;
+	int position = 0;
 	if (!str)
 		return NULL;
 	char **token = malloc(token_count * sizeof(int));
@@ -132,18 +132,23 @@ char **token_slicer(char *str, int token_count)
 	{
 		if (ft_is_operator(str[i]))
 		{
-			token[j] = ft_substr(str, 0,i);
+			token[j] = ft_substr(str, position,i);
+			printf("%s\n",token[j]);
+			position = i;
 		}
 		i++;
 	}
-	return token_count;
+	if()
+
+	return token;
 }
 
 int main(void)
 {
 	int i =0;
 	int j =0;
-	char *str = "ls - al";
+	char *str = "ls -al  ";
 	int token_count=  token_counter(str);
-	printf("%d", tokenizer(str));
+
+	printf("hi : %s", token_slicer(str,token_count)[0]);
 }
