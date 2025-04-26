@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/26 16:26:52 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:59:28 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,30 +125,35 @@ char **token_slicer(char *str, int token_count)
 	int position = 0;
 	if (!str)
 		return NULL;
-	char **token = malloc(token_count * sizeof(int));
+	char **token = malloc(token_count * sizeof(char *));
 	if(!token)
 		return NULL;
 	while (str[i])
 	{
 		if (ft_is_operator(str[i]))
 		{
-			token[j] = ft_substr(str, position,i);
-			printf("%s\n",token[j]);
+			token[j++] = ft_strtrim(ft_substr(str, position,i)," ");
 			position = i;
+			if(str[i+1] != '\0')
+				token[j++] = ft_substr(str,position++,1);
 		}
+		if(str[i+1] == '\0')
+			token[j] = ft_strtrim(ft_substr(str, position, i), " ");
 		i++;
 	}
-	if()
-
 	return token;
 }
 
 int main(void)
 {
-	int i =0;
-	int j =0;
-	char *str = "ls -al  ";
+	int i = 0;
+	int j = 0;
+	char *str = "ls -al | echo hola";
 	int token_count=  token_counter(str);
-
-	printf("hi : %s", token_slicer(str,token_count)[0]);
+	char **tokens = token_slicer(str, token_count);
+	// while (tokens[i])
+		printf("count :  <%d>\n", token_count);
+		printf("token :  <%s>\n", tokens[0]);
+		printf("token :  <%s>\n", tokens[1]);
+		printf("token :  <%s>\n", tokens[2]);
 }
