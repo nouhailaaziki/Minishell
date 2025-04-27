@@ -144,16 +144,25 @@ char **token_slicer(char *str, int token_count)
 	return token;
 }
 
+char *ft_strsquash(char * str)
+{
+	int i =0;
+	char *s = malloc(sizeof(char)* ft_strlen(str) + 1);
+	if(!s)
+		return str;
+	while(!ft_isspace(str[i]))
+		i++;
+	
+	return s;
+}
+
 int main(void)
 {
 	int i = 0;
 	int j = 0;
-	char *str = "ls -al | echo hola";
+	char *str = "ls -al|echo hola";
 	int token_count=  token_counter(str);
 	char **tokens = token_slicer(str, token_count);
-	// while (tokens[i])
-		printf("count :  <%d>\n", token_count);
-		printf("token :  <%s>\n", tokens[0]);
-		printf("token :  <%s>\n", tokens[1]);
-		printf("token :  <%s>\n", tokens[2]);
+	while (i < token_count)
+		printf("token :  <%s>\n", tokens[i++]);
 }
