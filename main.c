@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/26 21:59:28 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:43:19 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ char **token_slicer(char *str, int token_count)
 	int position = 0;
 	if (!str)
 		return NULL;
-	char **token = malloc(token_count * sizeof(char *));
+	char **token = ft_calloc(token_count , sizeof(char *));
 	if(!token)
 		return NULL;
 	while (str[i])
@@ -134,8 +134,11 @@ char **token_slicer(char *str, int token_count)
 		{
 			token[j++] = ft_strtrim(ft_substr(str, position,i)," ");
 			position = i;
-			if(str[i+1] != '\0')
-				token[j++] = ft_substr(str,position++,1);
+			token[j++] = ft_substr(str,i,1);
+			// if(str[i+1] != '\0')
+			// {
+			// }
+			position = i +1;
 		}
 		if(str[i+1] == '\0')
 			token[j] = ft_strtrim(ft_substr(str, position, i), " ");
@@ -144,25 +147,56 @@ char **token_slicer(char *str, int token_count)
 	return token;
 }
 
-char *ft_strsquash(char * str)
-{
-	int i =0;
-	char *s = malloc(sizeof(char)* ft_strlen(str) + 1);
-	if(!s)
-		return str;
-	while(!ft_isspace(str[i]))
-		i++;
-	
-	return s;
-}
-
-int main(void)
+int ft_strsquash(char * str)
 {
 	int i = 0;
+	int s_len =0;;
+
+	while(str[i])
+	{
+			// ft_putnbr(s_len);
+		if(!ft_isspace(str[i]))
+		{
+			s_len++;
+			if(ft_isspace(str[i+1]))
+				s_len++;
+		}
+		i++;
+	}
+	char *s = ft_calloc(s_len + 1, sizeof(char));
+	if(!s)
+		return 0;
+
+	return s_len;
+}
+void f()
+{
+	system("leaks -q minishell");
+}
+
+void free_arr(char **ptr)
+{
+	int i;
+
+	if (!ptr)
+		return;
+	i = 0;
+	while (ptr[i])
+		free(ptr[i++]);
+	free(ptr);
+}
+int main(void)
+{
+	// atexit(f);
+	int i = 0;
 	int j = 0;
-	char *str = "ls -al|echo hola";
+	char *str = "ls    -al  | echo strall | opop ";
+	puts(str);
 	int token_count=  token_counter(str);
 	char **tokens = token_slicer(str, token_count);
+	// free_arr(tokens);
+	// printf("%d", ft_strsquash(tokens[0]));
+
 	while (i < token_count)
 		printf("token :  <%s>\n", tokens[i++]);
 }
