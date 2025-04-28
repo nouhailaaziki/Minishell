@@ -1,8 +1,8 @@
 CC = cc
 
-CFLAGS = # -Wall -Wextra -Werror
+CFLAGS = -g# -Wall -Wextra -Werror
 
-MIMI_SRC = main.c
+MIMI_SRC =utils.c main.c
 
 MIMI_OBJ = $(MIMI_SRC:.c=.o)
 
@@ -18,8 +18,10 @@ LIBFT_DIR = coreutils
 
 all: $(NAME)
 
+debug: $(NAME_DEB)
+
 $(NAME): $(MIMI_OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(MIMI_OBJ)  -o $@ -lreadline $(LIBFT)
+	$(CC) $(CFLAGS) -lreadline $(MIMI_OBJ)  -o $@  $(LIBFT)
 
 $(LIBFT): $(LIBFT_SRC)
 	make -C coreutils all

@@ -6,21 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/27 17:43:19 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:13:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "coreutils/libft.h"
-
-int ft_is_operator(int c)
-{
-	if (c == '|' || c  == '>') // || c == '||' || c == '>>'|| c == '<<'|| c == '&&')
-		return 1;
-	return 0;
-}
-
-
 
 // size_t token_counter(char *s)
 // {
@@ -51,7 +41,6 @@ int ft_is_operator(int c)
 // 	free(delimiters);
 // 	return counter;
 // }
-
 // int lexer(char *str)
 // {
 // 	size_t i;
@@ -96,107 +85,93 @@ int ft_is_operator(int c)
 // 	return i;
 // }
 
-int token_counter(char *str)
+int ft_strsquash(char *str)
 {
 	int i = 0;
-	int j = 0;
-	char *store;
-	if (!str)
-		return 0;
-	int token_count = 1;
+	int s_len = 0;
+	;
+
 	while (str[i])
 	{
-		if (ft_is_operator(str[i]))
-		{
-			token_count++;
-			if (str[i + 1] != '\0')
-				token_count++;
-		}
-		i++;
-	}
-	return token_count;
-}
-
-char **token_slicer(char *str, int token_count)
-{
-	int i = 0;
-	int j = 0;
-	char *store;
-	int position = 0;
-	if (!str)
-		return NULL;
-	char **token = ft_calloc(token_count , sizeof(char *));
-	if(!token)
-		return NULL;
-	while (str[i])
-	{
-		if (ft_is_operator(str[i]))
-		{
-			token[j++] = ft_strtrim(ft_substr(str, position,i)," ");
-			position = i;
-			token[j++] = ft_substr(str,i,1);
-			// if(str[i+1] != '\0')
-			// {
-			// }
-			position = i +1;
-		}
-		if(str[i+1] == '\0')
-			token[j] = ft_strtrim(ft_substr(str, position, i), " ");
-		i++;
-	}
-	return token;
-}
-
-int ft_strsquash(char * str)
-{
-	int i = 0;
-	int s_len =0;;
-
-	while(str[i])
-	{
-			// ft_putnbr(s_len);
-		if(!ft_isspace(str[i]))
+		// ft_putnbr(s_len);
+		if (!ft_isspace(str[i]))
 		{
 			s_len++;
-			if(ft_isspace(str[i+1]))
+			if (ft_isspace(str[i + 1]))
 				s_len++;
 		}
 		i++;
 	}
 	char *s = ft_calloc(s_len + 1, sizeof(char));
-	if(!s)
+	if (!s)
 		return 0;
-
 	return s_len;
 }
+char **token_slicer(char *str, int token_count)
+{
+	int i = 0;
+	int j = 0;
+	char *store;
+	char *tmp;
+	char *tmp2;
+	int position = 0;
+	if (!str)
+		return NULL;
+	char **token = ft_calloc(token_count, sizeof(char *));
+	if (!token)
+		return NULL;
+	while (str[i])
+	{
+		if (ft_is_bonus_operator(&str[i]))
+		{
+			tmp = ft_substr(str, position, i - position);
+			token[j++] = ft_strtrim(tmp, " ");
+			position = i;
+			token[j++] = ft_substr(str, position, 2);
+			i += 2;
+			position = i;
+			free(tmp);
+		}
+		if (ft_is_operator(str[i]))
+		{
+			tmp = ft_substr(str, position, i - position);
+			token[j++] = ft_strtrim(tmp, " ");
+			position = i;
+			token[j++] = ft_substr(str, position, 1);
+			position = i + 1;
+			free(tmp);
+		}
+		if (str[i + 1] == '\0')
+		{
+			tmp2 = ft_substr(str, position, i);
+			token[j] = ft_strtrim(tmp2, " ");
+			free(tmp2);
+		}
+		i++;
+	}
+	return token;
+}
+
 void f()
 {
 	system("leaks -q minishell");
 }
 
-void free_arr(char **ptr)
-{
-	int i;
-
-	if (!ptr)
-		return;
-	i = 0;
-	while (ptr[i])
-		free(ptr[i++]);
-	free(ptr);
-}
 int main(void)
 {
-	// atexit(f);
+	atexit(f);
 	int i = 0;
 	int j = 0;
-	char *str = "ls    -al  | echo strall | opop ";
-	puts(str);
-	int token_count=  token_counter(str);
+	char *str = "ls      -al |       | ";
+	int token_count = token_counter(str);
 	char **tokens = token_slicer(str, token_count);
-	// free_arr(tokens);
-	// printf("%d", ft_strsquash(tokens[0]));
-
+	printf(BLU "TOKEN COUNT : %d\n", token_count);
+	// printf(BLU "squashed : %d\n", ft_strsquash(tokens[0]));
 	while (i < token_count)
-		printf("token :  <%s>\n", tokens[i++]);
+	{
+		printf(GRN "token :  <%s>\n" RESET, tokens[i]);
+		free(tokens[i]);
+		i++;
+	}
+	free(tokens);
 }
