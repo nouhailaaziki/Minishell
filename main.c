@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/28 12:13:51 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:06:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ int ft_strsquash(char *str)
 
 	while (str[i])
 	{
-		// ft_putnbr(s_len);
 		if (!ft_isspace(str[i]))
 		{
 			s_len++;
