@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/28 12:13:40 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:59:50 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,24 @@ int ft_is_bonus_operator(char *str)
 }
 int token_counter(char *str)
 {
-	int i = 0;
-	int j = 0;
-	char *store;
+	int i;
+	int j;
+	int token_count;
+
 	if (!str)
 		return 0;
-	int token_count = 1;
+	token_count = 1;
+	i = 0;
+	j = 0;
 	while (str[i])
 	{
 		if (ft_is_bonus_operator(&str[i]))
 		{
 			token_count++;
 			i += 2;
-			// if (str[i + 1] != '\0' && !ft_str_isspace(&str[i + 1]))
-			// 	token_count++;
 		}
 		if (ft_is_operator(str[i]))
-		{
 			token_count++;
-			// if (str[i + 1] != '\0' && !ft_str_isspace(&str[i + 1]))
-			// 	token_count++;
-		}
 		i++;
 	}
 	return token_count;

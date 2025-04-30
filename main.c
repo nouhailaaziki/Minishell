@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/28 15:06:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:01:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ char **token_slicer(char *str, int token_count)
 			token[j++] = ft_substr(str, position, 2);
 			i += 2;
 			position = i;
-			free(tmp);
+			// free(tmp);
 		}
 		if (ft_is_operator(str[i]))
 		{
@@ -138,30 +138,37 @@ char **token_slicer(char *str, int token_count)
 			position = i;
 			token[j++] = ft_substr(str, position, 1);
 			position = i + 1;
-			free(tmp);
+			// free(tmp);
 		}
 		if (str[i + 1] == '\0')
 		{
 			tmp2 = ft_substr(str, position, i);
 			token[j] = ft_strtrim(tmp2, " ");
-			free(tmp2);
+			// free(tmp2);
 		}
 		i++;
 	}
 	return token;
 }
 
-void f()
-{
-	system("leaks -q minishell");
-}
 
+char **token_slicer_v2(char *str)
+{
+	int i =0;
+	int j=0;
+	while(str[i])
+	{
+		if(ft_isalnum(str[i]))
+			j++;
+
+		i++;
+	}
+}
 int main(void)
 {
-	atexit(f);
 	int i = 0;
 	int j = 0;
-	char *str = "ls      -al |       | ";
+	char *str = "ls      -al ||    ||   ";
 	int token_count = token_counter(str);
 	char **tokens = token_slicer(str, token_count);
 	printf(BLU "TOKEN COUNT : %d\n", token_count);
@@ -169,8 +176,8 @@ int main(void)
 	while (i < token_count)
 	{
 		printf(GRN "token :  <%s>\n" RESET, tokens[i]);
-		free(tokens[i]);
+		// free(tokens[i]);
 		i++;
 	}
-	free(tokens);
+	// free(tokens);
 }
