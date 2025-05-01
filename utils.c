@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/30 16:59:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:50:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,7 @@ void free_arr(char **ptr)
 		free(ptr[i++]);
 	free(ptr);
 }
-int ft_is_operator(int c)
-{
-	if (c == '|' || c == '>') // c == '||' || c == '&&' || c == '>>'|| c == '<<')
-		return 1;
-	return 0;
-}
-int ft_is_bonus_operator(char *str)
+ int ft_is_bonus_operator(char *str)
 {
 	int i = 0;
 	char *operators[4] = {"&&", ">>", "<<", "||"};
@@ -44,27 +38,12 @@ int ft_is_bonus_operator(char *str)
 	}
 	return 0;
 }
-int token_counter(char *str)
+int ft_is_operator(int c)
 {
-	int i;
-	int j;
-	int token_count;
-
-	if (!str)
-		return 0;
-	token_count = 1;
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (ft_is_bonus_operator(&str[i]))
-		{
-			token_count++;
-			i += 2;
-		}
-		if (ft_is_operator(str[i]))
-			token_count++;
-		i++;
-	}
-	return token_count;
+	if (c == '|' || c == '>') // c == '||' || c == '&&' || c == '>>'|| c == '<<')
+		return 1;
+	else if(ft_is_bonus_operator((char *)&c))
+		return 2;
+	return 0;
 }
+

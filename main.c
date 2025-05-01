@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/04/30 17:01:48 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:06:12 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,99 +85,135 @@
 // 	return i;
 // }
 
-int ft_strsquash(char *str)
+// int ft_strsquash(char *str)
+// {
+// 	int i = 0;
+// 	int s_len = 0;
+// 	;
+
+// 	while (str[i])
+// 	{
+// 		if (!ft_isspace(str[i]))
+// 		{
+// 			s_len++;
+// 			if (ft_isspace(str[i + 1]))
+// 				s_len++;
+// 		}
+// 		i++;
+// 	}
+// 	char *s = ft_calloc(s_len + 1, sizeof(char));
+// 	if (!s)
+// 		return 0;
+// 	return s_len;
+// }
+// char **token_slicer(char *str, int token_count)
+// {
+// 	int i = 0;
+// 	int j = 0;
+// 	char *store;
+// 	char *tmp;
+// 	char *tmp2;
+// 	int position = 0;
+// 	if (!str)
+// 		return NULL;
+// 	char **token = ft_calloc(token_count, sizeof(char *));
+// 	if (!token)
+// 		return NULL;
+// 	while (str[i])
+// 	{
+// 		if (ft_is_bonus_operator(&str[i]))
+// 		{
+// 			tmp = ft_substr(str, position, i - position);
+// 			token[j++] = ft_strtrim(tmp, " ");
+// 			position = i;
+// 			token[j++] = ft_substr(str, position, 2);
+// 			i += 2;
+// 			position = i;
+// 		}
+// 		if (ft_is_operator(str[i]))
+// 		{
+// 			tmp = ft_substr(str, position, i - position);
+// 			token[j++] = ft_strtrim(tmp, " ");
+// 			position = i;
+// 			token[j++] = ft_substr(str, position, 1);
+// 			position = i + 1;
+// 			// free(tmp);
+// 		}
+// 		if (str[i + 1] == '\0')
+// 		{
+// 			tmp2 = ft_substr(str, position, i);
+// 			token[j] = ft_strtrim(tmp2, " ");
+// 			// free(tmp2);
+// 		}
+// 		i++;
+// 	}
+// 	return token;
+// }
+
+char *ft_op_srchr(char *s)
 {
 	int i = 0;
-	int s_len = 0;
-	;
-
-	while (str[i])
+	char *set[4] = {"||", "&&", ">>", "<<"};
+	while (i<=3)
 	{
-		if (!ft_isspace(str[i]))
-		{
-			s_len++;
-			if (ft_isspace(str[i + 1]))
-				s_len++;
-		}
+		if (ft_strnstr(s, set[i], 2))
+			return &s[i];
 		i++;
 	}
-	char *s = ft_calloc(s_len + 1, sizeof(char));
-	if (!s)
-		return 0;
-	return s_len;
+	puts("hi");
+	return NULL;
 }
-char **token_slicer(char *str, int token_count)
+
+int token_counter(char *str)
 {
-	int i = 0;
-	int j = 0;
-	char *store;
-	char *tmp;
-	char *tmp2;
-	int position = 0;
+	int i;
+	int j;
+	int token_count;
+
+	token_count = 0;
 	if (!str)
-		return NULL;
-	char **token = ft_calloc(token_count, sizeof(char *));
-	if (!token)
-		return NULL;
+		return 0;
+	i = 0;
 	while (str[i])
 	{
-		if (ft_is_bonus_operator(&str[i]))
-		{
-			tmp = ft_substr(str, position, i - position);
-			token[j++] = ft_strtrim(tmp, " ");
-			position = i;
-			token[j++] = ft_substr(str, position, 2);
-			i += 2;
-			position = i;
-			// free(tmp);
-		}
 		if (ft_is_operator(str[i]))
-		{
-			tmp = ft_substr(str, position, i - position);
-			token[j++] = ft_strtrim(tmp, " ");
-			position = i;
-			token[j++] = ft_substr(str, position, 1);
-			position = i + 1;
-			// free(tmp);
-		}
-		if (str[i + 1] == '\0')
-		{
-			tmp2 = ft_substr(str, position, i);
-			token[j] = ft_strtrim(tmp2, " ");
-			// free(tmp2);
-		}
+			token_count++;
 		i++;
 	}
-	return token;
+
+	return token_count;
 }
+// char **token_slicer_v2(char *str, int token_count)
+// {
+// 	int i = 0;
+// 	int token_length = 0;
+// 	int position = 0;
+// 	char **tokens = ft_calloc(token_count, sizeof(char *));
+// 	if (!tokens)
+// 		return NULL;
+// 	while (str[i])
+// 	{
+// 		token_length = 0;
+// 		while (str[i] != '\0' && !ft_is_operator(str[i]))
+// 		{
+// 			token_length++;
+// 			i++;
+// 		}
+// 		tokens[position++] = ft_substr(str, i - token_length, token_length);
+// 		tokens[position++] = ft_substr(str, i, ft_is_operator(str[i]));
+// 		token_count -= 2;
+// 		if (!str[i] || token_count == 0)
+// 			break;
+// 		i++;
+// 	}
+// }
 
-
-char **token_slicer_v2(char *str)
-{
-	int i =0;
-	int j=0;
-	while(str[i])
-	{
-		if(ft_isalnum(str[i]))
-			j++;
-
-		i++;
-	}
-}
 int main(void)
 {
 	int i = 0;
 	int j = 0;
-	char *str = "ls      -al ||    ||   ";
+	char *str = "ls -al | grep | p";
 	int token_count = token_counter(str);
-	char **tokens = token_slicer(str, token_count);
-	printf(BLU "TOKEN COUNT : %d\n", token_count);
-	// printf(BLU "squashed : %d\n", ft_strsquash(tokens[0]));
-	while (i < token_count)
-	{
-		printf(GRN "token :  <%s>\n" RESET, tokens[i]);
-		// free(tokens[i]);
-		i++;
-	}
-	// free(tokens);
+	ft_printf(BLU "TOKEN COUNT : %d\n", token_count);
+	return 0;
 }
