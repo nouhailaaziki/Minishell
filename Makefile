@@ -1,6 +1,6 @@
 CC = cc
 
-CFLAGS = -g# -Wall -Wextra -Werror
+CFLAGS = -g -fsanitize=address# -Wall -Wextra -Werror
 
 MIMI_SRC =utils.c main.c
 

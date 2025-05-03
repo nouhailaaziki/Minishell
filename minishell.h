@@ -9,6 +9,7 @@ typedef struct s_token
 	char *value;
 	char *type;
 	struct s_token *next;
+	// struct s_token *prev;
 } t_token;
 
 int ft_is_operator(int c);

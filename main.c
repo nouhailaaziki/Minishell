@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:34:48 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/01 15:06:12 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:37:08 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@
 // 		return 0;
 // 	return s_len;
 // }
+
+
 // char **token_slicer(char *str, int token_count)
 // {
 // 	int i = 0;
@@ -164,33 +166,87 @@ char *ft_op_srchr(char *s)
 	return NULL;
 }
 
+
 int token_counter(char *str)
 {
-	int i;
-	int j;
-	int token_count;
+	int i = 0;
+	int j = 0;
+	char *store;
 
-	token_count = 0;
 	if (!str)
 		return 0;
-	i = 0;
+	int token_count = 1;
 	while (str[i])
 	{
 		if (ft_is_operator(str[i]))
+		{
 			token_count++;
+			if (str[i + 1] != '\0')
+				token_count++;
+		}
 		i++;
 	}
-
 	return token_count;
 }
-// char **token_slicer_v2(char *str, int token_count)
+char **token_slicer_v2(char *str, int token_count)
+{
+	int i = 0;
+	int token_length = 0;
+	int position = 0;
+	char **tokens = ft_calloc(token_count, sizeof(char *));
+	if (!tokens)
+		return NULL;
+	while (str[i])
+	{
+		token_length = 0;
+		while (str[i] != '\0' && !ft_is_operator(str[i]))
+		{
+			token_length++;
+			i++;
+		}
+		tokens[position++] = ft_substr(str, i - token_length, token_length);
+		tokens[position++] = ft_substr(str, i, ft_is_operator(str[i]));
+		token_count -= 2;
+		if (!str[i] || token_count == 0)
+			break;
+		i++;
+	}
+	return tokens;
+}
+
+t_token *create_token(char *value, char *type)
+{
+	t_token *token = ft_calloc(1,sizeof(t_token));
+	if(!token)
+		return NULL;
+	token->type = type;
+	token->value = value;
+	token->next= NULL;
+	return token;
+}
+void link_token(t_token **head, t_token *node)
+{
+	t_token *tmp;
+	tmp = *head;
+	if(!*head)
+	{
+		*head = node;
+		node->next = NULL;
+		return;
+	}
+	while(tmp->next)
+	{
+		tmp = tmp->next;
+	}
+	tmp->next = node;
+	node->next = NULL;
+}
+// t_token *fill_tokens(char *str,t_token **head)
 // {
-// 	int i = 0;
-// 	int token_length = 0;
-// 	int position = 0;
-// 	char **tokens = ft_calloc(token_count, sizeof(char *));
-// 	if (!tokens)
-// 		return NULL;
+// 	t_token *head;
+// 	int i =0;
+// 	int token_length =0;
+// 	int _=0;
 // 	while (str[i])
 // 	{
 // 		token_length = 0;
@@ -199,21 +255,26 @@ int token_counter(char *str)
 // 			token_length++;
 // 			i++;
 // 		}
-// 		tokens[position++] = ft_substr(str, i - token_length, token_length);
-// 		tokens[position++] = ft_substr(str, i, ft_is_operator(str[i]));
-// 		token_count -= 2;
-// 		if (!str[i] || token_count == 0)
+// 		if(!head)
+// 			head = create_token(ft_substr(str, i - token_length, token_length),NULL);
+// 		// head->next = create_token(ft_substr(str, i - token_length, token_length),NULL);
+// 		// tokens[position++] = ft_substr(str, i, ft_is_operator(str[i]));
+// 		if (!str[i])
 // 			break;
 // 		i++;
 // 	}
+// 	return head;
 // }
+
+
 
 int main(void)
 {
-	int i = 0;
-	int j = 0;
-	char *str = "ls -al | grep | p";
-	int token_count = token_counter(str);
-	ft_printf(BLU "TOKEN COUNT : %d\n", token_count);
+	t_token *head;
+	head = NULL;
+	t_token *token = create_token("chicken", "word");
+	link_token(&head, token);
+	link_token(&head, create_token("meatballs", "dish"));
+	printf("%s",head->next->value);
 	return 0;
 }

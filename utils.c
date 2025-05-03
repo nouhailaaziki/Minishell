@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/01 14:50:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/05/01 20:00:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void free_arr(char **ptr)
 }
 int ft_is_operator(int c)
 {
-	if (c == '|' || c == '>') // c == '||' || c == '&&' || c == '>>'|| c == '<<')
-		return 1;
-	else if(ft_is_bonus_operator((char *)&c))
+	if(ft_is_bonus_operator((char *)&c))
 		return 2;
+	else if (c == '|' || c == '>') // c == '||' || c == '&&' || c == '>>'|| c == '<<')
+		return 1;
 	return 0;
 }
 
