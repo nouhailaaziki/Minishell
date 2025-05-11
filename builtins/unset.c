@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:00:49 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/06 13:35:44 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/10 11:01:03 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ int	run_unset(t_env **env_list, char **argv)
 			del_node(&curr, env_list, argv[i], &prev);
 		i++;
 	}
+	run_env(env_list);
 	return (0);
 }
