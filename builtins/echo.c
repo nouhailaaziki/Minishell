@@ -6,20 +6,24 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:15:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/04 11:50:28 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/12 15:50:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../headers/launchpad.h"
 
 int	run_echo(char **argv)
 {
 	int	i;
+	int	n;
 
-	if ((ft_strcmp("-n", argv[2])) == 0)
-		i = 3;
+	if (argv[2][0] == '-' && is_all_char(&argv[2][1], 'n'))
+	{
+		n = 3;
+	}
 	else
-		i = 2;
+		n = 2;
+	i = n;
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], 1);
@@ -27,7 +31,7 @@ int	run_echo(char **argv)
 		if (argv[i])
 			ft_putchar_fd(32, 1);
 	}
-	if ((ft_strcmp("-n", argv[2])) != 0)
+	if (n != 3)
 		ft_putchar_fd('\n', 1);
 	return (0);
 }

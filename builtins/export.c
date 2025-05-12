@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:00:55 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/10 12:10:17 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/11 11:24:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../headers/launchpad.h"
 
 void	add_node(t_env **env_list, char *argv)
 {

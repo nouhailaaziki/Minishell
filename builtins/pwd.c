@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:29:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/04 11:50:52 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/11 11:24:32 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../headers/launchpad.h"
 
 int	run_pwd(t_env **env_list)
 {

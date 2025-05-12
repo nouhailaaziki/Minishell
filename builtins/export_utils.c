@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/09 14:59:43 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/11 11:24:16 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../headers/launchpad.h"
 
 void	swap_env(t_env *a, t_env *b)
 {
@@ -58,7 +58,7 @@ t_env	*create_node(char *argv, size_t key_len, char *sign)
 		return (NULL);
 	if (argv[key_len - 1] == '+')
 		key_len--;
-	node->key = strndup(argv, key_len);
+	node->key = ft_strndup(argv, key_len);
 	if (sign)
 		node->value = ft_strdup(sign + 1);
 	else

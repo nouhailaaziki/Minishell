@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fill_env_list.c                                    :+:      :+:    :+:   */
+/*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/09 14:25:55 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/11 16:48:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../headers/launchpad.h"
 
-void	add_key(t_env **env_list, char *key)
+void	add_env_var(t_env **env_list, char *key)
 {
 	t_env	*tmp;
 	t_env	*node;
@@ -22,7 +22,10 @@ void	add_key(t_env **env_list, char *key)
 		return ;
 	node->key = ft_strdup(key);
 	if (!node->key)
+	{
+		free(node);
 		return ;
+	}
 	node->value = NULL;
 	node->next = NULL;
 	if (!*env_list)
@@ -36,32 +39,26 @@ void	add_key(t_env **env_list, char *key)
 	tmp->next = node;
 }
 
-void	check_list(t_env **env_list)
+void	add_if_missing(t_env **env_list)
 {
 	t_env	*tmp;
-	char	*key[1];
-	int		i;
+	char	*key;
 	int		found;
 
-	key[0] = "OLDPWD";
-	i = 0;
+	key = "OLDPWD";
 	found = 0;
-	while (i < 1)
+	tmp = *env_list;
+	while (tmp)
 	{
-		tmp = *env_list;
-		while (tmp)
+		if (ft_strcmp(tmp->key, key) == 0)
 		{
-			if (ft_strcmp(tmp->key, key[i]) == 0)
-			{
-				found = 1;
-				break ;
-			}
-			tmp = tmp->next;
+			found = 1;
+			break ;
 		}
-		if (!found)
-			add_key(env_list, key[i]);
-		i++;
+		tmp = tmp->next;
 	}
+	if (!found)
+		add_env_var(env_list, key);
 }
 
 t_env	*create_env_node(char *envp)
@@ -77,8 +74,12 @@ t_env	*create_env_node(char *envp)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
-	node->key = strndup(envp, key_len);
+	node->key = ft_strndup(envp, key_len);
+	if (!node->key)
+		return (free (node), NULL);
 	node->value = ft_strdup(sign + 1);
+	if (!node->value)
+		return (free(node->key), free(node), NULL);
 	node->next = NULL;
 	return (node);
 }
@@ -99,12 +100,10 @@ void	fill_env_list(char **envp, t_env **env_list)
 		{
 			current = *env_list;
 			while (current->next)
-			{
 				current = current->next;
-			}
 			current->next = new;
 		}
 		envp++;
 	}
-	check_list(env_list);
+	add_if_missing(env_list);
 }

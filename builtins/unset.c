@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:00:49 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/10 11:01:03 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:23:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../headers/launchpad.h"
 
 int	check_validity(char	*argv, char *cmd)
 {
@@ -23,7 +23,7 @@ int	check_validity(char	*argv, char *cmd)
 				|| (i > 0 && argv[i] >= '0' && argv[i] <= '9')
 				|| argv[i] == '_' || (argv[i] >= 'A' && argv[i] <= 'Z')))
 		{
-			printf("Executable: %s: `%s`: not a valid identifier\n", cmd, argv);
+			printf("minishell: %s: `%s`: not a valid identifier\n", cmd, argv);
 			return (1);
 		}
 		i++;
@@ -74,6 +74,5 @@ int	run_unset(t_env **env_list, char **argv)
 			del_node(&curr, env_list, argv[i], &prev);
 		i++;
 	}
-	run_env(env_list);
 	return (0);
 }

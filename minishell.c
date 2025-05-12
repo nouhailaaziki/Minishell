@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/10 12:09:59 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:28:47 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "headers/launchpad.h"
 
 int	main(int argc, char **argv, char **envp)
 {
