@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/05 17:56:30 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:22:27 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../headers/launchpad.h"
 
-void	up_env(t_env **env_list)
+void	refresh_pwd(t_env **env_list)
 {
 	char	pwd[PATH_MAX];
 	char	*oldpwd;
@@ -36,6 +36,7 @@ void	up_env(t_env **env_list)
 		}
 		tmp = tmp->next;
 	}
+	free(oldpwd);
 }
 
 int	run_cd(char **argv, t_env **env_list)
@@ -46,17 +47,17 @@ int	run_cd(char **argv, t_env **env_list)
 	{
 		if (access(argv[2], F_OK) != 0)
 		{
-			printf("Executable: cd: %s: No such file or directory\n", argv[2]);
+			printf("minishell: cd: %s: No such file or directory\n", argv[2]);
 			return (1);
 		}
 		if (stat(argv[2], &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
 		{
 			chdir(argv[2]);
-			up_env(env_list);
+			refresh_pwd(env_list);
 		}
 		else
 		{
-			printf("Executable: cd: %s: Not a directory\n", argv[2]);
+			printf("minishell: cd: %s: Not a directory\n", argv[2]);
 			return (1);
 		}
 	}

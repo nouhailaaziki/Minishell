@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   free_env_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <contact.naziki@gmail.com>         +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 17:36:59 by noaziki           #+#    #+#             */
-/*   Updated: 2024/11/19 09:35:10 by noaziki          ###   ########.fr       */
+/*   Created: 2025/05/11 16:52:55 by noaziki           #+#    #+#             */
+/*   Updated: 2025/05/12 15:51:33 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../headers/launchpad.h"
 
-char	*ft_strdup(const char *s)
+void	free_env_list(t_env **env)
 {
-	int		i;
-	char	*p;
+	t_env	*tmp;
 
-	i = 0;
-	p = (char *)malloc(ft_strlen(s) + 1);
-	if (!p)
-		return (NULL);
-	while (s[i])
+	while (*env)
 	{
-		p[i] = s[i];
-		i++;
+		tmp = (*env)->next;
+		free((*env)->key);
+		free((*env)->value);
+		free((*env));
+		*env = tmp;
 	}
-	p[i] = '\0';
-	return (p);
 }
