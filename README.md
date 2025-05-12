@@ -102,34 +102,18 @@ Execution = recognize the command → prepare → fork → execve → wait.
 
 You’re basically copying what bash does behind the scenes!
 
-# 📁 Minishell - Project Files Structure
+# 📁 Minishell - Executable Files Structure
 ## Files
 - minishell.c → The main program (handles prompt, parsing, and execution).
 
 - executor.c → Handles execution logic (execve, path resolution, redirections).
 
-- builtins.c → Implements built-in shell commands (cd, echo, pwd, export, unset, env, exit).
+## Folders
+- builtins → Implements built-in shell commands (cd, echo, pwd, export, unset, env, exit). 
 
-- parser.c → Parses user input into tokens, commands, and redirections.
+- utilities → Utility functions (memory management, path joining, string helpers).
 
-- lexer.c → Tokenizes the input string into words, operators, and symbols.
-
-- redir.c → Manages input/output redirections (>, <, >>, <<).
-
-- pipes.c → Handles multiple commands connected by pipes (|).
-
-- signals.c → Handles signal interruptions (like Ctrl+C, Ctrl+).
-
-- environment.c → Manages environment variables (export, unset, getenv support).
-
-- errors.c → Prints errors and manages error codes properly.
-
-- utilities.c → Utility functions (memory management, path joining, string helpers).
-
-- wildcards.c (Bonus) → Handles wildcard expansions (* in file names).
-
-- logical_operators.c (Bonus) → Manages && and || logical operators.
-
+- events → Contains files responsible for freeing linked lists and structures
 ## 📦 Extra Notes
 - I separated the bonus features (like wildcards and logical operators) into their own files for clarity.
 
