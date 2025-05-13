@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/12 16:22:27 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/05/13 11:15:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ void	refresh_pwd(t_env **env_list)
 	char	*oldpwd;
 	t_env	*tmp;
 
-	tmp = *env_list;
+	1 && (tmp = *env_list, oldpwd = NULL);
 	getcwd(pwd, PATH_MAX);
-	oldpwd = NULL;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, "PWD") == 0)
