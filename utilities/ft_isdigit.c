@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:27 by noaziki          ###   ########.fr       */
+/*   Created: 2024/10/22 10:56:07 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/02 12:47:27 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+int	ft_isdigit(int c)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
-	while (env_list)
-	{
-		if (env_list->value  && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
-		env_list = env_list->next;
-	}
+	if (c >= '0' && c <= '9')
+		return (1);
 	return (0);
 }

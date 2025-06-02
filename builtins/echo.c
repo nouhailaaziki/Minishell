@@ -6,32 +6,31 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:15:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/13 11:15:20 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/02 12:23:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/launchpad.h"
+#include "../launchpad.h"
 
-int	run_echo(char **argv)
+int	echo(char **cmd)
 {
 	int	i;
 	int	n;
 
-	if (!argv[2])
+	i = 1;
+	if (!cmd[1])
 		return (printf("\n"), 0);
-	if (argv[2][0] == '-' && is_all_char(&argv[2][1], 'n'))
-		n = 3;
-	else
-		n = 2;
-	i = n;
-	while (argv[i])
-	{
-		ft_putstr_fd(argv[i], 1);
+	while (cmd[i] && cmd[i][0] == '-' && ft_isallchar(&cmd[i][1], 'n'))
 		i++;
-		if (argv[i])
-			ft_putchar_fd(32, 1);
+	n = i;
+	while (cmd[i])
+	{
+		printf("%s", cmd[i]);
+		i++;
+		if (cmd[i])
+			printf(" ");
 	}
-	if (n != 3)
-		ft_putchar_fd('\n', 1);
+	if (n == 1)
+		printf("\n");
 	return (0);
 }

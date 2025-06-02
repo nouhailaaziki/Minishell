@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:27 by noaziki          ###   ########.fr       */
+/*   Created: 2024/10/24 14:06:11 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/02 13:51:46 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
-	while (env_list)
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (0);
+	while ((s1[i] && s2[i]) && i < n - 1)
 	{
-		if (env_list->value  && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
-		env_list = env_list->next;
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
-	return (0);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

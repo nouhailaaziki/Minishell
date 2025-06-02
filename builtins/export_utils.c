@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/11 11:24:16 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/02 12:31:55 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/launchpad.h"
+#include "../launchpad.h"
 
 void	swap_env(t_env *a, t_env *b)
 {
@@ -53,39 +53,39 @@ t_env	*create_node(char *argv, size_t key_len, char *sign)
 {
 	t_env	*node;
 
-	node = malloc(sizeof(t_env));
+	node = nalloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
 	if (argv[key_len - 1] == '+')
 		key_len--;
-	node->key = ft_strndup(argv, key_len);
+	node->key = na_substr(argv, 0, key_len);
 	if (sign)
-		node->value = ft_strdup(sign + 1);
+		node->value = na_strdup(sign + 1);
 	else
 		node->value = NULL;
 	node->next = NULL;
 	return (node);
 }
 
-void	handle_argument(t_env **env_list, char *argv)
+void	handle_argument(t_env **env_list, char *cmd)
 {
 	int		j;
 	int		n;
 	char	*str;
 
 	j = 0;
-	while (argv[j] && argv[j] != '=')
+	while (cmd[j] && cmd[j] != '=')
 		j++;
-	if (j > 0 && argv[j - 1] == '+' && argv[j] == '=')
+	if (j > 0 && cmd[j - 1] == '+' && cmd[j] == '=')
 		j--;
-	str = ft_substr(argv, 0, j);
+	str = na_substr(cmd, 0, j);
 	if (!str)
 		return ;
 	check_validity(str, "export");
 	n = j + 1;
-	if (argv[j] == '+' && j > 0 && argv[j + 1] && argv[j + 1] == '=')
-		add_value(env_list, argv, str);
-	else if (argv[j] == '=' || !argv[j])
-		update_env(env_list, argv, str, n);
+	if (cmd[j] == '+' && j > 0 && cmd[j + 1] && cmd[j + 1] == '=')
+		add_value(env_list, cmd, str);
+	else if (cmd[j] == '=' || !cmd[j])
+		update_env(env_list, cmd, str, n);
 	free (str);
 }

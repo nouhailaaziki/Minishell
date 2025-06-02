@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   na_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:27 by noaziki          ###   ########.fr       */
+/*   Created: 2025/05/26 13:47:50 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/02 10:43:49 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+char	*na_strdup(const char *s)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
-	while (env_list)
+	int		i;
+	char	*p;
+
+	i = 0;
+	p = (char *)nalloc(ft_strlen(s) + 1);
+	if (!p)
+		return (NULL);
+	while (s && s[i])
 	{
-		if (env_list->value  && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
-		env_list = env_list->next;
+		p[i] = s[i];
+		i++;
 	}
-	return (0);
+	p[i] = '\0';
+	return (p);
 }

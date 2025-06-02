@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_isallchar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:27 by noaziki          ###   ########.fr       */
+/*   Created: 2025/05/21 11:12:01 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/02 12:44:25 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+int	ft_isallchar(const char *str, char c)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
-	while (env_list)
+	size_t	i;
+
+	i = 0;
+	while (str[i])
 	{
-		if (env_list->value  && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
-		env_list = env_list->next;
+		if (str[i] != c)
+			return (0);
+		i++;
 	}
-	return (0);
+	return (1);
 }

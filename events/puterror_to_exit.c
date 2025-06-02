@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   puterror_to_exit.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/12 16:28:47 by noaziki          ###   ########.fr       */
+/*   Created: 2024/11/04 19:23:06 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/01 15:10:51 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/launchpad.h"
+#include "../launchpad.h"
 
-int	main(int argc, char **argv, char **envp)
+void	puterror_to_exit(char *cmd, char *error, int ex)
 {
-	t_env	*head;
+	char	*message;
 
-	head = NULL;
-	fill_env_list(envp, &head);
-	executor(argv, argc, &head);
+	message = na_strjoin("LeetShell: ", cmd);
+	message = na_strjoin(message, error);
+	write(1, message, ft_strlen(message));
+	free_all_tracked();
+	exit (ex);
 }

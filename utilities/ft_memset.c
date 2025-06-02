@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:27 by noaziki          ###   ########.fr       */
+/*   Created: 2024/10/26 09:39:06 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/01 12:24:41 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+void	*ft_memset(void *b, int c, size_t len)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
-	while (env_list)
+	size_t			i;
+	unsigned char	*h;
+
+	i = 0;
+	h = (unsigned char *) b;
+	while (i < len)
 	{
-		if (env_list->value  && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
-		env_list = env_list->next;
+		h[i] = (unsigned char) c;
+		i++;
 	}
-	return (0);
+	return (b);
 }

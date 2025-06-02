@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:00:55 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/11 11:24:23 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/02 12:50:12 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/launchpad.h"
+#include "../launchpad.h"
 
 void	add_node(t_env **env_list, char *argv)
 {
@@ -52,7 +52,7 @@ void	add_value(t_env	**env_list, char *argv, char *key)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
-			new_val = ft_strjoin(tmp->value, sign + 1);
+			new_val = na_strjoin(tmp->value, sign + 1);
 			if (!new_val)
 				return ;
 			free(tmp->value);
@@ -79,7 +79,7 @@ void	update_env(t_env **env_list, char *argv, char *key, int start)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
-			new_val = ft_substr(argv, start, len);
+			new_val = na_substr(argv, start, len);
 			if (!new_val)
 				return ;
 			free(tmp->value);
@@ -108,17 +108,18 @@ void	print_env(t_env **env_list)
 	}
 }
 
-int	run_export(int argc, char **argv, t_env **env_list)
+int	export(char **cmd, t_env **env_list)
 {
 	int	i;
+	int	len;
 
-	i = 2;
-	(void)argc;
-	if (argc == 2)
+	i = 1;
+	len = ft_arrlen(cmd);
+	if (len == 1)
 		print_env(env_list);
-	while (argv[i])
+	while (cmd[i])
 	{
-		handle_argument(env_list, argv[i]);
+		handle_argument(env_list, cmd[i]);
 		i++;
 	}
 	return (0);

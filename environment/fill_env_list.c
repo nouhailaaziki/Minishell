@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_list.c                                         :+:      :+:    :+:   */
+/*   fill_env_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/11 16:48:00 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/02 12:57:30 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/launchpad.h"
+#include "../launchpad.h"
 
 void	add_env_var(t_env **env_list, char *key)
 {
 	t_env	*tmp;
 	t_env	*node;
 
-	node = malloc(sizeof(t_env));
-	if (!node)
-		return ;
-	node->key = ft_strdup(key);
-	if (!node->key)
-	{
-		free(node);
-		return ;
-	}
+	node = nalloc(sizeof(t_env));
+	// malloc_error(node);
+	node->key = na_strdup(key);
+	// malloc_error(node->key);
 	node->value = NULL;
 	node->next = NULL;
 	if (!*env_list)
@@ -42,26 +37,46 @@ void	add_env_var(t_env **env_list, char *key)
 void	add_if_missing(t_env **env_list)
 {
 	t_env	*tmp;
-	char	*key;
+	char	*key[4];
 	int		found;
+	int		i;
 
-	key = "OLDPWD";
-	found = 0;
-	tmp = *env_list;
+	1 && (key[0] = "PWD", key[1] = "OLDPWD", key[2] = "SHLVL");
+	1 && (key[3] = "PATH", found = 0, tmp = *env_list);
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->key, key) == 0)
+		i = 0;
+		while (i < 4)
 		{
-			found = 1;
-			break ;
+			if (!ft_strcmp(tmp->key, key[i]))
+			{
+				found = 1;
+				break ;
+			}
+			i++;
 		}
+		if (!found)
+		add_env_var(env_list, key[i - 1]);
 		tmp = tmp->next;
 	}
-	if (!found)
-		add_env_var(env_list, key);
 }
 
-t_env	*create_env_node(char *envp)
+void	upp_shlvl(t_env *node, int nbr)
+{
+	if (nbr == 999)
+		node->value = na_strdup("");
+	else if (nbr < 0)
+		node->value = na_strdup("0");
+	else if (nbr > 999)
+		node->value = na_strdup("1");
+	else
+	{
+		nbr += 1;
+		node->value = na_strdup(na_itoa(nbr));
+	}
+}
+
+t_env	*env_node(char *envp)
 {
 	t_env	*node;
 	char	*sign;
@@ -71,27 +86,29 @@ t_env	*create_env_node(char *envp)
 	if (!sign)
 		return (NULL);
 	key_len = sign - envp;
-	node = malloc(sizeof(t_env));
-	if (!node)
-		return (NULL);
-	node->key = ft_strndup(envp, key_len);
-	if (!node->key)
-		return (free (node), NULL);
-	node->value = ft_strdup(sign + 1);
-	if (!node->value)
-		return (free(node->key), free(node), NULL);
+	node = nalloc(sizeof(t_env));
+	// malloc_error(node);
+	node->key = na_substr(envp, 0, key_len);
+	// malloc_error(node->key);
+	if (!strcmp(node->key, "SHLVL"))
+		upp_shlvl(node, ft_atoi(sign + 1));
+	else
+	{
+		node->value = na_strdup(sign + 1);
+		// malloc_error(node->value);
+	}
 	node->next = NULL;
 	return (node);
 }
 
-void	fill_env_list(char **envp, t_env **env_list)
+void	build_env(t_env **env_list, char **envp)
 {
 	t_env	*current;
 	t_env	*new;
 
 	while (*envp)
 	{
-		new = create_env_node(*envp);
+		new = env_node(*envp);
 		if (!new)
 			return ;
 		if (!*env_list)

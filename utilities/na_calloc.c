@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_fd.c                                         :+:      :+:    :+:   */
+/*   na_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 11:30:30 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/11 12:48:31 by noaziki          ###   ########.fr       */
+/*   Created: 2024/10/31 11:11:06 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/01 12:25:37 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/pixie.h"
+#include "../launchpad.h"
 
-void	ft_putchar_fd(char c, int fd)
+void	*na_calloc(size_t count, size_t size)
 {
-	if (fd >= 0)
-		write(fd, &c, 1);
-}
+	void	*p;
+	size_t	total_bytes;
 
-void	ft_putstr_fd(char *s, int fd)
-{
-	if (!s || fd < 0)
-		return ;
-	write(fd, s, ft_strlen(s));
+	total_bytes = count * size;
+	if (count && total_bytes / count != size)
+		return (NULL);
+	p = nalloc(count * size);
+	if (!p)
+		return (NULL);
+	ft_memset(p, 0, count * size);
+	return (p);
 }

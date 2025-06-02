@@ -1,37 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   digits.c                                           :+:      :+:    :+:   */
+/*   strict_atoi.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 11:46:47 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/12 16:14:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/01 15:12:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/launchpad.h"
-
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-int	guard_limits(long long i, long long s, long long r, char *str)
-{
-	if ((r == 922337203685477580 && ((i >= 18 && s == 1 && str[i] > '7')
-				|| (i >= 19 && s == -1 && str[i] > '8')))
-		|| r > 922337203685477580)
-	{
-		ft_putstr_fd("minishell: exit: ", 1);
-		ft_putstr_fd(str, 1);
-		ft_putstr_fd(": numeric argument required\n", 1);
-		return (1);
-	}
-	return (0);
-}
+#include "../launchpad.h"
 
 long	skip(const char *str, long *s)
 {
@@ -49,7 +28,7 @@ long	skip(const char *str, long *s)
 	return (i);
 }
 
-long	parse_number_or_exit(const char *str, t_env **env_list)
+long	strict_atoi(const char *str)
 {
 	long	i;
 	long	s;
@@ -60,13 +39,12 @@ long	parse_number_or_exit(const char *str, t_env **env_list)
 	i = skip(str, &s);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if (!guard_limits(i, s, r, (char *)str))
-			r = r * 10 + str[i] - 48;
+		if ((r == 922337203685477580 && ((i >= 18 && s == 1 && str[i] > '7')
+				|| (i >= 19 && s == -1 && str[i] > '8')))
+			|| r > 922337203685477580)
+			puterror_to_exit("exit", ": numeric argument required\n", 255);
 		else
-		{
-			free_env_list(env_list);
-			exit (255);
-		}
+			r = r * 10 + str[i] - 48;
 		i++;
 	}
 	return (r * s);

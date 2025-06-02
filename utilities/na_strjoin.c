@@ -1,27 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env_list.c                                    :+:      :+:    :+:   */
+/*   na_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:52:55 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/12 15:51:33 by noaziki          ###   ########.fr       */
+/*   Created: 2025/05/28 12:33:17 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/01 14:36:55 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/launchpad.h"
+#include "../launchpad.h"
 
-void	free_env_list(t_env **env)
+char	*na_strjoin(char const *s1, char const *s2)
 {
-	t_env	*tmp;
+	size_t	i;
+	size_t	j;
+	char	*s3;
 
-	while (*env)
+	i = 0;
+	j = 0;
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		return (na_strdup(s2));
+	if (!s2)
+		return (na_strdup(s1));
+	s3 = (char *)nalloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!s3)
+		return (NULL);
+	while (s1[i])
 	{
-		tmp = (*env)->next;
-		free((*env)->key);
-		free((*env)->value);
-		free((*env));
-		*env = tmp;
+		s3[i] = s1[i];
+		i++;
 	}
+	while (s2[j])
+		s3[i++] = s2[j++];
+	return (s3[i] = '\0', s3);
 }

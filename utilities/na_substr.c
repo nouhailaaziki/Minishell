@@ -1,26 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   na_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:27 by noaziki          ###   ########.fr       */
+/*   Created: 2025/05/26 13:51:37 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/01 14:37:06 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+char	*na_substr(char const *s, unsigned int start, size_t len)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
-	while (env_list)
+	size_t	i;
+	size_t	a;
+	size_t	lens;
+	char	*p;
+
+	a = start + len;
+	i = 0;
+	if (s == NULL)
+		return (NULL);
+	lens = ft_strlen(s);
+	if (start >= lens)
+		return (na_strdup(""));
+	if (len > lens - start)
+		len = lens - start;
+	p = (char *)nalloc(len + 1);
+	if (p == NULL)
+		return (NULL);
+	while (start < a && s[start])
 	{
-		if (env_list->value  && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
-		env_list = env_list->next;
+		p[i] = s[start];
+		i++;
+		start++;
 	}
-	return (0);
+	p[i] = '\0';
+	return (p);
 }
