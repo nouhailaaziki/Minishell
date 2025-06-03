@@ -1,0 +1,7 @@
+a.out
+main.c
+*.pdf
+.vscode
+a.out.dSYM
+.DS_Store
+!*.*
