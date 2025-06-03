@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:57:30 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/03 09:47:24 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	add_env_var(t_env **env_list, char *key)
 	t_env	*node;
 
 	node = nalloc(sizeof(t_env));
-	// malloc_error(node);
 	node->key = na_strdup(key);
-	// malloc_error(node->key);
 	node->value = NULL;
 	node->next = NULL;
 	if (!*env_list)
@@ -87,16 +85,11 @@ t_env	*env_node(char *envp)
 		return (NULL);
 	key_len = sign - envp;
 	node = nalloc(sizeof(t_env));
-	// malloc_error(node);
 	node->key = na_substr(envp, 0, key_len);
-	// malloc_error(node->key);
 	if (!strcmp(node->key, "SHLVL"))
 		upp_shlvl(node, ft_atoi(sign + 1));
 	else
-	{
 		node->value = na_strdup(sign + 1);
-		// malloc_error(node->value);
-	}
 	node->next = NULL;
 	return (node);
 }

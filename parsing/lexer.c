@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:08:00 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:58:14 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/03 09:49:19 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-static t_token *new_token(t_token_type type, const char *value)
+static t_token  *new_token(t_token_type type, const char *value)
 {
     t_token *token = malloc(sizeof(t_token));
     token->type = type;
@@ -30,12 +30,12 @@ static void add_token(t_token **head, t_token **tail, t_token *new)
     *tail = new;
 }
 
-static int is_operator_char(char c)
+static int  is_operator_char(char c)
 {
     return (c == '<' || c == '>' || c == '&' || c == '|' || c == '(' || c == ')');
 }
 
-static const char *parse_operator(const char *input, char *buf)
+static const char   *parse_operator(const char *input, char *buf)
 {
     if (input[0] == '<' && input[1] == '<')
         return strncpy(buf, "<<", 3), input + 2;
@@ -96,7 +96,7 @@ t_token *lexer(const char *input)
     return head;
 }
 
-void free_tokens(t_token *tokens)
+void    free_tokens(t_token *tokens)
 {
     while (tokens)
     {

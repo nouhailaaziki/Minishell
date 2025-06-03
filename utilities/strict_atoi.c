@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 11:46:47 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/01 15:12:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/03 09:25:51 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ long	strict_atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		if ((r == 922337203685477580 && ((i >= 18 && s == 1 && str[i] > '7')
-				|| (i >= 19 && s == -1 && str[i] > '8')))
+					|| (i >= 19 && s == -1 && str[i] > '8')))
 			|| r > 922337203685477580)
 			puterror_to_exit("exit", ": numeric argument required\n", 255);
 		else

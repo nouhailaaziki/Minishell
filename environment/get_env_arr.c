@@ -1,26 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   get_env_arr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 17:25:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/03 09:46:42 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/03 09:27:50 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/03 09:47:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	env(t_env *env_list)
+char	**get_env_arr(t_env *env_list)
 {
-	if (!env_list)
-		ft_putstr_fd("L33tShell: env: No such file or directory\n", 2);
+	int		i;
+	int		len;
+	char	**envp;
+	t_env	*backup;
+
+	1 && (len = 0, i = 0, envp = NULL, backup = env_list);
 	while (env_list)
 	{
-		if (env_list->value && env_list->value[0])
-			printf("%s=%s\n", env_list->key, env_list->value);
+		len++;
 		env_list = env_list->next;
 	}
-	return (0);
+	env_list = backup;
+	envp = (char **)nalloc(((len + 1) * sizeof(char *)));
+	while (env_list)
+	{
+		envp[i] = na_strjoin(env_list->key, "=");
+		envp[i] = na_strjoin(envp[i], env_list->value);
+		env_list = env_list->next;
+		i++;
+	}
+	envp[i] = NULL;
+	return (envp);
 }

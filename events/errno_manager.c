@@ -1,30 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all_tracked.c                                 :+:      :+:    :+:   */
+/*   errno_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/01 12:06:00 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/03 09:48:25 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/03 05:31:43 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/03 09:48:11 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-void	free_all_tracked(void)
+void	is_it_dir(char *cmd)
 {
-	t_gcnode	**tracker;
-	t_gcnode	*tmp;
+	struct stat	path_stat;
 
-	tracker = memory_tracker();
-	if (!tracker || !*tracker)
-		return ;
-	while (*tracker)
+	if (!access(cmd, F_OK) && !stat(cmd, &path_stat)
+		&& S_ISDIR(path_stat.st_mode))
 	{
-		free((*tracker)->address);
-		tmp = *tracker;
-		*tracker = (*tracker)->next;
-		free(tmp);
+		ft_putstr_fd("L33tShell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		exit(126);
 	}
+}
+
+void	errno_manager(char	*cmd)
+{
+	char	*error;
+
+	error = na_strjoin("Leetshell: ", cmd);
+	perror(error);
+	if (errno == 13 || errno == 20)
+		exit(126);
+	else if (errno == 2)
+		exit(127);
 }

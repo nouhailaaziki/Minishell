@@ -6,110 +6,89 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:10:04 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 12:58:28 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/03 08:55:16 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-static t_redir_type get_redir_type(t_token *token)
+t_redir	*new_redir(t_redir_type type, char *file)
 {
-    if (!token)
-        return REDIR_NONE;
-    if (strcmp(token->value, "<") == 0)
-        return REDIR_IN;
-    if (strcmp(token->value, ">") == 0)
-        return REDIR_OUT;
-    if (strcmp(token->value, ">>") == 0)
-        return REDIR_APPEND;
-    if (strcmp(token->value, "<<") == 0)
-        return REDIR_HEREDOC;
-    return REDIR_NONE;
+	t_redir *r;
+	
+	r = nalloc(sizeof(t_redir));
+	r->index = 0;
+	r->type = type;
+	r->file = na_strdup(file);
+	r->fd = -1;
+	r->flag = 0;
+	r->next = NULL;
+	return (r);
 }
 
-static t_redir *parse_redirections(t_token **tokens)
+t_tree	*new_command_node(char **cmd, t_redir *redir)
 {
-    t_redir *head = NULL;
-    t_redir *tail = NULL;
-
-    while (*tokens)
-    {
-        t_redir_type type = get_redir_type(*tokens);
-        if (type == REDIR_NONE)
-            break;
-
-        // t_token *redir_token = *tokens;
-        *tokens = (*tokens)->next;
-
-        if (!*tokens || (*tokens)->type != TOKEN_WORD)
-        {
-            // Handle syntax error
-            return NULL;
-        }
-
-        t_redir *new = calloc(1, sizeof(t_redir));
-        new->type = type;
-        new->file = strdup((*tokens)->value);
-
-        if (!head)
-            head = new;
-        else
-            tail->next = new;
-        tail = new;
-
-        *tokens = (*tokens)->next;
-    }
-
-    return head;
+	t_tree *n;
+	
+	n = nalloc(sizeof(t_tree));
+	n->type = NODE_COMMAND;
+	n->cmd = cmd;
+	n->redirs = redir;
+	n->redirs_before = NULL;
+	n->redirs_after = NULL;
+	n->is_ambiguous = 0;
+	n->left = NULL;
+	n->right = NULL;
+	return (n);
 }
 
-static char **parse_arguments(t_token **tokens)
+t_tree	*new_pipe_node(t_tree *left, t_tree *right)
 {
-    // Count arguments first
-    size_t count = 0;
-    t_token *tmp = *tokens;
-    while (tmp && tmp->type == TOKEN_WORD)
-    {
-        count++;
-        tmp = tmp->next;
-    }
-
-    char **args = calloc(count + 1, sizeof(char *));
-    if (!args)
-        return NULL;
-
-    for (size_t i = 0; i < count; i++)
-    {
-        args[i] = strdup((*tokens)->value);
-        *tokens = (*tokens)->next;
-    }
-
-    return args;
+	t_tree *n;
+	
+	n = nalloc(sizeof(t_tree));
+	n->type = NODE_PIPE;
+	n->cmd = NULL;
+	n->redirs = NULL;
+	n->redirs_before = NULL;
+	n->redirs_after = NULL;
+	n->is_ambiguous = 0;
+	n->left = left;
+	n->right = right;
+	return (n);
 }
 
-
-static t_tree *parse_command(t_token **tokens)
+char	**split_args(char *str)
 {
-    t_tree *node = calloc(1, sizeof(t_tree));
-    if (!node)
-        return NULL;
+	int i;
+	char *tok;
+	char **res;
 
-    node->type = NODE_COMMAND;
-    node->redirs_before = parse_redirections(tokens);
-    node->cmd = parse_arguments(tokens);
-    node->redirs_after = parse_redirections(tokens);
-    return node;
+	i = 0;
+	res = nalloc(sizeof(char *) * 10);
+	tok = strtok(str, " ");
+	while (tok)
+	{
+		res[i++] = na_strdup(tok);
+		tok = strtok(NULL, " ");
+	}
+	res[i] = NULL;
+	return (res);
 }
-
-static t_tree *parse_command(t_token **tokens);
-static t_redir *parse_redirections(t_token **tokens);
-static char **parse_arguments(t_token **tokens);
-
-t_tree *parse_input(t_token **tokens)
+t_redir *reverse_redir_list(t_redir *head)
 {
-    // This assumes you already have a lexer that gives token list
-    if (!tokens || !*tokens)
-        return NULL;
+	t_redir *prev;
+	t_redir *current;
+	t_redir *next;
 
-    return parse_command(tokens);
+	prev = NULL;
+	current = head;
+	while (current)
+	{
+		next = current->next;
+		current->next = prev;
+		prev = current;
+		current = next;
+	}
+	return (prev);
 }

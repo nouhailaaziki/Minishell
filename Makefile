@@ -19,11 +19,14 @@ EXECUTION =	builtins/cd.c \
 			builtins/env.c \
 			environment/fill_env_list.c \
 			environment/free_env_list.c \
+			environment/get_env_arr.c \
 			events/puterror_to_exit.c \
+			events/errno_manager.c \
 			garbage_collector/free_all_tracked.c \
 			garbage_collector/nalloc.c \
 			parsing/lexer.c \
 			parsing/parser.c \
+			parsing/parse_input.c \
 			utilities/ft_arrlen.c \
 			utilities/ft_atoi.c \
 			utilities/ft_isallchar.c \

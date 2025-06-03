@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/02 13:53:22 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/03 09:33:01 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,67 +42,30 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 	{
 		path = na_strjoin(path_list[i], "/");
 		path = na_strjoin(path, cmd[0]);
-			if (!access(path, X_OK))
-			{
-				execve(path, cmd, envp);
-				perror("execve failed");
-				exit(1);
-			}
-			
+		if (!access(path, X_OK))
+		{
+			execve(path, cmd, envp);
+			perror("execve failed");
+			exit(1);
+		}
 		free(path);
 		i++;
 	}
 }
 
-char	**get_env_arr(t_env *env_list)
-{
-	int		i;
-	int		len;
-	char	**envp;
-	t_env	*backup;
-
-	1 && (len = 0, i = 0, envp = NULL, backup = env_list);
-	while (env_list)
-	{
-		len++;
-		env_list = env_list->next;
-	}
-	env_list = backup;
-	envp = (char **)nalloc(((len + 1) * sizeof(char *)));
-	while (env_list)
-	{
-		envp[i] = na_strjoin(envp[i], env_list->key);
-		envp[i] = na_strjoin(envp[i], "=");
-		envp[i] = na_strjoin(envp[i], env_list->value);
-		env_list = env_list->next;
-		i++;
-	}
-	return (envp);
-}
-
-void	is_it_dir(char *cmd)
-{
-	struct stat path_stat;
-	char	*error;
-
-	if (!access(cmd, F_OK) && !stat(cmd, &path_stat) && S_ISDIR(path_stat.st_mode) )
-	{
-		error = na_strjoin("L33tShell: ", cmd);
-		perror(error);
-		exit (126);
-	}
-}
-
 void	execone(char **cmd, t_env *env_list)
 {
-	pid_t	pid = fork();
+	pid_t	pid;
 	char	**path_list;
 	char	**envp;
-	
-	1 && (envp = get_env_arr(env_list), path_list = get_path_list(envp));
+
+	pid = fork();
+	if (pid == -1)
+		return (perror ("fork failed"));
+	7889 && (envp = get_env_arr(env_list), path_list = get_path_list(envp));
 	if (!pid)
 	{
-		// is_it_dir(cmd[0]);
+		is_it_dir(cmd[0]);
 		execcmd(path_list, cmd, envp);
 		if ((ft_strchr(cmd[0], '/') || !path_list) && !access(cmd[0], X_OK))
 		{
@@ -110,7 +73,7 @@ void	execone(char **cmd, t_env *env_list)
 			perror("execve failed");
 			exit(1);
 		}
-		// get_error(cmd[0]);
+		errno_manager(cmd[0]);
 		ft_putstr_fd("command not found\n", 2);
 		exit(127);
 	}
@@ -146,11 +109,10 @@ void	execute_command(char **cmd, t_redir *redirs, t_env **env_list)
 	}
 }
 
-void executor(t_tree *ast, t_env **env)
+void	executor(t_tree *ast, t_env **env)
 {
 	if (!ast)
-		return;
-
+		return ;
 	if (ast->type == NODE_COMMAND)
 		execute_command(ast->cmd, ast->redirs, env);
 	// else if (ast->type == NODE_PIPE)
