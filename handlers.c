@@ -13,7 +13,7 @@
 #include "launchpad.h"
 
 
-int handle_quotes(char *str, char c)
+int handle_quotes(char *str, char c) // Handle quote expansion during tokenization
 {
 	int		i;
 	char	commander;
@@ -38,11 +38,10 @@ int handle_quotes(char *str, char c)
 	}
 	if (in_quote)
 		return (0);
-	// ft_printf("salam <%s>\n", &str[i]);
 	return (i);
 }
 
-int	handle_parentheses(char *str)
+int	handle_parentheses(char *str) // ! check if the parenthese count is correct only during tokenization
 {
 	int	i;
 	int parentheses;
@@ -88,7 +87,6 @@ int count_chars(char *str)
 	i = 0;
 	if (str[i] == '(' || str[i] == ')')
 	{
-		// TODO HANDLE PARENTHESES CORRECTLY
 		set = handle_parentheses(&str[i]);
 		if (!set)
 			return (0);
@@ -122,7 +120,7 @@ int ft_syntax_analyzer(char *str)
 			return (0);
 		i++;
 	}
-		if (ft_isparentheses(&str[i]) | ft_before_x(&str[i],ft_isparentheses))
+		if (ft_isparentheses(&str[i]) | ft_before_x(&str[i],ft_isparentheses)) // if the word is followed directly by parentheses
 			return (0);
-	return i;
+	return (i);
 }

@@ -1,6 +1,6 @@
 COMPILER = cc
 
-CFLAGS = -Wall -Wextra -Werror # -fsanitize=address -g3
+CFLAGS = -g  #-Wall -Wextra -Werror # -fsanitize=address -g3
 
 
 LIBFT = libft.a

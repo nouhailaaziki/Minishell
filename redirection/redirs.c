@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "launchpad.h"
+# include "../launchpad.h"
 
 int	handle_redirs(t_redir *redir)
 {

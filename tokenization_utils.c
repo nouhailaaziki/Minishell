@@ -49,7 +49,7 @@ int	ft_special_case(char *str, int type)
 		return (1);
 	return (0);
 }
-int	operator_len(char *str)
+int	operator_len(char *str) //returns the length of the operator on success
 {
 	int		i;
 	int		len;
@@ -129,7 +129,7 @@ int	lexer(t_token **head, char *line_read)
 		if (!token_len)
 			return (ft_syntax_err(&line_read[i], head));
 		link_token(head, new_token(ft_substr(line_read, position, token_len), \
-		token_lexer(&line_read[position])));
+		(token_lexer(&line_read[position]))));
 		i += token_len;
 		position = i;
 		if (ft_str_isspace(&line_read[i]))

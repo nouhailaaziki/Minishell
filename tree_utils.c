@@ -82,7 +82,7 @@ void link_redir(t_redir **list,t_redir *new_redir)
 }
 
 
-t_redir *redir_list_maker(t_token **head)
+t_redir *redir_list_maker(t_token **head) // links the redirections nodes to a linked list
 {
 	t_token *tmp;
 	t_redir *redir_list;
