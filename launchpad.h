@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/03 19:01:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/09 16:20:44 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,22 @@ typedef enum e_token_type
 {
 	TOKEN_WORD = 1,
 	TOKEN_ARG,
+	TOKEN_PAREN,
 	TOKEN_AND,
 	TOKEN_OR,
-	REDIR_IN,
-	REDIR_OUT,
 	TOKEN_PIPE,
+	TOKEN_REDIR,
+	R_FILE
+} t_token_type;
+
+typedef enum e_redir_type
+{
+	REDIR_IN = 10,
+	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-	R_FILE
-}	t_token_type;
+	REDIR_NONE
+} t_redir_type;
 
 /*--------------------Linked list of parsed tokens--------------------*/
 typedef struct s_token
@@ -105,6 +112,7 @@ typedef struct s_tree
 	t_node_type			type;
 	char				**cmd;
 	size_t				argc;
+	int					redir_count;
 	t_redir				*redirs;
 	t_redir				*redirs_before;
 	t_redir				*redirs_after;
@@ -170,7 +178,8 @@ void		is_it_dir(char *cmd);
 void		errno_manager(char	*cmd);
 int			puterror(char *cmd, char *error);
 void		puterror_to_exit(char *cmd, char *error, int ex);
-/*---------------------pARSING STUFF*/
+/*---------------------Parsing STUFF------------------------------------------*/
+
 t_token *ft_token_search(t_token **head, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
 int handle_quotes(char *str, char quote_type);
@@ -178,14 +187,13 @@ int ft_before_x(char *str, int (*f)(char *s));
 int ft_syntax_err(char *str, t_token **head);
 int lexer(t_token **head, char *line_read);
 void advanced_token_lexer(t_token **head);
-t_redir *redir_list_maker(t_token **head);
+t_redir *redir_list_maker(t_token **head, int count);
+t_tree *create_tree_node(int type,int *cmd_count);
 t_redir *redir_maker(t_token *data);
 int ft_is_bonus_operator(char *str);
 int ft_syntax_analyzer(char *str);
 int handle_parentheses(char *str);
-void print_tokens(t_token **head);
 void free_tokens(t_token **head);
-t_tree *create_tree_node(int cmd_count);
 int ft_isparentheses(char *c);
 int ft_is_operator(char *c);
 int operator_len(char *str);
@@ -195,4 +203,13 @@ int skip_spaces(char *str);
 int count_chars(char *str);
 int ft_is_redir(char *c);
 char ft_isquote(char c);
+
+// ! REMOVE THS LATER
+void print_tokens(t_token **head);
+void print_tree(t_tree *tree);
+void print_redirs(t_redir *redir);
+
+
+
+
 #endif

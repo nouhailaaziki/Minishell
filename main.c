@@ -3,27 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/03 19:23:21 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/09 17:30:31 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-void print_tree(t_tree *tree, int arg_count)
+void print_tree(t_tree *tree)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!tree)
+	{
+		printf(BLU"EMPTY TREE\n"RESET);
 		return;
+	}
 	printf("Command is : ");
-	while (i < arg_count)
-		printf(BHGRN "<%s> " RESET, tree->cmd[i++]);
-	printf("\n");
-	printf("Argc : %zu\n", tree->argc);
+	while (tree->cmd[i])
+		printf(BHGRN "{%s} " RESET, tree->cmd[i++]);
+	printf("\nArgc : %zu\n", tree->argc);
 
 	if (tree->redirs)
 	{
@@ -37,125 +39,24 @@ void print_tree(t_tree *tree, int arg_count)
 	}
 }
 
-
-void quote_expander(t_token **head)
-{
-	t_token *current;
-	int position;
-	int i;
-	char quote;
-	char *expanded_token;
-	i = 0;
-	position = 0;
-	current = *head;
-	while (current)
-	{
-		if (ft_strchr(current->value, '\"') == NULL && ft_strchr(current->value, '\'') == NULL)
-		{
-			current = current->next;
-			continue;
-		}
-		expanded_token = ft_calloc(ft_strlen(current->value) + 1 , sizeof(char));
-		if (!expanded_token)
-			return free_tokens(head), ft_putendl_fd("MALLOC FAILURE", 2);
-		while(current->value[i])
-		{
-		quote = ft_isquote(current->value[i]);
-		if (quote != '\0')
-		{
-			i++;
-			while (current->value[i] && current->value[i] != quote)
-				expanded_token[position++] = current->value[i++];
-			if (current->value[i] == quote)
-				i++;
-		}
-		else
-			expanded_token[position++] = current->value[i++];
-		}
-		if(expanded_token)
-		{
-			free(current->value);
-			current->value = expanded_token;
-		}
-		current = current->next;
-	}
-}
-
-void advanced_token_lexer(t_token **head)
-{
-	t_token *current;
-
-	current = *head;
-	while (current && current->next)
-	{
-		if(current->type == REDIR_HEREDOC || current->type == REDIR_IN)
-			current->next->type = R_FILE;
-		if (current->type== REDIR_OUT || current->type == REDIR_APPEND)
-			current->next->type = R_FILE;
-		if ((current->type == TOKEN_WORD || current->type ==TOKEN_ARG|| current->type == REDIR_IN || \
-		 current->type == R_FILE) && current->next->type == TOKEN_WORD)
-			current->next->type = TOKEN_ARG;
-		current = current->next;
-	}
-}
-int parser(t_token **head)
-{
-	t_token *current;
-
-	current = *head;
-	if (!current)
-		return 0;
-	if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
-		return ft_syntax_err(current->value, head);
-	while (current)
-	{
-		if (ft_is_operator(current->value) && !current->next)
-			return ft_syntax_err(current->value, head);
-		if (ft_is_redir(current->value) && ft_isparentheses(current->next->value))
-			return ft_syntax_err(current->value, head);
-		current = current->next;
-	}
-	advanced_token_lexer(head);
-	quote_expander(head);
-	return 1;
-}
-
-void	print_redirs(t_redir *redir)
-{
-	while (redir)
-	{
-		printf("Redir type: ");
-		if (redir->type == REDIR_IN)
-			printf("REDIR_IN");
-		else if (redir->type == REDIR_OUT)
-			printf("REDIR_OUT");
-		else if (redir->type == REDIR_APPEND)
-			printf("REDIR_APPEND");
-		else if (redir->type == REDIR_HEREDOC)
-			printf("REDIR_HEREDOC");
-		else
-			printf("UNKNOWN");
-		printf(", file: %s\n", redir->file);
-		redir = redir->next;
-	}
-}
-int block_arg_counter(t_token **head)
+int *block_arg_counter(t_token **head)
 {
 	t_token	*current;
-	int		count;
+	int		*count;
 
-	count = 0;
+	count = ft_calloc(2, sizeof(int));
 	current = *head;
 	while (current)
 	{
 		if (current->type ==TOKEN_AND|| current->type == TOKEN_PIPE || current->type == TOKEN_OR)
 			break;
-		else if(current->type >= REDIR_IN)
+		else if(current->type == TOKEN_REDIR)
 		{
+			count[1]++;
 			current = current->next;
 			continue;
 		}
-		count++;
+		count[0]++;
 		current = current->next;
 	}
 	return count;
@@ -183,21 +84,32 @@ int block_arg_counter(t_token **head)
 // 		print_ast(node->right);
 // 	}
 // }
-t_tree *create_block(t_token **head, int count)
+
+// ? i count the number of tokens until i stumble across a pipe/and/or.
+// ! i check for redirections and fill them in a linked list
+// * i fill inside the node the number of arguments
+/*
+	iterate the linked list and store the position of the last pao.
+	create a node tree to its right and fill it with the last argument.
+
+*/
+
+
+t_tree *create_block(t_token **head, int *count)
 {
 	t_tree *tree;
-	int i;
+	int		i;
 	t_token *current;
 
 	i = 0;
-	tree = create_tree_node(count);
+	tree = create_tree_node(NODE_COMMAND, count);
 	if(!tree)
 		return NULL;
-	tree->redirs = redir_list_maker(head);
+	tree->redirs = redir_list_maker(head,count[1]);
 	current = *head;
-	while (current && i < count)
+	while (current && i < count[0])
 	{
-		if (current->type < REDIR_IN)
+		if (current->type != TOKEN_REDIR)
 			tree->cmd[i++] = ft_strdup(current->value);
 		current = current->next;
 	}
@@ -210,8 +122,11 @@ int	main(int argc, char **argv, char **envp)
 	t_token	*tokens;
 	t_tree	*ast;
 	char	*line;
-	int count;
-	
+	int		*count;
+	t_token * current;
+	int I =0;
+
+	current = tokens;
 	(void)argc, (void)argv;
 	7889 && (env_list = NULL, tokens = NULL, ast = NULL);
 	display_intro();
@@ -219,17 +134,30 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline(PINK BOLD"╰┈➤ L33tShell-N.Y ✗ "RESET);
-		if (!line || !lexer(&tokens, line) || !parser(&tokens))
-		{
-			add_history(line);
-			continue;
-		}
-		count = block_arg_counter(&tokens);
-		ast = create_block(&tokens,count);
-		// print_tokens(&tokens);
-		// print_tree(ast,count);
-		executor(ast, &env_list);
+		// line = ft_strdup("ls");
 		add_history(line);
+		if (!line || !lexer(&tokens, line) || !parser(&tokens))
+			continue;
+		// while (current && I < 3)
+		// {
+		count = block_arg_counter(&tokens);
+		// 	if(!ast)
+		// 		ast = create_block(&current,count);
+		// 	else
+		// 		ast-> = create_block(&current, count);
+		// 	while(count >0)
+		// 	{
+			// 		count--;
+			// 		current = current->next;
+			// 	}
+			// 	if(current->type == TOKEN_AND)
+
+			// }
+		ast->left = create_block(&tokens,count);
+		ast = create_block(,1);
+		print_tree(ast);
+		print_tokens(&tokens);
+		// executor(ast, &env_list);
 		free_tokens(&tokens);
 		free(line);
 	}

@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/03 19:01:56 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/09 15:13:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
+
+void print_redirs(t_redir *redir)
+{
+	while (redir)
+	{
+		printf(BLU"Redir type: ");
+		if (redir->type == REDIR_IN)
+			printf("REDIR_IN");
+		else if (redir->type == REDIR_OUT)
+			printf("REDIR_OUT");
+		else if (redir->type == REDIR_APPEND)
+			printf("REDIR_APPEND");
+		else if (redir->type == REDIR_HEREDOC)
+			printf("REDIR_HEREDOC");
+		else
+			printf("UNKNOWN");
+		printf(", file: %s\n"RESET, redir->file);
+		redir = redir->next;
+	}
+}
 
 int ft_syntax_err(char *str, t_token **head)
 {
@@ -66,16 +86,18 @@ void print_tokens(t_token **head)
 			tiipe = "REDIR_HEREDOC";
 		else if (tmp->type == REDIR_APPEND )
 			tiipe = "REDIR_APPEND";
+		else if (tmp->type == REDIR_IN)
+				tiipe = "REDIR_IN";
+		else if (tmp->type == REDIR_OUT)
+				tiipe = "REDIR_OUT";
 		else if (tmp->type == TOKEN_PIPE )
 			tiipe = "PIPE";
-		else if (tmp->type == REDIR_IN)
-			tiipe = "REDIR_IN";
-		else if (tmp->type == REDIR_OUT)
-			tiipe = "REDIR_OUT";
-		else if (tmp->type == 0)
+		else if (tmp->type == R_FILE)
 			tiipe = "R_FILE";
 		else if (tmp->type == TOKEN_ARG)
-			tiipe = "ARG";
+			tiipe = "ARGUMENT";
+		else if (tmp->type == TOKEN_PAREN)
+			tiipe = "PARENTHESE_BLOCK";
 		else
 			tiipe = "WORD";
 

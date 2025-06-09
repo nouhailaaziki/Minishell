@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tree_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/03 19:14:20 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/09 16:24:41 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-t_tree *create_tree_node(int cmd_count)
+t_tree *create_tree_node(int type,int *cmd_count)
 {
 	t_tree *head;
 
@@ -21,12 +21,13 @@ t_tree *create_tree_node(int cmd_count)
 	head = ft_calloc(1, sizeof(t_tree));
 	if (!head)
 		return (NULL);
-	head->cmd = ft_calloc(cmd_count +1,sizeof(char **));
+	head->cmd = ft_calloc(cmd_count[0] +1,sizeof(char **));
 	if(!head->cmd)
 		return (free(head),NULL);
 	head->redirs = NULL;
-	head->type = NODE_COMMAND;
-	head->argc = cmd_count;
+	head->type = type;
+	head->redir_count = cmd_count[1];
+	head->argc = cmd_count[0];
 	head->left = NULL;
 	head->right = NULL;
 	return (head);
@@ -55,7 +56,8 @@ t_redir *redir_maker(t_token *data)
 		return (NULL);
 	redir->fd = -1;
 	redir->flag = 0;
-	redir->file= data->next->value;
+	if(data->next)
+		redir->file = data->next->value;
 	redir->index = 0;
 	redir->type = data->type;
 	redir->next = (NULL);
@@ -82,18 +84,20 @@ void link_redir(t_redir **list,t_redir *new_redir)
 }
 
 
-t_redir *redir_list_maker(t_token **head) // links the redirections nodes to a linked list
+t_redir *redir_list_maker(t_token **head, int count) // links the redirections nodes to a linked list
 {
 	t_token *tmp;
 	t_redir *redir_list;
+	int i;
 
 	redir_list = NULL;
+	i = 0;
 	tmp = *head;
-
 	while (tmp)
 	{
 		if (tmp->type >= REDIR_IN && tmp->type <= REDIR_HEREDOC)
 			link_redir(&redir_list, redir_maker(tmp));
+		// i++;
 		tmp = tmp->next;
 	}
 	return redir_list;

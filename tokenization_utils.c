@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/03 18:42:27 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/09 12:40:09 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,21 @@ int	token_lexer(char *str)
 	if (operator_length == 2)
 	{
 		if (str[0] == '|')
-			return ((TOKEN_OR));
+			return (TOKEN_OR);
 		if (str[0] == '&')
-			return ((TOKEN_AND));
-		if (str[0] == '<')
-			return ((REDIR_HEREDOC));
-		if (str[0] == '>')
-			return ((REDIR_APPEND));
+			return (TOKEN_AND);
+		if (str[0] == '<' || str[0] == '>')
+			return (TOKEN_REDIR);
 	}
 	else if (operator_length == 1)
 	{
 		if (str[0] == '|')
-			return ((TOKEN_PIPE));
-		if (str[0] == '<')
-			return ((REDIR_IN));
-		if (str[0] == '>')
-			return ((REDIR_OUT));
+			return (TOKEN_PIPE);
+		if (str[0] == '<' || str[0] == '>')
+			return (TOKEN_REDIR);
 	}
+	else if(str[0] == '(')
+		return (TOKEN_PAREN);
 	return ((TOKEN_WORD));
 }
 
@@ -45,7 +43,7 @@ int	ft_special_case(char *str, int type)
 	int	new_type;
 
 	new_type = token_lexer(&str[skip_spaces(str)]);
-	if ((type < REDIR_IN || type > REDIR_HEREDOC) && ( new_type >= REDIR_IN  && new_type <= REDIR_HEREDOC  )) // todo fix later range of enums
+	if ((type != TOKEN_REDIR) && (new_type == TOKEN_REDIR)) // todo fix later range of enums
 		return (1);
 	return (0);
 }
