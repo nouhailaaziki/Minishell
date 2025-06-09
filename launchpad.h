@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 16:20:44 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:03:18 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ int ft_before_x(char *str, int (*f)(char *s));
 int ft_syntax_err(char *str, t_token **head);
 int lexer(t_token **head, char *line_read);
 void advanced_token_lexer(t_token **head);
-t_redir *redir_list_maker(t_token **head, int count);
-t_tree *create_tree_node(int type,int *cmd_count);
+t_redir *redir_list_maker(t_token **head);
+t_tree *create_tree_node(int type,int cmd_count);
 t_redir *redir_maker(t_token *data);
 int ft_is_bonus_operator(char *str);
 int ft_syntax_analyzer(char *str);
