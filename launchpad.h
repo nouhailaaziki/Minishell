@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 18:03:18 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/10 13:10:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,25 +182,29 @@ void		puterror_to_exit(char *cmd, char *error, int ex);
 
 t_token *ft_token_search(t_token **head, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
+t_tree *create_block(t_token **head, int count, int type);
+t_tree *create_tree_node(int type,int cmd_count);
 int handle_quotes(char *str, char quote_type);
-int ft_before_x(char *str, int (*f)(char *s));
 int ft_syntax_err(char *str, t_token **head);
 int lexer(t_token **head, char *line_read);
 void advanced_token_lexer(t_token **head);
 t_redir *redir_list_maker(t_token **head);
-t_tree *create_tree_node(int type,int cmd_count);
 t_redir *redir_maker(t_token *data);
-int ft_is_bonus_operator(char *str);
 int ft_syntax_analyzer(char *str);
 int handle_parentheses(char *str);
 void free_tokens(t_token **head);
-int ft_isparentheses(char *c);
-int ft_is_operator(char *c);
 int operator_len(char *str);
 int token_lexer(char *str);
 int parser(t_token **head);
 int skip_spaces(char *str);
+int block_identifier(t_token **head);
+int block_arg_counter(t_token **head);
 int count_chars(char *str);
+	/*---------------------Checkers-------------------*/
+	int ft_before_x(char *str, int (*f)(char *s));
+int ft_is_bonus_operator(char *str);
+int ft_isparentheses(char *c);
+int ft_is_operator(char *c);
 int ft_is_redir(char *c);
 char ft_isquote(char c);
 

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/09 15:13:03 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:00:19 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ void print_tokens(t_token **head)
 {
 	t_token *tmp;
 	char * tiipe;
-	t_token *test;
 
-	test = ft_token_search(head, TOKEN_OR);
 	tmp = *head;
 	while (tmp)
 	{

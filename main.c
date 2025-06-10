@@ -6,87 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 18:10:47 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:53:06 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
-
-void print_tree(t_tree *tree)
-{
-	int i;
-
-	i = 0;
-	if (!tree)
-	{
-		printf(BLU "EMPTY TREE\n" RESET);
-		return;
-	}
-	printf("Command is : ");
-	while (tree->cmd[i])
-		printf(BHGRN "{%s} " RESET, tree->cmd[i++]);
-	printf("\nArgc : %zu\n", tree->argc);
-
-	if (tree->redirs)
-	{
-		printf(BLU "Redirs :");
-		while (tree->redirs)
-		{
-			printf("{%zu}[%d][%s] , ", tree->redirs->index, tree->redirs->type, tree->redirs->file);
-			tree->redirs = tree->redirs->next;
-		}
-		printf(RESET "}\n");
-	}
-	printf("LEFT");
-	print_tree(tree->left);
-	printf("\nRIGHT");
-	print_tree(tree->right);
-}
-
-int *block_arg_counter(t_token **head)
-{
-	t_token *current;
-	int *count;
-
-	count = ft_calloc(2, sizeof(int));
-	current = *head;
-	while (current)
-	{
-		if (current->type == TOKEN_AND || current->type == TOKEN_PIPE || current->type == TOKEN_OR)
-			break;
-		else if (current->type == TOKEN_REDIR)
-		{
-			current = current->next;
-			continue;
-		}
-		count++;
-		current = current->next;
-	}
-	return count;
-}
-// void	print_ast(t_tree *node)
-// {
-// 	if (!node)
-// 		return ;
-// 	if (node->type == NODE_COMMAND)
-// 	{
-// 		printf("NODE_COMMAND: ");
-// 		for (int i = 0; node->cmd && node->cmd[i]; i++)
-// 			printf("%s ", node->cmd[i]);
-// 		printf("\n");
-// 		if (node->redirs)
-// 		{
-// 			printf("Redirections:\n");
-// 			print_redirs(node->redirs);
-// 		}
-// 	}
-// 	else if (node->type == NODE_PIPE)
-// 	{
-// 		printf("NODE_PIPE:\n");
-// 		print_ast(node->left);
-// 		print_ast(node->right);
-// 	}
-// }
 
 // ? i count the number of tokens until i stumble across a pipe/and/or.
 // ! i check for redirections and fill them in a linked list
@@ -97,69 +21,87 @@ int *block_arg_counter(t_token **head)
 
 */
 
-t_tree *create_block(t_token **head, int count)
+void reset_tokens(t_token **head)
 {
-	t_tree *tree;
-	int i;
+	while((*head)->position > 0)
+		*head = (*head)->prev;
+}
+
+t_token *find_and_or(t_token **head)
+{
 	t_token *current;
 
-	i = 0;
-	tree = create_tree_node(NODE_COMMAND, count);
-	if (!tree)
-		return NULL;
-	tree->redirs = redir_list_maker(head);
 	current = *head;
-	while (current && i < count)
-	{
-		if (current->type != TOKEN_REDIR)
-			tree->cmd[i++] = ft_strdup(current->value);
+	while (current->next)
 		current = current->next;
+	while (current)
+	{
+		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
+			return current;
+		current = current->prev;
 	}
-	tree->cmd[i] = NULL;
-	return (tree);
+	printf("NO or/and FOUND\n");
+	return NULL;
 }
+
+void create_one_tree(t_token **head, t_tree **ast)
+{
+	t_token *current;
+	t_tree *tree;
+	int count;
+
+	tree = *ast;
+	current = *head;
+	current = find_and_or(&current);
+	if (current)
+	{
+		tree = create_block(&current, 1, block_identifier(&current));
+		current = current->next;
+		count = block_arg_counter(&current);
+		tree->right = create_block(&current, count, block_identifier(&current));
+		reset_tokens(&current);
+		current = *head;
+		count = block_arg_counter(&current);
+		tree->left = create_block(&current, count, block_identifier(&current));
+		puts(BLU "head");
+		print_tree(tree);
+		print_tokens(head);
+	}
+	else
+	{
+		// reset_tokens(&current);
+		current = *head;
+		count = block_arg_counter(&current);
+		tree = create_block(&current, count, block_identifier(&current));
+		puts(BLU "head");
+		print_tree(tree);
+	}
+}
+
+
+
+
 int main(int argc, char **argv, char **envp)
 {
-	t_env *env_list;
-	t_token *tokens, *current;
-	t_tree *ast;
-	char *line;
-	int *count;
-	int *X = 1;
+	t_env	*env_list;
+	t_token	*tokens, *current;
+	t_tree	*ast;
+	char	*line;
+	int		count;
+
 	(void)argc, (void)argv;
 	tokens = NULL;
-
 	7889 && (env_list = NULL, tokens = NULL, ast = NULL);
 	display_intro();
 	build_env(&env_list, envp);
 	while (1)
 	{
 		line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
-		// line = ft_strdup("ls && grep");
+		// line = ft_strdup("ls ");
 		add_history(line);
 		if (!line || !lexer(&tokens, line) || !parser(&tokens))
 			continue;
-		// count = block_arg_counter(&tokens);
-		// ast = create_block(&tokens,count);
-		current = tokens;
-		while (current->next)
-			current = current->next;
-		while (current)
-		{
-			if (current->type == TOKEN_AND)
-				break;
-			current = current->prev;
-		}
-		ast = create_tree_node(NODE_AND, 1);
-		current = current->next;
-		count = block_arg_counter(&current);
-		ast->right = create_block(&current, count);
-		while(current->position > 0)
-			current = current->prev;
-		count = block_arg_counter(&current);
-		ast->left = create_block(&current, count);
-		print_tree(ast);
-		print_tokens(&tokens);
+		create_one_tree(&tokens,&ast);
 		// executor(ast, &env_list);
 		free_tokens(&tokens);
 		free(line);

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/09 17:29:28 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:44:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void advanced_token_lexer(t_token **head)
 	{
 		if (current->type == TOKEN_REDIR)
 		{
-			current->type = redir_identifier(current->value);
+			// current->type = redir_identifier(current->value);
 			current->next->type = R_FILE;
 		}
 		if ((current->type == TOKEN_WORD || current->type == TOKEN_ARG || current->type == R_FILE) && \

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/09 12:40:09 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:58:56 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ int	lexer(t_token **head, char *line_read)
 	int	position;
 
 	i = 0;
-	token_len = 0;
 	while (line_read[i])
 	{
 		i += skip_spaces(&line_read[i]);
