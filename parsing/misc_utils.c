@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/10 16:00:19 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:42:54 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,15 @@ void print_redirs(t_redir *redir)
 	}
 }
 
-int ft_syntax_err(char *str, t_token **head)
+int ft_syntax_err(char *str, t_token *head)
 {
 	ft_putstr_fd("DeepShell: syntax error near unexpected token `", 2);
 	ft_putchar_fd(str[0], 2);
 	ft_putendl_fd("'", 2);
-	free_tokens(head);
+	free_tokens(&head);
 	return 0;
 }
-// void free_tokens(t_token **head)
-// {
-// 	t_token *tmp;
-// 	t_token *next;
-// 	// ft_printf(MAG "Freeing Tokens !-------\n"RESET);
-// 	tmp = *head;
-// 	while (tmp)
-// 	{
-// 		next = tmp->next;
-// 		free(tmp->value);
-// 		free(tmp);
-// 		(tmp) = next;
-// 	}
-// }
 
-void free_tokens(t_token **head)
-{
-	t_token *tmp;
-	// ft_printf(MAG "Freeing Tokens !-------\n"RESET);
-	while ((*head))
-	{
-		tmp = (*head);
-		free(tmp->value);
-		free(tmp);
-		(*head) = (*head)->next;
-	}
-}
 
 void print_tokens(t_token **head)
 {
@@ -103,5 +77,52 @@ void print_tokens(t_token **head)
 		// if(tmp->prev != NULL && tmp->prev->value)
 		// ft_printf("the one before the element %s, is %s", tmp->value , ÷tmp->prev->value);
 		tmp = (tmp)->next;
+	}
+}
+void print_tree(t_tree *tree)
+{
+	int i;
+	char *type;
+
+	type = NULL;
+	i = 0;
+	if (!tree)
+	{
+		printf(BLU "EMPTY TREE\n" RESET);
+		return;
+	}
+	if (tree->type == NODE_COMMAND)
+		type = "NODE_COMMAND";
+	else if (tree->type == NODE_PIPE)
+		type = "NODE_PIPE";
+	else if (tree->type == NODE_AND)
+		type = "NODE_AND";
+	else if (tree->type == NODE_OR)
+		type = "NODE_OR";
+
+	printf("Root Node is " ORANGE "%s :", type);
+	while (tree->cmd[i])
+		printf(BHGRN "{%s} " RESET, tree->cmd[i++]);
+	printf("\nArgc : %zu\n", tree->argc);
+
+	if (tree->redirs)
+	{
+		printf(BLU "Redirs :");
+		while (tree->redirs)
+		{
+			printf("{%zu}[%d][%s] , ", tree->redirs->index, tree->redirs->type, tree->redirs->file);
+			tree->redirs = tree->redirs->next;
+		}
+		printf(RESET "}\n");
+	}
+	if (tree->left)
+	{
+		printf("Left ||\n      V\n");
+		print_tree(tree->left);
+	}
+	if (tree->right)
+	{
+		printf("Right ||\n     V\n");
+		print_tree(tree->right);
 	}
 }

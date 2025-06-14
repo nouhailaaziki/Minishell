@@ -1,5 +1,4 @@
 */*.o
 .DS_Store
-log.txt
 .excalidraw
 *.tldr

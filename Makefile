@@ -1,16 +1,3 @@
-COMPILER = cc
-
-CFLAGS = -g  # -Wall -Wextra -Werror # -fsanitize=address -g3
-
-
-LIBFT = libft.a
-
-LIBFT_DIR = libft
-
-LIBFT_SRC = $(wildcard $(LIBFT_DIR)/*.c)
-
-LIBFT_OBJ = $(wildcard $(LIBFT_DIR)/*.o)
-
 
 RED = \033[0;31m
 BOLD = \033[1m
@@ -18,7 +5,29 @@ GREEN = \033[0;32m
 BLUE = \x1b[34m
 YELLOW = \033[0;33m
 RESET = \033[0m
-MINI_SRC = tokenization_utils.c handlers.c misc_utils.c lexer_utils.c tree_utils.c parser_utils.c
+
+RM = rm -rf
+
+COMPILER = cc
+
+CFLAGS = -g  # -Wall -Wextra -Werror # -fsanitize=address -g3
+
+LIBFT = libft.a
+
+LIBFT_SRC = libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.c libft/ft_isalpha.c libft/ft_isascii.c libft/ft_isdigit.c \
+			   libft/ft_isprint.c libft/ft_memchr.c libft/ft_memcmp.c libft/ft_memcpy.c libft/ft_memmove.c libft/ft_memset.c libft/ft_strchr.c \
+			   libft/ft_strdup.c libft/ft_strlcat.c libft/ft_strlcpy.c libft/ft_strlen.c libft/ft_strncmp.c libft/ft_strnstr.c libft/ft_strrchr.c \
+			   libft/ft_substr.c libft/ft_tolower.c libft/ft_toupper.c libft/ft_strjoin.c libft/ft_strtrim.c libft/ft_putchar_fd.c libft/ft_pow.c \
+			   libft/ft_putstr_fd.c libft/ft_putendl_fd.c libft/ft_putnbr_fd.c libft/ft_striteri.c libft/ft_strmapi.c libft/ft_itoa.c libft/ft_split.c \
+			   libft/ft_abs.c libft/ft_count_words.c libft/ft_factors_count.c libft/ft_is_duplicated.c libft/ft_is_int.c libft/ft_is_int_array.c \
+			   libft/ft_is_sorted.c libft/ft_is_uint.c libft/ft_isspace.c libft/ft_lst_new.c libft/ft_lstadd_front.c libft/ft_lstlast.c libft/ft_lstsize.c\
+			   libft/ft_str_isspace.c libft/ft_super_strlen.c libft/ft_atoi_modified.c libft/get_next_line/get_next_line.c libft/get_next_line/get_next_line_bonus.c \
+			   libft/ft_printf/ft_printchar.c libft/ft_printf/ft_puthex.c libft/ft_printf/ft_printnbr.c libft/ft_printf/ft_putptr.c\
+			   libft/ft_printf/ft_printstr.c libft/ft_printf/ft_putuint.c libft/ft_printf/ft_printf.c
+
+PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c \
+		  parsing/lexer_utils.c parsing/tree_utils.c parsing/parser_utils.c parsing/ft_free.c
+
 
 EXECUTION =	execution/builtins/cd.c \
 			execution/builtins/pwd.c \
@@ -56,25 +65,31 @@ EXECUTION =	execution/builtins/cd.c \
 			execution/utilities/ft_putstr_fd.c \
 			execution/redirection/redirs.c \
 			execution/executor.c main.c\
-			$(MINI_SRC)
-
 
 
 EXEC = ${EXECUTION:.c=.o}
 
-NAME = minishell
+PARSE = $(PARSING:.c=.o)
 
-HEADER = exeecution/launchpad.h libft/libft.h
+LIBFT_OBJ = $(LIBFT_SRC:.c=.o)
+
+HEADER = execution/launchpad.h libft/libft.h
+
+NAME = minishell
 
 all: ${NAME}
 	./minishell
-${NAME} : ${EXEC} $(LIBFT)
+
+${NAME} : $(LIBFT) ${PARSE} ${EXEC}
 	@echo "${YELLOW} ${BOLD}➤ Launching compilation...${RESET}"
-	${COMPILER} ${CFLAGS} ${EXEC} -o $@ $(LIBFT) -lreadline -ltermcap
+	${COMPILER} ${CFLAGS} $(PARSE) ${EXEC} -o $@ $(LIBFT) -lreadline -ltermcap
 	@echo "${GREEN} ${BOLD}➤ ${NAME} successfully compiled ✓${RESET}"
 
+
 $(LIBFT): $(LIBFT_SRC)
+	@echo "${YELLOW} ${BOLD}➤ Launching $(LIBFT) compilation...${RESET}"
 	make -C libft all
+	@echo "${GREEN} ${BOLD}➤ ${LIBFT} successfully compiled ✓${RESET}"
 	mv libft/libft.a .
 
 
@@ -83,8 +98,9 @@ $(LIBFT): $(LIBFT_SRC)
 
 clean:
 	${RM} ${EXEC}
-	@echo "${BLUE} ${BOLD}Object files removed ✓${RESET}"
+	${RM} ${PARSE}
 	make -C libft clean
+	@echo "${BLUE} ${BOLD}Object files removed ✓${RESET}"
 
 fclean: clean
 	${RM} ${NAME} $(LIBFT)

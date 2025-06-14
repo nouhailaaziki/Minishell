@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/10 15:58:56 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/12 16:09:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_token	*new_token(char *value, int type)
 	return (token);
 }
 
-int	lexer(t_token **head, char *line_read)
+int	lexer(t_token **head, char *line_read, int status_flag)
 {
 	int	i;
 	int	token_len;
@@ -125,6 +125,8 @@ int	lexer(t_token **head, char *line_read)
 			token_len = operator_len((char *)&line_read[i]);
 		if (!token_len)
 			return (ft_syntax_err(&line_read[i], head));
+		if(status_flag)
+			break;
 		link_token(head, new_token(ft_substr(line_read, position, token_len), \
 		(token_lexer(&line_read[position]))));
 		i += token_len;

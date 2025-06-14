@@ -6,30 +6,30 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/10 13:10:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:42:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LAUNCHPAD_H
-# define LAUNCHPAD_H
+#define LAUNCHPAD_H
 
 /*---------------------Header inclusion directive---------------------*/
-# include <errno.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <string.h>
-# include <limits.h>
-# include <sys/stat.h>
-# include "libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+#include <sys/stat.h>
+#include "libft/libft.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 /*-----------------------Format and Color Macros----------------------*/
-# define BOLD "\033[1m"
-# define ORANGE "\x1b[38;5;214m"
-# define PINK "\x1b[95m"
+#define BOLD "\033[1m"
+#define ORANGE "\x1b[38;5;214m"
+#define PINK "\x1b[95m"
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
@@ -56,23 +56,23 @@ typedef enum e_redir_type
 /*--------------------Linked list of parsed tokens--------------------*/
 typedef struct s_token
 {
-	size_t			position;
-	char			*value;
-	int				type;
-	struct s_token	*next;
-	struct s_token	*prev;
+	int position;
+	char *value;
+	int type;
+	struct s_token *next;
+	struct s_token *prev;
 } t_token;
 
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
 {
-	size_t				index;
-	t_token_type		type;
-	char				*file;
-	int					fd;
-	int					flag;
-	struct s_redir		*next;
-}	t_redir;
+	size_t index;
+	t_token_type type;
+	char *file;
+	int fd;
+	int flag;
+	struct s_redir *next;
+} t_redir;
 
 /*---------------------------Node type enum---------------------------*/
 typedef enum e_node_type
@@ -82,138 +82,152 @@ typedef enum e_node_type
 	NODE_AND,
 	NODE_OR,
 	NODE_PARENTHS
-}	t_node_type;
+} t_node_type;
 
 /*----------------Linked list of environment variables----------------*/
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
+	char *key;
+	char *value;
+	struct s_env *next;
+} t_env;
 
 /*-------------------Garbage collector node struct--------------------*/
 typedef struct s_gcnode
 {
-	void			*address;
-	struct s_gcnode	*next;
-}	t_gcnode;
+	void *address;
+	struct s_gcnode *next;
+} t_gcnode;
 
 /*---------------Linked list of executable search paths---------------*/
 typedef struct s_path
 {
-	void			*path;
-	struct s_path	*next;
-}	t_path;
+	void *path;
+	struct s_path *next;
+} t_path;
 
 /*--------------------------Tree node struct--------------------------*/
 typedef struct s_tree
 {
-	t_node_type			type;
-	char				**cmd;
-	size_t				argc;
-	int					redir_count;
-	t_redir				*redirs;
-	t_redir				*redirs_before;
-	t_redir				*redirs_after;
-	int					is_ambiguous;
-	struct s_tree		*left;
-	struct s_tree		*right;
-}	t_tree;
+	t_node_type type;
+	char **cmd;
+	size_t argc;
+	int redir_count;
+	t_redir *redirs;
+	t_redir *redirs_before;
+	t_redir *redirs_after;
+	int is_ambiguous;
+	struct s_tree *left;
+	struct s_tree *right;
+} t_tree;
+
+typedef struct s_shell
+{
+	t_token *tokens, *current;
+	t_env *env_list;
+	t_tree *ast;
+	char *line;
+} t_shell;
+
 
 /*-------------------------Execution manager--------------------------*/
-void		executor(t_tree *ast, t_env **env);
+void executor(t_tree *ast, t_env **env);
 
 /*-----------------------Environment fonctions------------------------*/
-t_env		*env_node(char *envp);
-char		**get_env_arr(t_env *env_list);
-void		upp_shlvl(t_env *node, int nbr);
-void		build_env(t_env **env_list, char **envp);
+t_env *env_node(char *envp);
+char **get_env_arr(t_env *env_list);
+void upp_shlvl(t_env *node, int nbr);
+void build_env(t_env **env_list, char **envp);
 
 /*-------------------------Builtins fonctions-------------------------*/
-int			pwd(void);
-int			echo(char **cmd);
-int			env(t_env *env_list);
-int			cd(char **cmd, t_env **env_list);
-int			unset(t_env **env_list, char **cmd);
-int			export(char **cmd, t_env **env_list);
-void		run_exit(char **cmd, int exit_status);
-void		handle_argument(t_env **env_list, char *cmd);
-t_env		*create_node(char *argv, size_t key_len, char *sign);
-void		sort_env_list(t_env **env_list);
-int			check_validity(char	*argv, char *cmd);
-void		add_value(t_env	**env_list, char *argv, char *key);
-void		update_env(t_env **env_list, char *argv, char *key, int start);
-void		ft_putstr_fd(char *s, int fd);
+int pwd(void);
+int echo(char **cmd);
+int env(t_env *env_list);
+int cd(char **cmd, t_env **env_list);
+int unset(t_env **env_list, char **cmd);
+int export(char **cmd, t_env **env_list);
+void run_exit(char **cmd, int exit_status);
+void handle_argument(t_env **env_list, char *cmd);
+t_env *create_node(char *argv, size_t key_len, char *sign);
+void sort_env_list(t_env **env_list);
+int check_validity(char *argv, char *cmd);
+void add_value(t_env **env_list, char *argv, char *key);
+void update_env(t_env **env_list, char *argv, char *key, int start);
+void ft_putstr_fd(char *s, int fd);
 
 /*--------------------Garbage collector fonctions---------------------*/
-void		*nalloc(size_t __size);
-void		free_all_tracked(void);
-t_gcnode	**memory_tracker(void);
+void *nalloc(size_t __size);
+void free_all_tracked(void);
+t_gcnode **memory_tracker(void);
 
 /*-------------------Utilities from libft (Updated)-------------------*/
-char		*na_itoa(int n);
-int			ft_isdigit(int c);
-int			ft_arrlen(char **arr);
-int			ft_atoi(const char *str);
-size_t		ft_strlen(const char *s);
-char		*na_strdup(const char *s);
-long		strict_atoi(const char *str);
-int			ft_strcmp(char *s1, char *s2);
-char		*ft_strchr(const char *s, int c);
-char		**na_split(char const *s, char c);
-int			ft_isallchar(const char *str, char c);
-void		*na_calloc(size_t count, size_t size);
-void		*ft_memset(void *b, int c, size_t len);
-char		*na_strjoin(char const *s1, char const *s2);
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
-char		*na_substr(char const *s, unsigned int start, size_t len);
+char *na_itoa(int n);
+int ft_isdigit(int c);
+int ft_arrlen(char **arr);
+int ft_atoi(const char *str);
+size_t ft_strlen(const char *s);
+char *na_strdup(const char *s);
+long strict_atoi(const char *str);
+int ft_strcmp(char *s1, char *s2);
+char *ft_strchr(const char *s, int c);
+char **na_split(char const *s, char c);
+int ft_isallchar(const char *str, char c);
+void *na_calloc(size_t count, size_t size);
+void *ft_memset(void *b, int c, size_t len);
+char *na_strjoin(char const *s1, char const *s2);
+int ft_strncmp(const char *s1, const char *s2, size_t n);
+char *na_substr(char const *s, unsigned int start, size_t len);
 
 /*---------------------------Redirection implement---------------------------*/
-int	handle_redirs(t_redir *redir);
+int handle_redirs(t_redir *redir);
 
 /*----------------------------------Events-----------------------------------*/
-void		display_intro(void);
-void		is_it_dir(char *cmd);
-void		errno_manager(char	*cmd);
-int			puterror(char *cmd, char *error);
-void		puterror_to_exit(char *cmd, char *error, int ex);
+void display_intro(void);
+void is_it_dir(char *cmd);
+void errno_manager(char *cmd);
+int puterror(char *cmd, char *error);
+void puterror_to_exit(char *cmd, char *error, int ex);
 /*---------------------Parsing STUFF------------------------------------------*/
 
-t_token *ft_token_search(t_token **head, int type);
-void link_redir(t_redir **list, t_redir *new_redir);
-t_tree *create_block(t_token **head, int count, int type);
-t_tree *create_tree_node(int type,int cmd_count);
+int lexer(t_token **head, char *line_read, int status_flag);
+void link_token(t_token **head, t_token *node);
 int handle_quotes(char *str, char quote_type);
-int ft_syntax_err(char *str, t_token **head);
-int lexer(t_token **head, char *line_read);
-void advanced_token_lexer(t_token **head);
-t_redir *redir_list_maker(t_token **head);
-t_redir *redir_maker(t_token *data);
+int advanced_token_lexer(t_token **head);
 int ft_syntax_analyzer(char *str);
 int handle_parentheses(char *str);
-void free_tokens(t_token **head);
+// void free_tokens(t_token **head);
 int operator_len(char *str);
 int token_lexer(char *str);
-int parser(t_token **head);
+int parser(t_shell shell);
 int skip_spaces(char *str);
-int block_identifier(t_token **head);
+/*-----------Tree Stuff-------------------*/
+t_tree *create_block(t_token **head, int count, int type);
+void link_redir(t_redir **list, t_redir *new_redir);
+t_token *ft_token_search(t_token **head, int type);
+t_tree *create_tree_node(int type, int cmd_count);
+t_redir *redir_list_maker(t_token **head);
 int block_arg_counter(t_token **head);
+int sub_block_arg_counter(t_token **head);
+t_token *find_prev_PIPE(t_token **head,int nav_flag);
+int block_identifier(t_token **head);
+t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
-	/*---------------------Checkers-------------------*/
-	int ft_before_x(char *str, int (*f)(char *s));
+/*---------------------Checkers-------------------*/
+int ft_syntax_err(char *str, t_token *head);
+int ft_before_x(char *str, int (*f)(char *s));
 int ft_is_bonus_operator(char *str);
 int ft_isparentheses(char *c);
 int ft_is_operator(char *c);
 int ft_is_redir(char *c);
 char ft_isquote(char c);
+/*-----------free-------------*/
+void clear_memory(t_tree **ast, t_token **tokens, char *line);
+void free_tree(t_tree **ast);
+void free_tokens(t_token **head);
 
 // ! REMOVE THS LATER
 void print_tokens(t_token **head);
-void print_tree(t_tree *tree);
 void print_redirs(t_redir *redir);
-
-
-
+void print_tree(t_tree *tree);
 
 #endif
