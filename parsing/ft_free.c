@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/13 16:15:02 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 08:35:13 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,34 @@
 	count = 0;
 	if(!(*ast))
 		return;
-	while ((*ast)->cmd && (*ast)->cmd[count] != NULL)
-	{
-		ft_printf("Freeing %s \n", (*ast)->cmd[count]);
-		free((*ast)->cmd[count]);
-		count++;
-	}
 	while ((*ast)->redirs)
 	{
 		free((*ast)->redirs);
 		(*ast)->redirs = (*ast)->redirs->next;
 	}
-	free_tree(&((*ast)->right));
-	free_tree(&((*ast)->left));
+	(*ast)->redirs  = NULL;
+	while ((*ast)->cmd[count] && (*ast)->cmd[count] != NULL)
+	{
+		free((*ast)->cmd[count]);
+		(*ast)->cmd[count] = NULL;
+		count++;
+	}
+	free((*ast)->cmd[count]);
+	(*ast)->cmd[count] = NULL;
+	if ((*ast)->left)
+			free_tree((*ast)->left);
+	if ((*ast)->left)
+		free_tree((*ast)->right);
 	free((*ast));
+	(*ast) = NULL;
 }
 
-void clear_memory(t_tree **ast, t_token **tokens, char *line)
+void clear_memory(t_shell *shell)
 {
-	free_tree(ast);
-	free_tokens(tokens);
-	free(line);
+	if(shell->ast)
+		free_tree(&shell->ast);
+	free_tokens(&shell->tokens);
+	free(shell->line);
 }
  void free_tokens(t_token **head)
 {

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/14 20:42:04 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 08:47:58 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ typedef struct s_tree
 	t_node_type type;
 	char **cmd;
 	size_t argc;
-	int redir_count;
 	t_redir *redirs;
 	t_redir *redirs_before;
 	t_redir *redirs_after;
@@ -188,8 +187,9 @@ void errno_manager(char *cmd);
 int puterror(char *cmd, char *error);
 void puterror_to_exit(char *cmd, char *error, int ex);
 /*---------------------Parsing STUFF------------------------------------------*/
-
-int lexer(t_token **head, char *line_read, int status_flag);
+void init_shell(t_shell *shell);
+int lexer(t_shell *shell, int status_flag);
+int parentheses_lexer(char *p_string);
 void link_token(t_token **head, t_token *node);
 int handle_quotes(char *str, char quote_type);
 int advanced_token_lexer(t_token **head);
@@ -203,13 +203,13 @@ int skip_spaces(char *str);
 /*-----------Tree Stuff-------------------*/
 t_tree *create_block(t_token **head, int count, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
-t_token *ft_token_search(t_token **head, int type);
+t_token *ft_token_search(t_token *head, int type);
 t_tree *create_tree_node(int type, int cmd_count);
 t_redir *redir_list_maker(t_token **head);
 int block_arg_counter(t_token **head);
-int sub_block_arg_counter(t_token **head);
-t_token *find_prev_PIPE(t_token **head,int nav_flag);
-int block_identifier(t_token **head);
+int sub_block_arg_counter(t_token *head);
+t_token *find_prev_PIPE(t_token *head,int nav_flag);
+int block_identifier(t_token *head);
 t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
 /*---------------------Checkers-------------------*/
@@ -221,7 +221,7 @@ int ft_is_operator(char *c);
 int ft_is_redir(char *c);
 char ft_isquote(char c);
 /*-----------free-------------*/
-void clear_memory(t_tree **ast, t_token **tokens, char *line);
+void clear_memory(t_shell *shell);
 void free_tree(t_tree **ast);
 void free_tokens(t_token **head);
 
@@ -229,5 +229,37 @@ void free_tokens(t_token **head);
 void print_tokens(t_token **head);
 void print_redirs(t_redir *redir);
 void print_tree(t_tree *tree);
+/*-- -- -- -- -- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -- -- -- -- -- -*/
+
+	/**
+	 * @brief Main function to visualize the AST tree with colors and structure
+	 * @param root Pointer to the root node of the AST
+	 *
+	 * Displays a detailed tree structure with:
+	 * - Color-coded node types
+	 * - Command arguments
+	 * - Redirection information
+	 * - Tree depth and node count
+	 */
+	void visualize_ast_tree(t_tree *root);
+
+/**
+ * @brief Print a simplified flat representation of the tree
+ * @param node Current node to print
+ * @param level Indentation level
+ *
+ * Displays a simple indented list showing the tree structure
+ */
+void print_flat_ast(t_tree *node, int level);
+
+/**
+ * @brief Export the AST to DOT format for graphviz visualization
+ * @param root Pointer to the root node of the AST
+ * @param filename Output filename for the DOT file
+ *
+ * Creates a .dot file that can be rendered with graphviz:
+ * dot -Tpng filename.dot -o output.png
+ */
+void export_ast_to_dot(t_tree *root, const char *filename);
 
 #endif

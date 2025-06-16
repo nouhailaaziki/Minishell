@@ -8,13 +8,14 @@
 			"name": "(lldb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/diddyshell",
+			"program": "${workspaceFolder}/minishell",
 			"args": [],
 			"stopAtEntry": false,
-			"cwd": "${fileDirname}",
+			"cwd": "${workspaceFolder}",
 			"environment": [],
 			"externalConsole": false,
-			"MIMode": "lldb"
+			"MIMode": "lldb",
+			"preLaunchTask": "C/C++: clang build active file"
 		}
 
 	]

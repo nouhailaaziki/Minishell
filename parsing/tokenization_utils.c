@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/12 16:09:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/15 18:37:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_special_case(char *str, int type)
 	int	new_type;
 
 	new_type = token_lexer(&str[skip_spaces(str)]);
-	if ((type != TOKEN_REDIR) && (new_type == TOKEN_REDIR)) // todo fix later range of enums
+	if ((type != TOKEN_REDIR) && (new_type == TOKEN_REDIR))
 		return (1);
 	return (0);
 }
@@ -109,29 +109,29 @@ t_token	*new_token(char *value, int type)
 	return (token);
 }
 
-int	lexer(t_token **head, char *line_read, int status_flag)
+int	lexer(t_shell *shell, int status_flag)
 {
 	int	i;
 	int	token_len;
 	int	position;
 
 	i = 0;
-	while (line_read[i])
+	while (shell->line[i])
 	{
-		i += skip_spaces(&line_read[i]);
+		i += skip_spaces(&shell->line[i]);
 		position = i;
-		token_len = count_chars(&line_read[i]);
+		token_len = count_chars(&shell->line[i]);
 		if (!token_len)
-			token_len = operator_len((char *)&line_read[i]);
+			token_len = operator_len((char *)&shell->line[i]);
 		if (!token_len)
-			return (ft_syntax_err(&line_read[i], head));
+			return (ft_syntax_err(&shell->line[i], (shell)->tokens));
 		if(status_flag)
 			break;
-		link_token(head, new_token(ft_substr(line_read, position, token_len), \
-		(token_lexer(&line_read[position]))));
+		link_token(&shell->tokens, new_token(ft_substr(shell->line, position, token_len), \
+		(token_lexer(&shell->line[position]))));
 		i += token_len;
 		position = i;
-		if (ft_str_isspace(&line_read[i]))
+		if (ft_str_isspace(&shell->line[i]))
 			break ;
 	}
 	return (1);

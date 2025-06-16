@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/14 20:44:09 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/15 18:36:56 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,25 @@ void quote_expander(t_token **head)
 }
 int parentheses_lexer(char * p_string)
 {
-	int i = 1;
-	int count = 0;
+	int i;
+	t_shell dummy;
+	int count;
+
+	count = 0;
 	if(!p_string)
 	{
 		printf(RED"FATAL ERROR 0\n"RESET);
 		return 0;
 	}
+	i = 1;
+	dummy.line = &p_string[i];
 	while (p_string[i] != ')' && p_string[i+1] != '\0')
 	{
 		i++;
 		count++;
 	}
 	printf("len inside () is : %d\n ",count);
-	if(!lexer(NULL, &p_string[1], 1))
+	if(!lexer(&dummy, 1))
 		return ft_syntax_analyzer(p_string);
 	return 1;
 }
@@ -101,7 +106,7 @@ int advanced_token_lexer(t_token **head)
 			return 0;
 		if (current->type == TOKEN_REDIR)
 			{
-				// current->type = redir_identifier(current->value);
+				current->type = redir_identifier(current->value);
 				current->next->type = R_FILE;
 			}
 		if ((current->type == TOKEN_WORD || current->type == TOKEN_ARG || current->type == R_FILE) && \
@@ -109,6 +114,7 @@ int advanced_token_lexer(t_token **head)
 			current->next->type = TOKEN_ARG;
 		current = current->next;
 	}
+	return 1;
 }
 int parser(t_shell shell)
 {
@@ -118,17 +124,17 @@ int parser(t_shell shell)
 		return 0;
 	current = shell.tokens;
 	if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
-		return ft_syntax_err(current->value, &shell.tokens);
+		return ft_syntax_err(current->value, shell.tokens);
 	while (current)
 	{
 		if (ft_is_operator(current->value) && !current->next)
-			return ft_syntax_err(current->value, &shell.tokens);
+			return ft_syntax_err(current->value, shell.tokens);
 		if (ft_is_redir(current->value) && ft_isparentheses(current->next->value))
-			return ft_syntax_err(current->value, &shell.tokens);
+			return ft_syntax_err(current->value, shell.tokens);
 		current = current->next;
 	}
 	// quote_expander(head);
 	if(!advanced_token_lexer(&shell.tokens))
-		return ft_syntax_err(current->value, &shell.tokens); // ! SIGSEGV HERE
+		return ft_syntax_err(current->value, shell.tokens);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/13 11:57:17 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:45:54 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ t_tree *create_tree_node(int type,int cmd_count)
 	return (head);
 }
 
-t_token *ft_token_search(t_token **head, int type)
+t_token *ft_token_search(t_token *head, int type)
 {
 	t_token	*current;
 
-	current = *head;
+	current = head;
 	while(current)
 	{
 		if(current->type == type)
@@ -86,15 +86,15 @@ void link_redir(t_redir **list,t_redir *new_redir)
 	new_redir->next = NULL;
 }
 
-int block_identifier(t_token **head)
+int block_identifier(t_token *head)
 {
-	if ((*head)->type == TOKEN_OR)
+	if (head->type == TOKEN_OR)
 		return NODE_OR;
-	else if ((*head)->type == TOKEN_AND)
+	else if (head->type == TOKEN_AND)
 		return NODE_AND;
-	else if ((*head)->type == TOKEN_WORD)
+	else if (head->type == TOKEN_WORD)
 		return NODE_COMMAND;
-	else if ((*head)->type == TOKEN_PIPE)
+	else if (head->type == TOKEN_PIPE)
 		return NODE_PIPE;
 	else
 		return printf(RED"Fatal error 1\n"RESET), 0;
@@ -137,13 +137,13 @@ int block_arg_counter(t_token **head)
 	}
 	return (count);
 }
-int sub_block_arg_counter(t_token **head)
+int sub_block_arg_counter(t_token *head)
 {
 	t_token *current;
 	int count;
 
 	count = 0;
-	current = *head;
+	current = head;
 	while (current)
 	{
 		if (current->type == TOKEN_PIPE)
@@ -160,9 +160,9 @@ int sub_block_arg_counter(t_token **head)
 }
 t_tree *create_block(t_token **head, int count, int type)
 {
-	t_tree *tree;
-	int i;
-	t_token *current;
+	t_tree	*tree;
+	int		i;
+	t_token	*current;
 
 	i = 0;
 	tree = NULL;
