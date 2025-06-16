@@ -3,235 +3,171 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/03 19:23:21 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/16 08:38:44 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-void print_tree(t_tree *tree, int arg_count)
+// ? i count the number of tokens until i stumble across a pipe/and/or.
+// ! i check for redirections and fill them in a linked list
+// * i fill inside the node the number of arguments
+/*
+	iterate the linked list and store the position of the last pao.
+	create a node tree to its right and fill it with the last argument.
+
+*/
+
+void reset_tokens(t_token **head)
 {
-	int i;
-
-	i = 0;
-	if (!tree)
-		return;
-	printf("Command is : ");
-	while (i < arg_count)
-		printf(BHGRN "<%s> " RESET, tree->cmd[i++]);
-	printf("\n");
-	printf("Argc : %zu\n", tree->argc);
-
-	if (tree->redirs)
-	{
-		printf(BLU "Redirs :");
-		while (tree->redirs)
-		{
-			printf("{%zu}[%d][%s] , ",tree->redirs->index, tree->redirs->type, tree->redirs->file);
-			tree->redirs = tree->redirs->next;
-		}
-		printf(RESET "}\n");
-	}
+	while((*head)->position > 0)
+		*head = (*head)->prev;
 }
 
-
-void quote_expander(t_token **head)
+t_token *find_and_or(t_token **head, int nav_flag)
 {
 	t_token *current;
-	int position;
-	int i;
-	char quote;
-	char *expanded_token;
-	i = 0;
-	position = 0;
+
 	current = *head;
-	while (current)
+	if (nav_flag == 0)
 	{
-		if (ft_strchr(current->value, '\"') == NULL && ft_strchr(current->value, '\'') == NULL)
-		{
+		while (current->next)
 			current = current->next;
-			continue;
-		}
-		expanded_token = ft_calloc(ft_strlen(current->value) + 1 , sizeof(char));
-		if (!expanded_token)
-			return free_tokens(head), ft_putendl_fd("MALLOC FAILURE", 2);
-		while(current->value[i])
-		{
-		quote = ft_isquote(current->value[i]);
-		if (quote != '\0')
-		{
-			i++;
-			while (current->value[i] && current->value[i] != quote)
-				expanded_token[position++] = current->value[i++];
-			if (current->value[i] == quote)
-				i++;
-		}
-		else
-			expanded_token[position++] = current->value[i++];
-		}
-		if(expanded_token)
-		{
-			free(current->value);
-			current->value = expanded_token;
-		}
-		current = current->next;
 	}
+	while (current && current->prev)
+	{
+		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
+			return (current);
+		current = current->prev;
+	}
+	return (current);
 }
 
-void advanced_token_lexer(t_token **head)
+t_token *find_prev_PIPE(t_token *head, int nav_flag)
 {
 	t_token *current;
 
-	current = *head;
-	while (current && current->next)
+	current = head;
+	if (nav_flag == 0)
 	{
-		if(current->type == REDIR_HEREDOC || current->type == REDIR_IN)
-			current->next->type = R_FILE;
-		if (current->type== REDIR_OUT || current->type == REDIR_APPEND)
-			current->next->type = R_FILE;
-		if ((current->type == TOKEN_WORD || current->type ==TOKEN_ARG|| current->type == REDIR_IN || \
-		 current->type == R_FILE) && current->next->type == TOKEN_WORD)
-			current->next->type = TOKEN_ARG;
-		current = current->next;
+		while (current->next)
+			current = current->next;
 	}
-}
-int parser(t_token **head)
-{
-	t_token *current;
-
-	current = *head;
-	if (!current)
-		return 0;
-	if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
-		return ft_syntax_err(current->value, head);
-	while (current)
+	while (current && current->prev)
 	{
-		if (ft_is_operator(current->value) && !current->next)
-			return ft_syntax_err(current->value, head);
-		if (ft_is_redir(current->value) && ft_isparentheses(current->next->value))
-			return ft_syntax_err(current->value, head);
-		current = current->next;
+		if (current->type == TOKEN_PIPE)
+			return (current);
+		current = current->prev;
 	}
-	advanced_token_lexer(head);
-	quote_expander(head);
-	return 1;
+	return (current);
 }
 
-void	print_redirs(t_redir *redir)
-{
-	while (redir)
-	{
-		printf("Redir type: ");
-		if (redir->type == REDIR_IN)
-			printf("REDIR_IN");
-		else if (redir->type == REDIR_OUT)
-			printf("REDIR_OUT");
-		else if (redir->type == REDIR_APPEND)
-			printf("REDIR_APPEND");
-		else if (redir->type == REDIR_HEREDOC)
-			printf("REDIR_HEREDOC");
-		else
-			printf("UNKNOWN");
-		printf(", file: %s\n", redir->file);
-		redir = redir->next;
-	}
-}
-int block_arg_counter(t_token **head)
+
+
+void create_one_tree(t_shell *shell)
 {
 	t_token	*current;
+	t_tree	*tree;
 	int		count;
 
-	count = 0;
-	current = *head;
-	while (current)
+	tree = (shell->ast);
+	current = shell->tokens;
+	current = find_and_or(&current,0);
+	if (current->type == TOKEN_AND || current->type == TOKEN_OR)
 	{
-		if (current->type ==TOKEN_AND|| current->type == TOKEN_PIPE || current->type == TOKEN_OR)
-			break;
-		else if(current->type >= REDIR_IN)
+		tree = create_block(&current, 1, block_identifier(current));
+		count = block_arg_counter(&current->next);
+		tree->right = create_block(&current->next, count, block_identifier(current->next));
+		current = find_and_or(&current->prev,1);
+		if (current->type != TOKEN_WORD)
 		{
-			current = current->next;
-			continue;
+			tree->left = create_block(&current, 1, block_identifier(current));
+			count = block_arg_counter(&current->next);
+			tree->left->right = create_block(&current->next, count, block_identifier(current->next));
+			current = find_and_or(&current->prev, 1);
+			if (current->type != TOKEN_WORD)
+			{
+				printf("Reached The End of the demo\n");
+				exit(1);
+				return;
+			}
+				count = block_arg_counter(&current);
+				tree->left->left = create_block(&current, count, block_identifier(current));
 		}
-		count++;
-		current = current->next;
-	}
-	return count;
-}
-// void	print_ast(t_tree *node)
-// {
-// 	if (!node)
-// 		return ;
-// 	if (node->type == NODE_COMMAND)
-// 	{
-// 		printf("NODE_COMMAND: ");
-// 		for (int i = 0; node->cmd && node->cmd[i]; i++)
-// 			printf("%s ", node->cmd[i]);
-// 		printf("\n");
-// 		if (node->redirs)
-// 		{
-// 			printf("Redirections:\n");
-// 			print_redirs(node->redirs);
-// 		}
-// 	}
-// 	else if (node->type == NODE_PIPE)
-// 	{
-// 		printf("NODE_PIPE:\n");
-// 		print_ast(node->left);
-// 		print_ast(node->right);
-// 	}
-// }
-t_tree *create_block(t_token **head, int count)
-{
-	t_tree *tree;
-	int i;
-	t_token *current;
-
-	i = 0;
-	tree = create_tree_node(count);
-	if(!tree)
-		return NULL;
-	tree->redirs = redir_list_maker(head);
-	current = *head;
-	while (current && i < count)
+		else
+		{
+			count = block_arg_counter(&current);
+			tree->left = create_block(&current, count, block_identifier(current));
+		}
+		}
+	// else if((current = find_prev_PIPE(&current))->type == TOKEN_PIPE) //! look for why this keeps coming back to pipe problem with unctions not seperated ? or something , check its stop condition
+	// {
+	// 	tree = create_block(&current, 1, block_identifier(&current));
+	// 	count = sub_block_arg_counter(&current->next);
+	// 	tree->right = create_block(&current->next, count, block_identifier(current->next));
+	// 	current = find_prev_PIPE(&current->prev);
+	// 	if ( current->type == TOKEN_PIPE )
+	// 	{
+	// 		printf("EXTRA PIPE FOUND \n");
+	// 		// tree->left = create_block(&current, 1, block_identifier(&current));
+	// 		exit(0);
+	// 	}
+	// 	else
+	// 	{
+	// 		current = *head;
+	// 	}
+	// 	tree->left = create_block(&current, 1, block_identifier(&current));
+	// 	count = sub_block_arg_counter(&current);
+	// 	tree->left->right = create_block(&current->next, count, block_identifier(&current->next));
+	// }
+	else
 	{
-		if (current->type < REDIR_IN)
-			tree->cmd[i++] = ft_strdup(current->value);
-		current = current->next;
+		printf(BLU"no or/and FOUND ,creating one node!!!\n"RESET);
+		current = shell->tokens;
+		count = block_arg_counter(&current);
+		tree = create_block(&current, count, block_identifier(current));
 	}
-	tree->cmd[i] = NULL;
-	return (tree);
+	visualize_ast_tree(tree); // * FIX REDIR TYPE
+	shell->ast = tree;
+	puts(current->value);
+	current = NULL;
 }
-int	main(int argc, char **argv, char **envp)
+
+void f()
 {
-	t_env	*env_list;
-	t_token	*tokens;
-	t_tree	*ast;
-	char	*line;
-	int count;
-	
+	system("leaks -q -fullContent -- minishell");
+}
+
+
+
+int main(int argc, char **argv, char **envp)
+{
+	t_shell shell;
+
+	atexit(f);
 	(void)argc, (void)argv;
-	7889 && (env_list = NULL, tokens = NULL, ast = NULL);
 	display_intro();
-	build_env(&env_list, envp);
+	init_shell(&shell);
+	build_env(&shell.env_list, envp);
 	while (1)
 	{
-		line = readline(PINK BOLD"╰┈➤ L33tShell-N.Y ✗ "RESET);
-		if (!line || !lexer(&tokens, line) || !parser(&tokens))
+		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
+		// shell.line = ft_strdup("make >> d || clean < c && sleep > a");
+		add_history(shell.line);
+		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))
 		{
-			add_history(line);
+			free(shell.line);
 			continue;
 		}
-		count = block_arg_counter(&tokens);
-		ast = create_block(&tokens,count);
-		// print_tokens(&tokens);
-		// print_tree(ast,count);
-		executor(ast, &env_list);
-		add_history(line);
-		free_tokens(&tokens);
-		free(line);
+		create_one_tree(&shell);
+		// print_tree(shell.ast);
+		// executor(shell.ast, &env_list);
+		 clear_memory(&shell);
+		if(ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
+			break;
 	}
 	return (0);
 }
