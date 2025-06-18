@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    parsing log.txt                                    :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/06/17 16:09:25 by yrhandou          #+#    #+#              #
+#    Updated: 2025/06/17 16:10:42 by yrhandou         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 # Tree Guide
 
 Assuming that the tokens are ready andthat there is no syntax error.
@@ -91,3 +103,10 @@ so lets check what i thought of today .
 
 #2	start looking rom the end i check for {AND, OR} if  i find nothing then i start looking for pipes
 
+-------------------
+
+look for the last and_or
+
+if found
+	create the head of and_or fill the right with  the command after and_or
+	look for pipes on the right

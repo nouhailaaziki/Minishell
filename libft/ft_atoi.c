@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:33:26 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/18 19:43:12 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:29:43 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	ft_atoi(const char *str)
 	long			result;
 
 	sign = 1;
-	i = 0;
 	result = 0;
 	i = sign_check(str, &sign);
 	while (ft_isdigit(str[i]))
