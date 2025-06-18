@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 15:19:17 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 18:19:30 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <signal.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -234,6 +235,10 @@ void print_tree(t_tree *tree);
 int	execute_ast(t_tree *ast, t_env **env);
 int	execute_command(char **cmd, t_redir *redirs, t_env **env_list);
 int	execute_pipe(t_tree *ast, t_redir *redirs, t_env **env_list);
+
+/*--------------------------------signals------------------------------------*/
+void	setup_signals_parent(void);
+void	setup_signals_child(void);
 
 /*-- -- -- -- -- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -- -- -- -- -- -*/
 

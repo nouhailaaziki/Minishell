@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 15:19:36 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 19:07:22 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,13 @@ int main(int argc, char **argv, char **envp)
 	build_env(&shell.env_list, envp);
 	while (1)
 	{
+		setup_signals_parent(); // It configures how the parent process handles signals
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
+		if (!shell.line) // Ctrl+D should exit the shell using this.
+		{
+		    write(1, "exit\n", 5);
+		    exit(0);
+		}
 		// shell.line = ft_strdup("ls > a ");
 		add_history(shell.line);
 		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))

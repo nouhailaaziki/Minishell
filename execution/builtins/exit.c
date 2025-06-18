@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 11:54:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/17 14:48:18 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 19:07:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	run_exit(char **cmd, int exit_status)
 	if (len == 1)
 	{
 		free_all_tracked();
-		printf("\nexit satus : %u\n", (unsigned char)exit_status);
+		// printf("\nexit satus : %u\n", (unsigned char)exit_status);
 		exit((unsigned char)exit_status);
 	}
 	if (len > 2)
@@ -51,11 +51,11 @@ void	run_exit(char **cmd, int exit_status)
 	if (!is_numeric(cmd[1]))
 	{
 		free_all_tracked();
-		printf("\nexit satus : 255\n");
+		// printf("\nexit satus : 255\n");
 		printf("L33tShell: exit: %s: numeric argument required\n", cmd[1]);
 		exit(255);
 	}
 	free_all_tracked();
-	printf("Value: %u\n", (unsigned char)strict_atoi(cmd[1]));
+	// printf("Value: %u\n", (unsigned char)strict_atoi(cmd[1]));
 	exit((unsigned char)strict_atoi(cmd[1]));
 }

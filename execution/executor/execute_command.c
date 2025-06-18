@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 10:49:27 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 18:20:24 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list)
 		return (perror("fork failed"), 1);
 	if (!pid)
 	{
+		setup_signals_child();
 		7889 && (envp = get_env_arr(*env_list), path_list = get_path_list(envp));
 		handle_redirs(redirs);
 		status = is_builtins(cmd, env_list);
