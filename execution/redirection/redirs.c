@@ -6,22 +6,28 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/17 12:59:56 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 09:41:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../launchpad.h"
 
 int	handle_heredoc(t_redir *redir)
-{
-	char	*line;
-	int		fd;
+{// TODO: multi herdocs | genrate a valid file | and handle signals | handle expand in herdoc  
 
-	fd = open(".tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	char	*line;
+	char	*file;
+	int		fd;
+	int		i;
+
+	i = 0;
+	file = "/tmp/.tmp";
+	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0644);
 	if (fd < 0)
 	{
-		perror("heredoc: open");
-		return (-1);
+		i++;
+		file = na_strjoin(file, ft_itoa(i));
+		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0644);
 	}
 	while (1)
 	{
@@ -38,7 +44,7 @@ int	handle_heredoc(t_redir *redir)
 		free(line);
 	}
 	close(fd);
-	fd = open(".tmp", O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
 		perror("heredoc: reopen");

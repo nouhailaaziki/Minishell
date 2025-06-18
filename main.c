@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/17 12:15:50 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:19:36 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv, char **envp)
 		// visualize_ast_tree(shell.ast); // * FIX REDIR TYPE
 		// print_tokens(&shell.tokens);
 		// print_tree(shell.ast);
-		executor(shell.ast, &shell.env_list);
+		execute_ast(shell.ast, &shell.env_list);
 		 clear_memory(&shell);
 		if(ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;

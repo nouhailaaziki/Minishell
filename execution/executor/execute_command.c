@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/17 14:13:59 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/18 10:49:27 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../../launchpad.h"
 
 char	**get_path_list(char **env)
 {
@@ -126,21 +126,4 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list)
 	}
 	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
-}
-
-int	executor(t_tree *ast, t_env **env)
-{
-	int	status;
-	
-	if (!ast)
-		status = 1;
-	if (ast->type == NODE_COMMAND)
-		status = execute_command(ast->cmd, ast->redirs, env);
-	// else if (ast->type == NODE_PIPE)
-	// 	execute_pipe(ast, env);
-	// else if (ast->type == NODE_AND)
-	// 	execute_and(ast, env);
-	// else if (ast->type == NODE_OR)
-	// 	execute_or(ast, env);
-	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/17 09:39:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:19:17 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,11 @@ void free_tokens(t_token **head);
 void print_tokens(t_token **head);
 void print_redirs(t_redir *redir);
 void print_tree(t_tree *tree);
+
+/*-----------------------------execute fonctions-----------------------------*/
+int	execute_ast(t_tree *ast, t_env **env);
+int	execute_command(char **cmd, t_redir *redirs, t_env **env_list);
+int	execute_pipe(t_tree *ast, t_redir *redirs, t_env **env_list);
 
 /*-- -- -- -- -- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -- -- -- -- -- -*/
 

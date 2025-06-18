@@ -38,8 +38,7 @@ EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/
 			execution/utilities/ft_strchr.c execution/utilities/ft_strcmp.c execution/utilities/ft_strncmp.c execution/utilities/ft_strlen.c \
 			execution/utilities/na_calloc.c execution/utilities/na_itoa.c execution/utilities/na_split.c execution/utilities/na_strdup.c \
 			execution/utilities/na_strjoin.c execution/utilities/na_substr.c execution/utilities/strict_atoi.c execution/utilities/ft_putstr_fd.c \
-			execution/redirection/redirs.c execution/executor.c main.c
-
+			execution/redirection/redirs.c execution/executor/execute.c main.c execution/executor/execute_command.c execution/executor/execute_pipe.c
 
 EXEC = ${EXECUTION:.c=.o}
 
