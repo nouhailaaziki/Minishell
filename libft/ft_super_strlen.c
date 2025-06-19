@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 08:41:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/18 08:41:49 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:27:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	*ft_super_strlen(char **array)
 	int	j;
 	int	*result;
 
-	j = 0;
 	i = 0;
 	while (array[i])
 		i++;

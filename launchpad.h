@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/16 08:47:58 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 07:01:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "libft/libft.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 
 /*-----------------------Format and Color Macros----------------------*/
 #define BOLD "\033[1m"
@@ -41,17 +42,13 @@ typedef enum e_token_type
 	TOKEN_OR,
 	TOKEN_PIPE,
 	TOKEN_REDIR,
-	R_FILE
-} t_token_type;
-
-typedef enum e_redir_type
-{
+	R_FILE,
 	REDIR_IN = 10,
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-	REDIR_NONE
-} t_redir_type;
+} t_token_type;
+
 
 /*--------------------Linked list of parsed tokens--------------------*/
 typedef struct s_token
@@ -113,8 +110,6 @@ typedef struct s_tree
 	char **cmd;
 	size_t argc;
 	t_redir *redirs;
-	t_redir *redirs_before;
-	t_redir *redirs_after;
 	int is_ambiguous;
 	struct s_tree *left;
 	struct s_tree *right;
@@ -186,6 +181,14 @@ void is_it_dir(char *cmd);
 void errno_manager(char *cmd);
 int puterror(char *cmd, char *error);
 void puterror_to_exit(char *cmd, char *error, int ex);
+/*-----------------------------execute fonctions-----------------------------*/
+int execute_ast(t_tree *ast, t_env **env);
+int execute_command(char **cmd, t_redir *redirs, t_env **env_list);
+int execute_pipe(t_tree *ast, t_redir *redirs, t_env **env_list);
+
+/*--------------------------------signals------------------------------------*/
+void setup_signals_parent(void);
+void setup_signals_child(void);
 /*---------------------Parsing STUFF------------------------------------------*/
 void init_shell(t_shell *shell);
 int lexer(t_shell *shell, int status_flag);
@@ -206,14 +209,14 @@ void link_redir(t_redir **list, t_redir *new_redir);
 t_token *ft_token_search(t_token *head, int type);
 t_tree *create_tree_node(int type, int cmd_count);
 t_redir *redir_list_maker(t_token **head);
-int block_arg_counter(t_token **head);
+int block_arg_counter(t_token *head);
 int sub_block_arg_counter(t_token *head);
-t_token *find_prev_PIPE(t_token *head,int nav_flag);
+t_token *find_PIPE(t_token *head, int nav_flag);
 int block_identifier(t_token *head);
 t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
 /*---------------------Checkers-------------------*/
-int ft_syntax_err(char *str, t_token *head);
+int ft_syntax_err(char *str, t_token **head);
 int ft_before_x(char *str, int (*f)(char *s));
 int ft_is_bonus_operator(char *str);
 int ft_isparentheses(char *c);
@@ -222,9 +225,9 @@ int ft_is_redir(char *c);
 char ft_isquote(char c);
 /*-----------free-------------*/
 void clear_memory(t_shell *shell);
+void free_cmd(char **cmd);
 void free_tree(t_tree **ast);
 void free_tokens(t_token **head);
-
 // ! REMOVE THS LATER
 void print_tokens(t_token **head);
 void print_redirs(t_redir *redir);
@@ -260,6 +263,6 @@ void print_flat_ast(t_tree *node, int level);
  * Creates a .dot file that can be rendered with graphviz:
  * dot -Tpng filename.dot -o output.png
  */
-void export_ast_to_dot(t_tree *root, const char *filename);
+void visualize_tokens(t_token *head);
 
 #endif

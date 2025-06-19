@@ -18,6 +18,9 @@
 		"system_error": "c",
 		"tuple": "c",
 		"type_traits": "c",
-		"vector": "c"
+		"vector": "c",
+		"fcntl.h": "c",
+		"stdio.h": "c",
+		"unistd.h": "c"
 	}
 }

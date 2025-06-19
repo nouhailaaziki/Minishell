@@ -1,4 +1,6 @@
+*/*/*.o
 */*.o
+*.o
 .DS_Store
 .excalidraw
 *.tldr

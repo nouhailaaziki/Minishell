@@ -13,10 +13,17 @@
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
-			"externalConsole": false,
+			"externalConsole": true,
+
 			"MIMode": "lldb",
 			"preLaunchTask": "C/C++: clang build active file"
+		},
+		{
+			"name": "(lldb) Attach",
+			"type": "cppdbg",
+			"request": "attach",
+			"program": "${workspaceFolder}/minishell",
+			"MIMode": "lldb"
 		}
-
 	]
 }

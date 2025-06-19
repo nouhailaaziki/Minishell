@@ -6,25 +6,22 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/15 15:45:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 06:00:29 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-
 t_tree *create_tree_node(int type,int cmd_count)
 {
 	t_tree *head;
 
-	if(!cmd_count)
-		return (NULL);
 	head = ft_calloc(1, sizeof(t_tree));
+	head->cmd = NULL;
 	if (!head)
 		return (NULL);
-	head->cmd = ft_calloc(cmd_count +1,sizeof(char **));
-	if(!head->cmd)
-		return (free(head),NULL);
+	if(cmd_count)
+		head->cmd = ft_calloc(cmd_count +1,sizeof(char **));
 	head->redirs = NULL;
 	head->type = type;
 	head->argc = cmd_count;
@@ -59,7 +56,9 @@ t_redir *redir_maker(t_token **data)
 	if((*data)->next)
 	{
 		(*data)->position = -1;
-		redir->file = (*data)->next->value;
+		redir->file = ft_strdup((*data)->next->value);
+		if(!redir->file)
+			return printf("This is not supposed to happen.\n") ,NULL;
 	}
 	redir->index = 0;
 	redir->type = (*data)->type;
@@ -92,69 +91,72 @@ int block_identifier(t_token *head)
 		return NODE_OR;
 	else if (head->type == TOKEN_AND)
 		return NODE_AND;
-	else if (head->type == TOKEN_WORD)
-		return NODE_COMMAND;
 	else if (head->type == TOKEN_PIPE)
 		return NODE_PIPE;
 	else
-		return printf(RED"Fatal error 1\n"RESET), 0;
+		return NODE_COMMAND;
 }
-
-t_redir *redir_list_maker(t_token **head) // links the redirections nodes to a linked list
+ /**
+ * links the redirections nodes to a linked list
+*/
+t_redir *redir_list_maker(t_token **head)
 {
 	t_token *tmp;
 	t_redir *redir_list;
 
 	redir_list = NULL;
+	if( !head ||!*head)
+	{
+		printf("This is not supposed to happen.\n");
+		return (NULL);;
+	}
 	tmp = *head;
 	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR)
 	{
-		if (tmp->type == TOKEN_REDIR)
+		if (tmp->type > R_FILE)
+		{
 			link_redir(&redir_list, redir_maker(&tmp));
+		}
 		tmp = tmp->next;
 	}
-	return redir_list;
+	return (redir_list);
 }
 
-int block_arg_counter(t_token **head)
+int block_arg_counter(t_token *head)
 {
-	t_token *current;
 	int count;
 
 	count = 0;
-	current = *head;
-	while (current)
+	while (head && head->type)
 	{
-		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
+		if (head->type == TOKEN_AND || head->type == TOKEN_OR)
 			break;
-		else if (current->type == TOKEN_REDIR || current->type == R_FILE)
+		else if (head->type >= R_FILE)
 		{
-			current = current->next;
+			head = head->next;
 			continue;
 		}
 		count++;
-		current = current->next;
+		head = head->next;
 	}
 	return (count);
 }
 int sub_block_arg_counter(t_token *head)
 {
-	t_token *current;
 	int count;
 
 	count = 0;
-	current = head;
-	while (current)
+	while (head)
 	{
-		if (current->type == TOKEN_PIPE)
+		if (head->type == TOKEN_PIPE)
 			break;
-		else if (current->type == TOKEN_REDIR || current->type == R_FILE)
+		else if (head->type >= R_FILE)
 		{
-			current = current->next;
+			head = head->next;
 			continue;
 		}
 		count++;
-		current = current->next;
+		head = head->next;
 	}
 	return (count);
 }
@@ -173,13 +175,13 @@ t_tree *create_block(t_token **head, int count, int type)
 	current = *head;
 	while (current && i < count)
 	{
-		if (current->type != TOKEN_REDIR && current->type != R_FILE)
+		if (current->type < TOKEN_PAREN)
 		{
-			current->position = -1;
 			tree->cmd[i++] = ft_strdup(current->value);
 		}
 		current = current->next;
 	}
-	tree->cmd[i] = NULL;
+	if(tree->cmd)
+		tree->cmd[i] = NULL;
 	return (tree);
 }

@@ -6,43 +6,104 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 07:46:15 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../launchpad.h"
 
+int	handle_heredoc(t_redir *redir)
+{// TODO: multi herdocs | genrate a valid file | and handle signals | handle expand in herdoc
+
+	char	*line;
+	char	*file;
+	int		fd;
+	int		i;
+
+	i = 0;
+	file = "/tmp/.tmp"; 
+	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0644);
+	if (fd < 0)
+	{
+		i++;
+		file = na_strjoin(file, ft_itoa(i));
+		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0644);
+	}
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			break;
+		if (ft_strcmp(line, redir->file) == 0)
+		{
+			free(line);
+			break;
+		}
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	close(fd);
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("heredoc: reopen");
+		return (-1);
+	}
+	return (fd);
+}
+
+int	apply_fd_redirection(t_redir *redir, int fd)
+{
+	if (fd == -1)
+		exit (puterror(redir->file, ": No such file or directory"));
+	if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
+	{
+		if (dup2(fd, STDIN_FILENO) == -1)
+			return (puterror("dup2", " failed"));
+	}
+	if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND)
+	{
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			return (puterror("dup2", " failed"));
+	}
+	close(fd);
+	return (0);
+}
+
 int	handle_redirs(t_redir *redir)
 {
-	int		fd;
+	int	i;
 
+	i = 0;
+	if (!redir)
+		return (1);
 	while (redir)
 	{
-		if (!redir->file || redir->file[0] == '\0')
-		{
-			puterror("ambiguous redirect", NULL);
-			return (1);
-		}
 		if (redir->type == REDIR_OUT)
-			fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			redir->fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		else if (redir->type == REDIR_APPEND)
-			fd = open(redir->file, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
-			fd = open(redir->file, O_RDONLY);
+			redir->fd = open(redir->file, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else if (redir->type == REDIR_IN)
+			redir->fd = open(redir->file, O_RDONLY);
+		else if (redir->type == REDIR_HEREDOC)
+		{
+			redir->fd = handle_heredoc(redir);
+			if (redir->fd == -1)
+				return (1);
+			else
+				unlink(".tmp");
+		}
 		else
 		{
 			redir = redir->next;
 			continue;
 		}
-		if (fd == -1)
-			exit(puterror(redir->file, ": No such file or directory"));
-		if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
-			dup2(fd, STDIN_FILENO);
-		else
-			dup2(fd, STDOUT_FILENO);
-		close(fd);
+		if(apply_fd_redirection(redir, redir->fd) == -1)
+			i = 1;
 		redir = redir->next;
 	}
-	exit (0);
+	return (i);
 }
+
 
