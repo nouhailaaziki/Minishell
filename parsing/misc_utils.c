@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/18 10:35:41 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 06:56:38 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void print_redirs(t_redir *redir)
 
 int ft_syntax_err(char *str, t_token **head)
 {
+	(void)head;
 	ft_putstr_fd("DeepShell: syntax error near unexpected token `", 2);
 	ft_putstr_fd(str, 2);
 	ft_putendl_fd("'", 2);

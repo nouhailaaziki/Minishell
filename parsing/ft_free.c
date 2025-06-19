@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/18 10:33:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 06:56:56 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ void free_cmd(char **cmd)
 /// @param ast tree param
 void free_tree(t_tree **ast)
 {
-	void *next;
-	void *tmp;
 
 	if (!(*ast) || !ast)
 		return;

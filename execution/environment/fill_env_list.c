@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_env_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/17 10:58:59 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,32 @@ void	add_env_var(t_env **env_list, char *key)
 void	add_if_missing(t_env **env_list)
 {
 	t_env	*tmp;
-	char	*key[4];
-	int		found;
+	char	*key[3];
+	int		found[3];
 	int		i;
 
-	1 && (key[0] = "PWD", key[1] = "OLDPWD", key[2] = "SHLVL");
-	1 && (key[3] = "PATH", found = 0, tmp = *env_list);
+	7889 && (key[0] = "PWD", key[1] = "OLDPWD", key[2] = "SHLVL");
+	7889 && (found[0] = 0, found[1] = 0, found[2] = 0, tmp = *env_list);
 	while (tmp)
 	{
 		i = 0;
-		while (i < 4)
+		while (i < 3)
 		{
 			if (!ft_strcmp(tmp->key, key[i]))
-			{
-				found = 1;
-				break ;
-			}
+				found[i] = 1;
 			i++;
 		}
-		if (!found)
-		add_env_var(env_list, key[i - 1]);
 		tmp = tmp->next;
 	}
+	i = 0;
+	while (i < 3)
+	{
+		if (!found[i])
+			add_env_var(env_list, key[i]);
+		i++;
+	}
 }
+
 
 void	upp_shlvl(t_env *node, int nbr)
 {

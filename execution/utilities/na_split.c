@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   na_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:06:29 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 10:35:57 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-static size_t	ft_counter(char const *s, char c)
+ size_t	ft_counter(char const *s, char c)
 {
 	size_t	i;
 	size_t	count;
@@ -35,7 +35,7 @@ static size_t	ft_counter(char const *s, char c)
 	return (count);
 }
 
-static void	**ft_free(char **arr, size_t count)
+ void	**ft_free(char **arr, size_t count)
 {
 	size_t	i;
 
@@ -49,7 +49,7 @@ static void	**ft_free(char **arr, size_t count)
 	return (NULL);
 }
 
-static char	**ft_fill_arr(char const *s, char c, char **arr)
+ char	**ft_fill_arr(char const *s, char c, char **arr)
 {
 	size_t		i;
 	size_t		j;

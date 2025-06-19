@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 07:51:30 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 07:01:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "libft/libft.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 
 /*-----------------------Format and Color Macros----------------------*/
 #define BOLD "\033[1m"
@@ -180,6 +181,14 @@ void is_it_dir(char *cmd);
 void errno_manager(char *cmd);
 int puterror(char *cmd, char *error);
 void puterror_to_exit(char *cmd, char *error, int ex);
+/*-----------------------------execute fonctions-----------------------------*/
+int execute_ast(t_tree *ast, t_env **env);
+int execute_command(char **cmd, t_redir *redirs, t_env **env_list);
+int execute_pipe(t_tree *ast, t_redir *redirs, t_env **env_list);
+
+/*--------------------------------signals------------------------------------*/
+void setup_signals_parent(void);
+void setup_signals_child(void);
 /*---------------------Parsing STUFF------------------------------------------*/
 void init_shell(t_shell *shell);
 int lexer(t_shell *shell, int status_flag);
@@ -202,7 +211,7 @@ t_tree *create_tree_node(int type, int cmd_count);
 t_redir *redir_list_maker(t_token **head);
 int block_arg_counter(t_token *head);
 int sub_block_arg_counter(t_token *head);
-t_token *find_PIPE(t_token *head);
+t_token *find_PIPE(t_token *head, int nav_flag);
 int block_identifier(t_token *head);
 t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
@@ -219,7 +228,6 @@ void clear_memory(t_shell *shell);
 void free_cmd(char **cmd);
 void free_tree(t_tree **ast);
 void free_tokens(t_token **head);
-
 // ! REMOVE THS LATER
 void print_tokens(t_token **head);
 void print_redirs(t_redir *redir);

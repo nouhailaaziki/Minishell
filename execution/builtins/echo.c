@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:15:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/17 09:54:28 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ int	echo(char **cmd)
 
 	i = 1;
 	if (!cmd[1])
-		return (printf("\n"), 0);
+		return (write(1, "\n", 1), 0);
 	while (cmd[i] && cmd[i][0] == '-' && ft_isallchar(&cmd[i][1], 'n'))
 		i++;
 	n = i;
 	while (cmd[i])
 	{
-		printf("%s", cmd[i]);
-		if (cmd[i])
-			printf(" ");
+		write(1, cmd[i], ft_strlen(cmd[i]));
+		if (cmd[i + 1])
+			write(1, " ", 1);
 		i++;
 	}
 	if (n == 1)
-		printf("\n");
+		write(1, "\n", 1);
 	return (0);
 }

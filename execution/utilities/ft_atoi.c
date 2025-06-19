@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:50:32 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/14 19:03:28 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 10:35:57 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-static int	skip(const char *str, int *s)
+ int	skip(const char *str, int *s)
 {
 	int	i;
 

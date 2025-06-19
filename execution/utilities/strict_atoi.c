@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   strict_atoi.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 11:46:47 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/16 11:21:14 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-long	skip(const char *str, long *s)
+long	do_skip(const char *str, long *s)
 {
 	long	i;
 
@@ -36,7 +36,7 @@ long	strict_atoi(const char *str)
 
 	s = 1;
 	r = 0;
-	i = skip(str, &s);
+	i = do_skip(str, &s);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		if ((r == 922337203685477580 && ((i >= 18 && s == 1 && str[i] > '7')

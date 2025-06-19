@@ -10,7 +10,7 @@ RM = rm -rf
 
 COMPILER = cc
 
-CFLAGS = -g3  -O0  #-fsanitize=address#undefined -Wall -Wextra -Werror
+CFLAGS = -g3  -O0 -Wall -Wextra -Werror
 
 LIBFT = libft.a
 
@@ -64,7 +64,9 @@ EXECUTION =	execution/builtins/cd.c \
 			execution/utilities/strict_atoi.c \
 			execution/utilities/ft_putstr_fd.c \
 			execution/redirection/redirs.c \
-			execution/executor.c main.c\
+			execution/executor/execute.c main.c\
+			execution/executor/execute_command.c execution/executor/execute_pipe.c \
+			execution/setup_signals.c
 
 
 EXEC = ${EXECUTION:.c=.o}
@@ -82,7 +84,7 @@ all: ${NAME}
 
 ${NAME} : $(LIBFT) ${PARSE} ${EXEC}
 	@echo "${YELLOW} ${BOLD}➤ Launching compilation...${RESET}"
-	${COMPILER} ${CFLAGS} $(PARSE) ${EXEC} -o $@ $(LIBFT) -lreadline -ltermcap
+	${COMPILER} ${CFLAGS} $(PARSE) ${EXEC} -o $@ $(LIBFT) -lreadline
 	@echo "${GREEN} ${BOLD}➤ ${NAME} successfully compiled ✓${RESET}"
 
 
