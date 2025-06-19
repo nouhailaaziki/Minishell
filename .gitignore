@@ -1,6 +1,8 @@
 */*/*.o
-*/*.o
+libft/*.o
+libft/*/*.o
 *.o
 .DS_Store
 .excalidraw
 *.tldr
+libft.a

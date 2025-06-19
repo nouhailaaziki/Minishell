@@ -6,24 +6,21 @@
 	"configurations": [
 		{
 			"name": "(lldb) Launch",
-			"type": "cppdbg",
+			"type": "lldb",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
-			"environment": [],
 			"externalConsole": true,
-
 			"MIMode": "lldb",
 			"preLaunchTask": "C/C++: clang build active file"
-		},
-		{
-			"name": "(lldb) Attach",
-			"type": "cppdbg",
+		},{
+			"type": "lldb-dap",
 			"request": "attach",
+			"name": "LLDB DAP Attach",
 			"program": "${workspaceFolder}/minishell",
-			"MIMode": "lldb"
+			"waitFor": true
 		}
-	]
-}
+		]
+	}

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/19 06:56:56 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:18:45 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void clear_memory(t_shell *shell)
 		free_tree(&shell->ast);
 	if (shell->tokens)
 		free_tokens(&shell->tokens);
+	free(shell->line);
 	shell->line = NULL;
 }
 void free_tokens(t_token **head)

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/19 07:01:03 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:14:40 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,16 +204,17 @@ int token_lexer(char *str);
 int parser(t_shell shell);
 int skip_spaces(char *str);
 /*-----------Tree Stuff-------------------*/
+void create_tree(t_tree **ast, t_token **tokens, int flag);
 t_tree *create_block(t_token **head, int count, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
-t_token *ft_token_search(t_token *head, int type);
 t_tree *create_tree_node(int type, int cmd_count);
-t_redir *redir_list_maker(t_token **head);
-int block_arg_counter(t_token *head);
-int sub_block_arg_counter(t_token *head);
+t_token *ft_token_search(t_token *head, int type);
 t_token *find_PIPE(t_token *head, int nav_flag);
-int block_identifier(t_token *head);
+t_redir *redir_list_maker(t_token **head);
+int sub_block_arg_counter(t_token *head);
 t_redir *redir_maker(t_token **data);
+void refresh_block(t_token **head) ;
+int block_identifier(t_token *head);
 int count_chars(char *str);
 /*---------------------Checkers-------------------*/
 int ft_syntax_err(char *str, t_token **head);
@@ -234,7 +235,7 @@ void print_redirs(t_redir *redir);
 void print_tree(t_tree *tree);
 /*-- -- -- -- -- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -- -- -- -- -- -*/
 
-	/**
+/**
 	 * @brief Main function to visualize the AST tree with colors and structure
 	 * @param root Pointer to the root node of the AST
 	 *
@@ -243,7 +244,7 @@ void print_tree(t_tree *tree);
 	 * - Command arguments
 	 * - Redirection information
 	 * - Tree depth and node count
-	 */
+*/
 	void visualize_ast_tree(t_tree *root);
 
 /**

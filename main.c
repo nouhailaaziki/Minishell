@@ -6,31 +6,14 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/19 07:38:18 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/19 19:19:29 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-// ? i count the number of tokens until i stumble across a pipe/and/or.
-// ! i check for redirections and fill them in a linked list
-// * i fill inside the node the number of arguments
-/*
-	iterate the linked list and store the position of the last pao.
-	create a node tree to its right and fill it with the last argument.
-
-*/
-
-void refresh_block(t_token **head)
-{
-	while (*head && (*head)->prev &&  (*head)->prev->type != TOKEN_PIPE)
-		*head = (*head)->prev;
-}
-
 /**
- * TEMPORARY
- * NAV FLAG
- * refresh block for exit
+*
 */
 t_token *find_PIPE(t_token *head, int nav_flag)
 {
@@ -41,7 +24,7 @@ t_token *find_PIPE(t_token *head, int nav_flag)
 	current = head;
 	if(nav_flag)
 	{
-		while(current && current->next)
+		while(current && current->next && current->next->position != -1)
 			current = current->next;
 	}
 	while (current && current->prev && current->position != -1)
@@ -57,18 +40,17 @@ t_token *find_PIPE(t_token *head, int nav_flag)
  * @param ast root node
  * @param tokens Tokenizer Tokens
  */
-int create_subtree(t_tree **ast, t_token **tokens, int flag)
+void create_subtree(t_tree **ast, t_token **tokens, int flag)
 {
 	int count;
 	t_token *pipe_token;
 
 	if (!tokens || !*tokens)
-		return 0;
+		return ;
 	pipe_token = find_PIPE(*tokens, flag);
 	if (pipe_token && pipe_token->type == TOKEN_PIPE)
 	{
-		*ast = create_block(&pipe_token, 1, block_identifier(pipe_token)); // ! infinite loop here for some reason (redir maker )
-		printf("Created a Pipe Node\n");
+		*ast = create_block(&pipe_token, 1, block_identifier(pipe_token));
 		pipe_token->position = -1;
 		if (pipe_token->next)
 			create_subtree(&(*ast)->right, &(pipe_token->next), 0);
@@ -85,8 +67,12 @@ int create_subtree(t_tree **ast, t_token **tokens, int flag)
 		count = sub_block_arg_counter(*tokens);
 		*ast = create_block(tokens, count, block_identifier(*tokens));
 	}
-	return 1;
 }
+/**
+ * @brief Creates a subtree if a Pipe is found in tokens
+ * @param ast root node
+ * @param tokens Tokenizer Tokens
+ */
 t_token *find_and_or(t_token *head, int nav_flag)
 {
 	t_token *current;
@@ -106,11 +92,12 @@ t_token *find_and_or(t_token *head, int nav_flag)
 	return (NULL);
 }
 /**
- * * Recursion: look for and_or
- * * 	create the block for the op and th command on its right.
- * *  call this function but the result would be put to the left
+ * @brief Creates a Tree
+ * @param ast Root node
+ * @param tokens Tokenizer Tokens
+ * @param flag Navigation flag for search
  */
-void create_one_tree(t_tree **ast, t_token **tokens ,int flag)
+void create_tree(t_tree **ast, t_token **tokens ,int flag)
 {
 	t_token *and_or;
 
@@ -123,14 +110,14 @@ void create_one_tree(t_tree **ast, t_token **tokens ,int flag)
 		*ast = create_block(&and_or, 1, block_identifier(and_or));
 		and_or->position = -1;
 		if (and_or->next)
-			create_subtree(&((*ast)->right), &and_or->next, 0);
+			create_tree(&((*ast)->right), &and_or->next, 0);
 		if (and_or->prev)
-			create_one_tree(&((*ast)->left), &and_or->prev, 0);
+			create_tree(&((*ast)->left), &and_or->prev, 0);
 	}
 	else
 	{
-		// if (flag)
-		// 	refresh_block(tokens);
+		if (flag)
+			refresh_block(tokens);
 		printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
 	}
@@ -141,28 +128,31 @@ void f()
 	system("leaks -q -- minishell");
 }
 
+
+
+
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
 
 	// atexit(f);
+	printf("%d", getpid());
 	(void)argc, (void)argv;
-	display_intro();
 	init_shell(&shell);
 	build_env(&shell.env_list, envp);
 	while (1)
 	{
 		setup_signals_parent();
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
-		if (!shell.line) // Ctrl+D should exit the shell using this.
-		{
-			free_tokens(&shell.tokens);
-			free_all_tracked();
-			write(1, "exit\n", 5);
-			exit(0);
-		}
-		// shell.line = ft_strdup("make ");
+		shell.line = ft_strdup("Hello");
 		add_history(shell.line);
+		// ? if (!shell.line)
+		// ? {
+		// ? 	free_tokens(&shell.tokens);
+		// ? 	free_all_tracked();
+		// ? 	write(1, "exit\n", 5);
+		// ? 	exit(0);
+		// }
 		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))
 		{
 			free(shell.line);
@@ -170,95 +160,16 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		}
 		// visualize_tokens(shell.tokens);
-		create_one_tree(&shell.ast, &shell.tokens, 1);
-		// visualize_ast_tree(shell.ast);
+		create_tree(&shell.ast, &shell.tokens, 1);
+		visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
 		execute_ast(shell.ast, &shell.env_list);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
-		free(shell.line);
+
 		clear_memory(&shell);
 	}
-	free(shell.line);
+
 	clear_memory(&shell);
 	return (0);
 }
-//?  // if (current->type != TOKEN_WORD)
-//?  // {
-//?  // 	tree->left = create_block(&current, 1, block_identifier(current));
-//?  // 	count = block_arg_counter(&current->next);
-//?  // 	tree->left->right = create_block(&current->next, count, block_identifier(current->next));
-//?  // 	current = find_and_or(&current->prev, 1);
-//?  // 	if (current->type != TOKEN_WORD)
-//?  // 	{
-//?  // 		printf("Reached The End of the demo\n");
-//?  // 		exit(1);
-//?  // 		return;
-//?  // 	}
-//?  // 		count = block_arg_counter(&current);
-//?  // 		tree->left->left = create_block(&current, count, block_identifier(current));
-//?  // }
-//?  // else
-//?  // {
-//?  // 	count = block_arg_counter(&current);
-//?  // 	tree->left = create_block(&current, count, block_identifier(current));
-//?  // }
-//?  // }
-// else if((current = find_prev_PIPE(&current))->type == TOKEN_PIPE) //! look for why this keeps coming back to pipe problem with unctions not seperated ? or something , check its stop condition
-// {
-// 	tree = create_block(&current, 1, block_identifier(&current));
-// 	count = sub_block_arg_counter(&current->next);
-// 	tree->right = create_block(&current->next, count, block_identifier(current->next));
-// 	current = find_prev_PIPE(&current->prev);
-// 	if ( current->type == TOKEN_PIPE )
-// 	{
-// 		printf("EXTRA PIPE FOUND \n");
-// 		// tree->left = create_block(&current, 1, block_identifier(&current));
-// 		exit(0);
-// 	}
-// 	else
-// 	{
-// 		current = *head;
-// 	}
-// 	tree->left = create_block(&current, 1, block_identifier(&current));
-// 	count = sub_block_arg_counter(&current);
-// 	tree->left->right = create_block(&current->next, count, block_identifier(&current->next));
-// }
-// void create_subtree(t_tree **ast, t_token **tokens)
-// {
-// 	t_token *current;
-// 	t_tree * sub_tree;
-// 	int	count;
-// 	t_token *pipe;
-// 	count = 0;
-// 	sub_tree = NULL;
-// 	current = *tokens;
-// 	pipe = find_prev_PIPE(current, 0);
-// 	if(pipe->type == TOKEN_PIPE)
-// 	{
-// 		printf("Creating node for %s\n", pipe->value);
-// 		sub_tree = create_block(&pipe, 1, block_identifier(current));
-// 		pipe->position = -1;
-// 		create_subtree(&sub_tree->right,&pipe->next);
-// 		create_subtree(&sub_tree->left, &pipe->prev);
-// 		// free_tokens(&current);
-// 		// sub_tree->right = create_block(&current->next, count, block_identifier(current->next));
-// 		// count = sub_block_arg_counter(current->prev);
-// 		// sub_tree->left = create_block(&current->prev, count, block_identifier(current->prev));
-// 	}
-// 	else
-// 	{
-// 		printf("FINAL PIPE FUNCTION\n");
-// 		count = block_arg_counter(pipe);
-// 		sub_tree = create_block(&pipe, count, block_identifier(pipe));
-// 		t_token *temp = pipe;
-// 		while (temp && temp->type != TOKEN_PIPE)
-// 		{
-// 			temp->position = -1;
-// 			temp = temp->next;
-// 		}
-// 		// ! YOU ARE HERE , the tree is filled with null because of something , i think in the find prev search conditions
-// 	}
-// 	current->position = -1;
-// 		*ast = sub_tree;
-// }
