@@ -6,7 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2025/06/19 06:56:38 by yrhandou         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/20 15:58:01 by yrhandou         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +93,11 @@ void print_tokens(t_token **head)
 	}
 }
 #include "launchpad.h"
+<<<<<<< Updated upstream
+=======
+#include <stdlib.h>
+#include <string.h>
+>>>>>>> Stashed changes
 
 // ANSI color codes for different node types
 #define COLOR_RESET "\033[0m"
@@ -101,16 +110,20 @@ void print_tokens(t_token **head)
 #define COLOR_WHITE "\033[37m"
 
 // Tree drawing characters
+<<<<<<< Updated upstream
 #define TREE_VERTICAL "│"
+=======
+>>>>>>> Stashed changes
 #define TREE_BRANCH "├──"
 #define TREE_LAST "└──"
 #define TREE_SPACE "    "
 #define TREE_CONTINUE "│   "
 
-/**
+	/**
  * Get the string representation of a node type
  */
-static const char *get_node_type_string(t_node_type type)
+	static const char *
+	get_node_type_string(t_node_type type)
 {
 	switch (type)
 	{
@@ -198,15 +211,17 @@ static const char *get_token_type_string(t_token_type type)
 		return "REDIR_HEREDOC";
 	case R_FILE:
 		return "R_FILE";
-	case TOKEN_PAREN:
-		return "TOKEN_PAREN";
+	case TOKEN_PAREN_LEFT:
+		return "PAREN_LEFT";
+	case TOKEN_PAREN_RIGHT:
+		return "PAREN_RIGHT";
 	default:
 		return "UNKNOWN";
 	}
 }
 
 /**
- * Get color for token type
+ * Get the display color for a token type
  */
 static const char *get_token_color(t_token_type type)
 {
@@ -227,43 +242,45 @@ static const char *get_token_color(t_token_type type)
 		return COLOR_BLUE;
 	case R_FILE:
 		return COLOR_MAGENTA;
+<<<<<<< Updated upstream
+=======
+	case TOKEN_PAREN_LEFT:
+	case TOKEN_PAREN_RIGHT:
+		return COLOR_MAGENTA;
+>>>>>>> Stashed changes
 	default:
 		return COLOR_WHITE;
 	}
 }
 
 /**
- * Calculate the depth of the tree
+ * Calculate the depth of the AST
  */
 static int calculate_tree_depth(t_tree *node)
 {
-	int left_depth, right_depth;
-
 	if (!node)
 		return 0;
-
-	left_depth = calculate_tree_depth(node->left);
-	right_depth = calculate_tree_depth(node->right);
-
-	return 1 + (left_depth > right_depth ? left_depth : right_depth);
+	int ld = calculate_tree_depth(node->left);
+	int rd = calculate_tree_depth(node->right);
+	return 1 + (ld > rd ? ld : rd);
 }
 
 /**
- * Count the total number of nodes in the tree
+ * Count total nodes in the AST
  */
 static int count_tree_nodes(t_tree *node)
 {
 	if (!node)
 		return 0;
-
 	return 1 + count_tree_nodes(node->left) + count_tree_nodes(node->right);
 }
 
 /**
- * Print redirection information
+ * Print a linked list of redirections
  */
-static void print_redirections(t_redir *redirs, const char *prefix)
+static void print_redirections(t_redir *r, const char *prefix)
 {
+<<<<<<< Updated upstream
 	t_redir *current;
 	int count;
 
@@ -288,9 +305,23 @@ static void print_redirections(t_redir *redirs, const char *prefix)
 			   COLOR_RESET,
 			   COLOR_WHITE,
 			   COLOR_RESET,
+=======
+	int i = 0;
+	for (; r; r = r->next, ++i)
+	{
+		const char *mark = r->next ? "├─" : "└─";
+		printf("%s    %s│ %s[%d] %s%s%s → \"%s\"%s",
+			   prefix,
+			   COLOR_CYAN,
+			   mark,
+			   i,
+			   COLOR_CYAN,
+			   get_redir_type_string(r->type),
+>>>>>>> Stashed changes
 			   COLOR_WHITE,
-			   current->file ? current->file : "NULL",
+			   r->file ? r->file : "NULL",
 			   COLOR_RESET);
+<<<<<<< Updated upstream
 
 		// Add fd and flag info if they're meaningful
 		if (current->fd != -1 || current->flag != 0)
@@ -302,8 +333,11 @@ static void print_redirections(t_redir *redirs, const char *prefix)
 				   COLOR_RESET);
 		}
 
+=======
+		if (r->fd != -1 || r->flag)
+			printf(" %s(fd:%d,flag:%d)%s", COLOR_WHITE, r->fd, r->flag, COLOR_RESET);
+>>>>>>> Stashed changes
 		printf("\n");
-		current = current->next;
 	}
 
 	if (count > 0)
@@ -317,6 +351,7 @@ static void print_redirections(t_redir *redirs, const char *prefix)
 }
 
 /**
+<<<<<<< Updated upstream
  * Enhanced command arguments display with better formatting
  */
 static void print_command_args(char **cmd, const char *prefix)
@@ -341,6 +376,25 @@ static void print_command_args(char **cmd, const char *prefix)
 		if (cmd[i + 1])
 			printf(" ");
 		i++;
+=======
+ * Print command node details (args, etc.)
+ */
+static void print_command_args(char **cmd, const char *prefix)
+{
+	if (!cmd || !cmd[0])
+	{
+		printf("%s    %s┌─ Command: %s(empty)%s\n",
+			   prefix, COLOR_GREEN, COLOR_RED, COLOR_RESET);
+		return;
+	}
+	printf("%s    %s┌─ Command: %s\"%s\"%s",
+		   prefix, COLOR_GREEN, COLOR_YELLOW, cmd[0], COLOR_RESET);
+	if (cmd[1])
+	{
+		printf(" %sArgs:%s", COLOR_GREEN, COLOR_RESET);
+		for (int i = 1; cmd[i]; ++i)
+			printf(" \"%s\"", cmd[i]);
+>>>>>>> Stashed changes
 	}
 	printf("\n");
 
@@ -352,6 +406,7 @@ static void print_command_args(char **cmd, const char *prefix)
 }
 
 /**
+<<<<<<< Updated upstream
  * Recursive function to visualize the tree
  */
 static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_last, int depth)
@@ -361,11 +416,21 @@ static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_la
 	const char *node_color;
 	int has_redirections;
 
+=======
+ * Recursive AST printer
+ */
+static void visualize_tree_recursive(t_tree *node,
+									 const char *prefix,
+									 int is_last)
+{
+	char np[1024];
+>>>>>>> Stashed changes
 	if (!node)
 	{
 		printf("%s%s(null)%s\n", prefix, COLOR_RED, COLOR_RESET);
 		return;
 	}
+<<<<<<< Updated upstream
 
 	// Choose the appropriate branch character
 	branch_char = is_last ? TREE_LAST : TREE_BRANCH;
@@ -379,6 +444,14 @@ static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_la
 		   prefix,
 		   branch_char,
 		   node_color,
+=======
+	const char *branch = is_last ? TREE_LAST : TREE_BRANCH;
+	const char *ncol = get_node_color(node->type);
+	printf("%s%s %s%s%s %s[%s%s%s]%s\n",
+		   prefix,
+		   branch,
+		   ncol,
+>>>>>>> Stashed changes
 		   get_node_type_string(node->type),
 		   COLOR_WHITE,
 		   node->is_ambiguous ? COLOR_RED : COLOR_GREEN,
@@ -386,6 +459,7 @@ static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_la
 		   COLOR_WHITE,
 		   COLOR_RESET);
 
+<<<<<<< Updated upstream
 	if (node->type == NODE_COMMAND)
 	{
 		printf(" %s(argc: %zu", COLOR_WHITE, node->argc);
@@ -401,6 +475,9 @@ static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_la
 			 prefix, is_last ? TREE_SPACE : TREE_CONTINUE);
 
 	// Print command details if it's a command node
+=======
+	// Print command details + redirs
+>>>>>>> Stashed changes
 	if (node->type == NODE_COMMAND)
 	{
 		print_command_args(node->cmd, new_prefix);
@@ -409,6 +486,7 @@ static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_la
 		if (node->redirs)
 			print_redirections(node->redirs, new_prefix);
 
+<<<<<<< Updated upstream
 		// Add a separator line if there were redirections and there are children
 		if (has_redirections && (node->left || node->right))
 			printf("%s%s│%s\n", new_prefix, COLOR_CYAN, COLOR_RESET);
@@ -434,22 +512,38 @@ static void visualize_tree_recursive(t_tree *node, const char *prefix, int is_la
 			strcat(new_prefix, "    ");
 			visualize_tree_recursive(node->right, new_prefix, 1, depth + 1);
 		}
+=======
+	// Prepare prefix for children
+	snprintf(np, sizeof(np), "%s%s", prefix, is_last ? TREE_SPACE : TREE_VERT);
+
+	// Recurse left/right
+	if (node->left)
+	{
+		printf("%s%s Left:%s\n", prefix, COLOR_YELLOW, COLOR_RESET);
+		visualize_tree_recursive(node->left, np, node->right == NULL);
+	}
+	if (node->right)
+	{
+		printf("%s%s Right:%s\n", prefix, COLOR_YELLOW, COLOR_RESET);
+		visualize_tree_recursive(node->right, np, 1);
+>>>>>>> Stashed changes
 	}
 }
 
 /**
- * Main function to visualize the AST tree
+ * Entry point for AST visualization
  */
 void visualize_ast_tree(t_tree *root)
 {
-	int depth, node_count;
-
 	if (!root)
 	{
 		printf("%sAST Tree: (empty)%s\n", COLOR_RED, COLOR_RESET);
 		return;
 	}
+	int depth = calculate_tree_depth(root);
+	int nodes = count_tree_nodes(root);
 
+<<<<<<< Updated upstream
 	depth = calculate_tree_depth(root);
 	node_count = count_tree_nodes(root);
 
@@ -513,29 +607,57 @@ void print_flat_ast(t_tree *node, int level)
 
 /**
  * Visualize token list with values and types
+=======
+	// Header box
+	printf("\n%s╔══════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+	printf("%s║   %sAST TREE VISUALIZER%s   ║%s\n",
+		   COLOR_CYAN, COLOR_WHITE, COLOR_CYAN, COLOR_RESET);
+	printf("%s║ Depth: %-2d │ Nodes: %-2d ║%s\n",
+		   COLOR_CYAN, depth, nodes, COLOR_RESET);
+	printf("%s╚══════════════════════════════════╝%s\n\n", COLOR_CYAN, COLOR_RESET);
+
+	visualize_tree_recursive(root, "", 1);
+
+	// Legend
+	printf("\n%sLegend:%s\n", COLOR_WHITE, COLOR_RESET);
+	printf("  %sNode Types:%s COMMAND=● GREEN, PIPE=● BLUE, AND=● YELLOW, OR=● RED, PARENTHS=● MAGENTA\n",
+		   COLOR_WHITE, COLOR_RESET);
+	printf("  %sTokens:%s WORD/ARG=WHITE, AND/OR=YELLOW, REDIR=CYAN, PIPE=BLUE, R_FILE=MAGENTA,\n"
+		   "           %sPAREN_LEFT/RIGHT=● MAGENTA\n",
+		   COLOR_WHITE, COLOR_RESET, COLOR_MAGENTA);
+	printf("  %sPosition: integer index in token list%s\n\n",
+		   COLOR_WHITE, COLOR_RESET);
+}
+
+/**
+ * Token list visualizer, now with integer position and paren tokens
+>>>>>>> Stashed changes
  */
 void visualize_tokens(t_token *head)
 {
-	t_token *current;
-	int count;
-
 	if (!head)
 	{
 		printf("%sToken List: (empty)%s\n", COLOR_RED, COLOR_RESET);
 		return;
 	}
+<<<<<<< Updated upstream
 
 	// Print header
 	printf("\n%s╔══════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
 	printf("%s║           %sTOKEN VISUALIZER%s            ║%s\n",
 		   COLOR_CYAN, COLOR_WHITE, COLOR_CYAN, COLOR_RESET);
 	printf("%s╚══════════════════════════════════════╝%s\n\n", COLOR_CYAN, COLOR_RESET);
+=======
+	printf("\n%s╔══════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+	printf("%s║     %sTOKEN VISUALIZER%s     ║%s\n",
+		   COLOR_CYAN, COLOR_WHITE, COLOR_CYAN, COLOR_RESET);
+	printf("%s╚══════════════════════════════════╝%s\n\n", COLOR_CYAN, COLOR_RESET);
+>>>>>>> Stashed changes
 
-	current = head;
-	count = 0;
-
-	while (current)
+	int idx = 0;
+	for (t_token *cur = head; cur; cur = cur->next, ++idx)
 	{
+<<<<<<< Updated upstream
 		const char *token_color = get_token_color(current->type);
 		const char *next_marker = (current->next) ? "├──" : "└──";
 
@@ -545,10 +667,22 @@ void visualize_tokens(t_token *head)
 			   count++,
 			   token_color,
 			   get_token_type_string(current->type),
+=======
+		const char *mark = cur->next ? TREE_BRANCH : TREE_LAST;
+		const char *tcol = get_token_color(cur->type);
+		printf("%s%s [%02d] %s%-12s%s \"%s\" %s(pos:%d)%s\n",
+			   COLOR_CYAN,
+			   mark,
+			   idx,
+			   tcol,
+			   get_token_type_string(cur->type),
+>>>>>>> Stashed changes
 			   COLOR_RESET,
+			   cur->value ? cur->value : "NULL",
 			   COLOR_WHITE,
-			   current->value ? current->value : "NULL",
+			   cur->position,
 			   COLOR_RESET);
+<<<<<<< Updated upstream
 
 		if (current->position > 0)
 			printf(" %s(pos: %d)%s", COLOR_WHITE, current->position, COLOR_RESET);
@@ -874,4 +1008,8 @@ void print_tree(t_tree *node)
 		return;
 	}
 	print_tree_recursive(node, "", 1, NULL, 0, 0);
+=======
+	}
+	printf("\n");
+>>>>>>> Stashed changes
 }

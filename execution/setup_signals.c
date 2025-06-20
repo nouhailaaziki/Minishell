@@ -3,27 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   setup_signals.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:05:19 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 19:03:51 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/20 12:18:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-// Ctrl+C: Show a new prompt on a new line | Ctrl+D: in main, it exit the program | ctrl+\: do nothing
+//
 
-void	handle_sigint(int sig)              // it work with Ctrl+C: Show a new prompt on a new line
+/// @brief Ctrl+C: Show a new prompt on a new line | Ctrl+D: in main, it exit the program | ctrl+\: do nothing
+/// @paragraph it work with Ctrl+C: Show a new prompt on a new line,
+void	handle_sigint(int sig)
 {
-	(void)sig;                              // Ignores the parameter since we don’t use it
+	(void)sig;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);                 // Clears the current input line (uses readline)
 	rl_on_new_line();                       // Moves to a new line internally
 	rl_redisplay();                         // Shows the prompt again
 }
-
-void	setup_signals_parent(void)          // It configures how the parent process handles signals
+ /**
+ * @brief It configures how the parent process handles signals
+ */
+void	setup_signals_parent(void)
 {
 	struct sigaction sa_int;
 	struct sigaction sa_quit;
@@ -37,8 +41,10 @@ void	setup_signals_parent(void)          // It configures how the parent process
 	sa_quit.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
-
-void	setup_signals_child(void)           // It sets the default behavior for signals in the child process
+/**
+ * @brief It sets the default behavior for signals in the child process
+*/
+void	setup_signals_child(void)
 {
 	struct sigaction sa;
 

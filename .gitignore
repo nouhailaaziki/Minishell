@@ -4,3 +4,8 @@
 .DS_Store
 .excalidraw
 *.tldr
+<<<<<<< Updated upstream
+=======
+libft.a
+*/Contents/*
+>>>>>>> Stashed changes

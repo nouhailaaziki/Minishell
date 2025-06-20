@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/18 09:25:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:17:10 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,15 @@ int	token_lexer(char *str)
 			return (TOKEN_OR);
 		if (str[0] == '&')
 			return (TOKEN_AND);
-		if (str[0] == '<' || str[0] == '>')
-			return (TOKEN_REDIR);
 	}
 	else if (operator_length == 1)
 	{
 		if (str[0] == '|')
 			return (TOKEN_PIPE);
-		if (str[0] == '<' || str[0] == '>')
-			return (TOKEN_REDIR);
 	}
-	else if(str[0] == '(')
+	if (str[0] == '<' || str[0] == '>')
+		return (TOKEN_REDIR);
+	else if(ft_isparentheses(&str[0]))
 		return (TOKEN_PAREN);
 	return ((TOKEN_WORD));
 }
@@ -46,31 +44,6 @@ int	ft_special_case(char *str, int type)
 	if ((type != TOKEN_REDIR) && (new_type == TOKEN_REDIR))
 		return (1);
 	return (0);
-}
-int	operator_len(char *str) //returns the length of the operator on success
-{
-	int		i;
-	int		len;
-	int		type;
-
-	i = 0;
-	len = ft_is_operator(&str[i]);
-	if(!len)
-		return (0);
-	type = token_lexer(&str[i]);
-	i += len; // if(!str[i]) 	return 0;
-	len = i;
-	while(str[len])
-	{
-		if((ft_special_case(&str[len],type)))
-			break;
-		else if (ft_before_x(&str[len], ft_is_operator))
-			return 0;
-		else if (!ft_isspace(str[len]))
-			break;
-		len++;
-	}
-	return (i);
 }
 
 void	link_token(t_token **head, t_token *node)
@@ -126,11 +99,52 @@ int token_lookup(char *line)
 	int token_len;
 
 	token_len = count_chars(line);
+	if(!token_len)
+		token_len = ft_isparentheses(line);
 	if (!token_len)
-		token_len = operator_len((char *)line);
+		token_len = operator_len(line);
 	return token_len;
 }
 
+int count_chars(char *str)
+{
+	int i;
+	int set;
+
+	i = 0;
+	if (ft_isparentheses(str))
+		return 0;
+	set = ft_syntax_analyzer(&str[i]);
+	if (!set )//|| ft_before_x(&str[i], ft_isparentheses)) // ||(head && tokens_init(head,&str[i])))
+		return (0);
+	i += set;
+	return (i);
+}
+int operator_len(char *str) // returns the length of the operator on success
+{
+	int i;
+	int len;
+	int type;
+
+	i = 0;
+	len = ft_is_operator(&str[i]);
+	if (!len)
+		return (0);
+	type = token_lexer(&str[i]);
+	i += len; // if(!str[i]) 	return 0;
+	len = i;
+	while (str[len])
+	{
+		if ((ft_special_case(&str[len], type)))
+			break;
+		else if (ft_before_x(&str[len], ft_is_operator))
+			return 0;
+		else if (!ft_isspace(str[len]))
+			break;
+		len++;
+	}
+	return (i);
+}
 
 int	lexer(t_shell *shell, int status_flag)
 {

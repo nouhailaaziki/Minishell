@@ -6,12 +6,17 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2025/06/19 07:38:18 by yrhandou         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/20 12:11:09 by yrhandou         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
+<<<<<<< Updated upstream
 // ? i count the number of tokens until i stumble across a pipe/and/or.
 // ! i check for redirections and fill them in a linked list
 // * i fill inside the node the number of arguments
@@ -32,6 +37,27 @@ void refresh_block(t_token **head)
  * NAV FLAG
  * refresh block for exit
 */
+=======
+t_token *find_and_or(t_token *head, int nav_flag)
+{
+	t_token *current;
+
+	current = head;
+	if (nav_flag)
+	{
+		while (current && current->next)
+			current = current->next;
+	}
+	while (current && current->prev && current->position != -1)
+	{
+		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
+			return (current);
+		current = current->prev;
+	}
+	return (NULL);
+}
+
+>>>>>>> Stashed changes
 t_token *find_PIPE(t_token *head, int nav_flag)
 {
 	t_token *current;
@@ -53,9 +79,10 @@ t_token *find_PIPE(t_token *head, int nav_flag)
 	return (NULL);
 }
 /**
- * @brief Creates a subtree if a Pipe is found in tokens
- * @param ast root node
+ * @brief Creates a subtree with a pipe as the root node if a Pipe is found in tokens
+ * @param ast Root node
  * @param tokens Tokenizer Tokens
+ * @param flag Navigation flag for search
  */
 int create_subtree(t_tree **ast, t_token **tokens, int flag)
 {
@@ -87,24 +114,13 @@ int create_subtree(t_tree **ast, t_token **tokens, int flag)
 	}
 	return 1;
 }
+<<<<<<< Updated upstream
 t_token *find_and_or(t_token *head, int nav_flag)
 {
 	t_token *current;
+=======
+>>>>>>> Stashed changes
 
-	current = head;
-	if (nav_flag)
-	{
-		while (current && current->next)
-			current = current->next;
-	}
-	while (current && current->prev && current->position != -1)
-	{
-		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
-			return (current);
-		current = current->prev;
-	}
-	return (NULL);
-}
 /**
  * * Recursion: look for and_or
  * * 	create the block for the op and th command on its right.
@@ -154,6 +170,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		setup_signals_parent();
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
+<<<<<<< Updated upstream
 		if (!shell.line) // Ctrl+D should exit the shell using this.
 		{
 			free_tokens(&shell.tokens);
@@ -163,17 +180,33 @@ int main(int argc, char **argv, char **envp)
 		}
 		// shell.line = ft_strdup("make ");
 		add_history(shell.line);
+=======
+		// shell.line = ft_strdup("Hello");
+		add_history(shell.line);
+		 if (!shell.line)
+		 {
+		 	free_tokens(&shell.tokens);
+		 	free_all_tracked();
+		 	write(1, "exit\n", 5);
+		 	exit(0);
+		}
+>>>>>>> Stashed changes
 		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))
 		{
 			free(shell.line);
 			free_tokens(&shell.tokens);
 			continue;
 		}
+<<<<<<< Updated upstream
 		// visualize_tokens(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens, 1);
+=======
+		visualize_tokens(shell.tokens);
+		// create_tree(&shell.ast, &shell.tokens, 1);
+>>>>>>> Stashed changes
 		// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
-		execute_ast(shell.ast, &shell.env_list);
+		// execute_ast(shell.ast, &shell.env_list);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
 		free(shell.line);

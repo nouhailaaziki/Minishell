@@ -6,7 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2025/06/19 06:00:29 by yrhandou         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/20 11:03:40 by yrhandou         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +34,29 @@ t_tree *create_tree_node(int type,int cmd_count)
 	return (head);
 }
 
-t_token *ft_token_search(t_token *head, int type)
+t_token *ft_token_search(t_token *head, int type, int nav_flag)
 {
-	t_token	*current;
+	t_token *current;
+	int pipe_int;
 
+	if(!head)
+		return (printf("This is not supposed to happen\n"),NULL);
+	pipe_int = 0;
 	current = head;
-	while(current)
+	if (nav_flag)
 	{
-		if(current->type == type)
+		while (current && current->next)
+			current = current->next;
+	}
+	if(type == TOKEN_PIPE)
+		pipe_int = 1;
+	while (current && current->prev && current->position != -1)
+	{
+		if (!pipe_int && (current->type == type++ || current->type == type-- ))
 			return (current);
-		current = current->next;
+		else if(pipe_int && current->type == TOKEN_PIPE)
+			return (current);
+		current = current->prev;
 	}
 	return (NULL);
 }
