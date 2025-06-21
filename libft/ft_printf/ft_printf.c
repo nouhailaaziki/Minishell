@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
- int	check_format(va_list va, char str)
+static int	check_format(va_list va, char str)
 {
 	int	counter;
 

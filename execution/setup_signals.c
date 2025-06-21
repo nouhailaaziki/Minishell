@@ -6,13 +6,29 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:05:19 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 19:03:51 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/20 16:42:41 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
 // Ctrl+C: Show a new prompt on a new line | Ctrl+D: in main, it exit the program | ctrl+\: do nothing
+
+struct termios orig_termios;
+
+void disable_echoctl(void)
+{
+    struct termios new_termios;
+    tcgetattr(STDIN_FILENO, &orig_termios);
+    new_termios = orig_termios;
+    new_termios.c_lflag &= ~ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &new_termios);
+}
+
+void restore_terminal(void)
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
+}
 
 void	handle_sigint(int sig)              // it work with Ctrl+C: Show a new prompt on a new line
 {
@@ -48,6 +64,3 @@ void	setup_signals_child(void)           // It sets the default behavior for sig
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 }
-
-
-

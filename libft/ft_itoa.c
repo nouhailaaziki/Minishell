@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 08:46:40 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/16 10:35:57 by noaziki          ###   ########.fr       */
+/*   Updated: 2024/11/20 11:49:57 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
- int	count_num(int num)
+static int	count_num(int num)
 {
 	int	count;
 
@@ -25,7 +25,7 @@
 	return (count);
 }
 
- char	*itoa_ft(int count, int n)
+static char	*itoa_ft(int count, int n)
 {
 	char	*str;
 

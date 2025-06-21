@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:33:26 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/16 10:35:57 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/16 12:29:43 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
- char	sign_check(const char *str, int *sign)
+static char	sign_check(const char *str, int *sign)
 {
 	int	i;
 
@@ -36,7 +36,6 @@ int	ft_atoi(const char *str)
 	long			result;
 
 	sign = 1;
-	i = 0;
 	result = 0;
 	i = sign_check(str, &sign);
 	while (ft_isdigit(str[i]))

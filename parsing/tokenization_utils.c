@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/16 12:03:32 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 09:25:50 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "launchpad.h"
 
 int	token_lexer(char *str)
 {
@@ -77,8 +77,12 @@ void	link_token(t_token **head, t_token *node)
 {
 	t_token	*tmp;
 
-	tmp = *head;
-	if (!*head)
+	if(!node)
+	{
+		ft_putendl_fd("Error Token is Empty\n",2);
+		return ;
+	}
+	if (!head || !*head)
 	{
 		*head = node;
 		node->next = NULL;
@@ -86,6 +90,7 @@ void	link_token(t_token **head, t_token *node)
 		node->position = 0;
 		return ;
 	}
+	tmp = *head;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = node;
@@ -102,35 +107,52 @@ t_token	*new_token(char *value, int type)
 	if (!token)
 		return (NULL);
 	token->type = type;
-	token->value = value;
+	if (value)
+	{
+		token->value = ft_strdup(value);
+		if(!token->value)
+			return (free(token), ft_putendl_fd(" StrdupError\n", 2), NULL);
+	}
+	else
+		return (free(token), ft_putendl_fd("malloc Error\n", 2), NULL);
 	token->next = NULL;
 	token->prev = NULL;
 	token->position = -1;
 	return (token);
 }
 
+int token_lookup(char *line)
+{
+	int token_len;
+
+	token_len = count_chars(line);
+	if (!token_len)
+		token_len = operator_len((char *)line);
+	return token_len;
+}
+
+
 int	lexer(t_shell *shell, int status_flag)
 {
 	int	i;
 	int	token_len;
 	int	position;
+	char *sub_str;
 
 	i = 0;
 	while (shell->line[i])
 	{
 		i += skip_spaces(&shell->line[i]);
 		position = i;
-		token_len = count_chars(&shell->line[i]);
+		token_len = token_lookup(&shell->line[i]);
 		if (!token_len)
-			token_len = operator_len((char *)&shell->line[i]);
-		if (!token_len)
-			return (ft_syntax_err(&shell->line[i], (shell)->tokens));
+			return (ft_syntax_err(&shell->line[i],&(shell)->tokens));
 		if(status_flag)
 			break;
-		link_token(&shell->tokens, new_token(ft_substr(shell->line, position, token_len), \
-		(token_lexer(&shell->line[position]))));
+		sub_str = ft_substr(shell->line, position, token_len);
+		link_token(&shell->tokens, new_token(sub_str,(token_lexer(&shell->line[position]))));
+		free(sub_str);
 		i += token_len;
-		position = i;
 		if (ft_str_isspace(&shell->line[i]))
 			break ;
 	}

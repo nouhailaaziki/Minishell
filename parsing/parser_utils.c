@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/17 14:37:04 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/18 09:41:39 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "launchpad.h"
 
 int redir_identifier(char *str)
 {
@@ -100,15 +100,15 @@ int advanced_token_lexer(t_token **head)
 	current = *head;
 	while (current && current->next)
 	{
-		if(current->value[0] == '(')
+		if (current->value && current->value[0] == '(')
 			current->type = TOKEN_PAREN;
-		if (current->type == TOKEN_PAREN && !parentheses_lexer(current->value))
+		if (current->type == TOKEN_PAREN && current->value && !parentheses_lexer(current->value))
 			return 0;
-		if (current->type == TOKEN_REDIR)
-			{
-				current->type = redir_identifier(current->value);
-				current->next->type = R_FILE;
-			}
+		if (current->type == TOKEN_REDIR && current->value)
+		{
+			current->type = redir_identifier(current->value);
+			current->next->type = R_FILE;
+		}
 		if ((current->type == TOKEN_WORD || current->type == TOKEN_ARG || current->type == R_FILE) && \
 			(current->next->type == TOKEN_WORD))
 			current->next->type = TOKEN_ARG;
@@ -124,17 +124,18 @@ int parser(t_shell shell)
 		return 0;
 	current = shell.tokens;
 	if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
-		return ft_syntax_err(current->value, shell.tokens);
-	while (current)
+		return ft_syntax_err(current->value, &shell.tokens);
+	while (current && current->value)//
 	{
 		if (ft_is_operator(current->value) && !current->next)
-			return ft_syntax_err(current->value, shell.tokens);
+			return ft_syntax_err(current->value, &shell.tokens);
 		if (ft_is_redir(current->value) && ft_isparentheses(current->next->value))
-			return ft_syntax_err(current->value, shell.tokens);
+			return ft_syntax_err(current->value, &shell.tokens);
 		current = current->next;
 	}
-	quote_expander(&shell.tokens);
+	// quote_expander(head);
+
 	if(!advanced_token_lexer(&shell.tokens))
-		return ft_syntax_err(current->value, shell.tokens);
+		return ft_syntax_err(current->value, &shell.tokens);
 	return (1);
 }

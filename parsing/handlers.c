@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/16 12:02:31 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/03 18:06:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "launchpad.h"
 
 
 int handle_quotes(char *str, char c) // Handle quote expansion during tokenization

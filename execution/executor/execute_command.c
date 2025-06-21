@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 18:20:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/20 17:08:36 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,31 +53,29 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 	}
 }
 
-int	is_builtins(char **cmd, t_env **env_list)
+int	run_builtins(char **cmd, t_env **env_list, int status)
 {
-	int	last_status;
-
-	last_status = 0;
+	status = 0;
 	if (cmd && cmd[0])
 	{
 		if (!ft_strcmp("exit", cmd[0]))
-			run_exit(cmd, last_status);
+			run_exit(cmd, status);
 		else if (!ft_strcmp("env", cmd[0]))
-			last_status = env(*env_list);
+			status = env(*env_list);
 		else if (!ft_strcmp("pwd", cmd[0]))
-			last_status = pwd();
+			status = pwd();
 		else if (!ft_strcmp("echo", cmd[0]))
-			last_status = echo(cmd);
+			status = echo(cmd);
 		else if (!ft_strcmp("cd", cmd[0]))
-			last_status = cd(cmd, env_list);
+			status = cd(cmd, env_list);
 		else if (!ft_strcmp("unset", cmd[0]))
-			last_status = unset(env_list, cmd);
+			status = unset(env_list, cmd);
 		else if (!ft_strcmp("export", cmd[0]))
-			last_status = export(cmd, env_list);
+			status = export(cmd, env_list);
 		else
-			last_status = -1;
+			status = -1;
 	}
-	return (last_status);
+	return (status);
 }
 
 int	is_parent_builtin(char *cmd)
@@ -90,17 +88,17 @@ int	is_parent_builtin(char *cmd)
 			!ft_strcmp(cmd, "exit"));
 }
 
-int	execute_command(char **cmd, t_redir *redirs, t_env **env_list)
+int	execute_command(char **cmd, t_redir *redirs, t_env **env_list, t_stash *stash)
 {
 	char	**path_list;
 	char	**envp;
-	int		status;
+	int		stats;
 
-	status = 0;
+	stats = 0;
 	if (is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
-		return (is_builtins(cmd, env_list));
+		return (run_builtins(cmd, env_list, stash->status));
 	}
 	pid_t pid = fork();
 	if (pid == -1)
@@ -110,9 +108,9 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list)
 		setup_signals_child();
 		7889 && (envp = get_env_arr(*env_list), path_list = get_path_list(envp));
 		handle_redirs(redirs);
-		status = is_builtins(cmd, env_list);
-		if (status >= 0)
-			exit(status);
+		stats = run_builtins(cmd, env_list, stash->status);
+		if (stats >= 0)
+			exit(stash->status);
 		is_it_dir(cmd[0]);
 		execcmd(path_list, cmd, envp);
 		if ((ft_strchr(cmd[0], '/') || !path_list) && !access(cmd[0], X_OK))
@@ -125,6 +123,6 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list)
 		ft_putstr_fd("command not found\n", 2);
 		exit(127);
 	}
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	waitpid(pid, &stats, 0);
+	return (WEXITSTATUS(stats));
 }
