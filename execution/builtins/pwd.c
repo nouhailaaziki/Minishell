@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:29:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/22 08:24:11 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ int	pwd(void)
 	pwd = getcwd(0, 0);
 	if (!pwd)
 		return (1);
-	printf("%s\n", pwd);
+	ft_putendl_fd(pwd, 1);
 	return (0);
 }

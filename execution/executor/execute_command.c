@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/20 17:08:36 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 16:04:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	is_parent_builtin(char *cmd)
 		return (0);
 	return (!ft_strcmp(cmd, "cd") ||
 			!ft_strcmp(cmd, "export") ||
+			!ft_strcmp(cmd, "pwd") ||
 			!ft_strcmp(cmd, "unset") ||
 			!ft_strcmp(cmd, "exit"));
 }
@@ -95,7 +96,7 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list, t_stash *stas
 	int		stats;
 
 	stats = 0;
-	if (is_parent_builtin(cmd[0]))
+	if (cmd && is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
 		return (run_builtins(cmd, env_list, stash->status));
@@ -105,7 +106,7 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list, t_stash *stas
 		return (perror("fork failed"), 1);
 	if (!pid)
 	{
-		setup_signals_child();
+		// setup_signals_child();
 		7889 && (envp = get_env_arr(*env_list), path_list = get_path_list(envp));
 		handle_redirs(redirs);
 		stats = run_builtins(cmd, env_list, stash->status);

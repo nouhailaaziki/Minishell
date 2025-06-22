@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/20 10:36:57 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 10:49:54 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 	if (ast->type == NODE_COMMAND)
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	else if (ast->type == NODE_PIPE)
-		stash->status = execute_pipe(ast, ast->redirs, env, stash);
+		stash->status = execute_pipe(ast, env, stash);
 	else if (ast->type == NODE_AND)
 	{
 		stash->status = execute_ast(ast->left, env, stash);

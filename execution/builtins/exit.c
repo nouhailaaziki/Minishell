@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 11:54:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/20 07:04:52 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 08:36:02 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 int	is_numeric(const char *str)
 {
-	long	i;
-
 	if (!str || !*str)
 		return (0);
-	i = strict_atoi(str);
+	strict_atoi(str);
 	if (*str == '-' || *str == '+')
 		str++;
 	while (*str)

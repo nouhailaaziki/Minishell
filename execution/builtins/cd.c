@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 08:09:33 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 08:37:38 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ char	*get_env_value(t_env **env_list, char *key)
 	while(tmp)
 	{
 		if (!ft_strcmp(tmp->key, key))
-			break ;
+			return (tmp->value) ;
 		tmp = tmp->next;
 	}
-	return (tmp->value);
+	return (NULL);
 }
 
 int	cd(char **cmd, t_env **env_list)

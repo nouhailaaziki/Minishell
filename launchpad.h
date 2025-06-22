@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/21 09:36:17 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 16:13:48 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 # define BOLD "\033[1m"
 # define ORANGE "\x1b[38;5;214m"
 # define PINK "\x1b[95m"
+
+/*----------------------------global flag-----------------------------*/
+volatile sig_atomic_t g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
@@ -180,8 +183,9 @@ char		*na_substr(char const *s, unsigned int start, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
-void		open_heredoc(t_redir *redir, t_stash *stash);
-int 		manage_heredoc(t_tree *ast, t_redir *redir, t_stash *stash);
+int			open_heredoc(t_redir *redir);
+int			manage_heredocs(t_tree *ast);
+void    	count_heredocs(t_tree *ast);
 
 /*------------------------------Events--------------------------------*/
 void		display_intro(void);
@@ -194,14 +198,11 @@ void		puterror_to_exit(char *cmd, char *error, int ex);
 int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
-int			execute_pipe(t_tree *ast, t_redir *redirs, t_env **env_list, \
-t_stash *stash);
+int		execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
 
 /*------------------------------signals-------------------------------*/
-void		setup_signals_parent(void);
-void		setup_signals_child(void);
-void		restore_terminal(void);
-void		disable_echoctl(void);
+void		setup_signals_prompt(void);
+void		setup_signals_heredoc(void);
 
 /*---------------------------Parsing STUFF----------------------------*/
 void		init_shell(t_shell *shell);
@@ -212,7 +213,7 @@ int			handle_quotes(char *str, char quote_type);
 int			advanced_token_lexer(t_token **head);
 int			ft_syntax_analyzer(char *str);
 int			handle_parentheses(char *str);
-// void free_tokens(t_token **head);
+// void 	free_tokens(t_token **head);
 int			operator_len(char *str);
 int			token_lexer(char *str);
 int			parser(t_shell shell);
