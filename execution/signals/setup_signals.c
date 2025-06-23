@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterror.c                                         :+:      :+:    :+:   */
+/*   setup_signals.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 16:19:41 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 17:57:55 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/23 11:28:12 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/23 11:30:01 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-// exemple : "L33tShell: cd: file_x: No such file or directory\n"
-int	puterror(int program, char *cmd, char *arg, char *error)
+void	setup_signals_heredoc(void)
 {
-	char	*message;
+	struct sigaction	sa_int;
 
-	if (program)
-	{
-		message = na_strjoin("L33tShell: ", cmd);
-		message = na_strjoin(message, arg);
-		message = na_strjoin(message, error);
-	}
-	else
-	{
-		message = na_strjoin(cmd, arg);
-		message = na_strjoin(message, error);
-	}
-	ft_putstr_fd(message, 2);
-	ft_putstr_fd("\n", 2);
-	return (1);
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0;
+	sa_int.sa_handler = handle_sigint_heredoc;
+	sigaction(SIGINT, &sa_int, NULL);
+}
+
+void	setup_signals_prompt(void)
+{
+	struct sigaction	sa_int;
+
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = SA_RESTART;
+	sa_int.sa_handler = handle_sigint_prompt;
+	sigaction(SIGINT, &sa_int, NULL);
 }

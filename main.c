@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 09:07:31 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 20:55:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +118,6 @@ void create_tree(t_tree **ast, t_token **tokens ,int flag)
 	{
 		if (flag)
 			refresh_block(tokens);
-
 		// printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
 	}
@@ -129,6 +127,9 @@ void f()
 {
 	system("leaks -q -- minishell");
 }
+
+
+
 
 int main(int argc, char **argv, char **envp)
 {
@@ -146,7 +147,7 @@ int main(int argc, char **argv, char **envp)
 		g_sigint_received = 0; // Reset flag at the start of each loop
         stash.heredoc_interrupted = 0;
 		setup_signals_prompt(); // Setup signals for the main prompt
-		disable_echoctl();
+		disable_echoctl(&stash);
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
 		add_history(shell.line);
 		if (!shell.line)
@@ -166,7 +167,7 @@ int main(int argc, char **argv, char **envp)
 		// visualize_tokens(shell.tokens);
 		create_tree(&shell.ast, &shell.tokens, 1);	// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
-		count_heredocs(shell.ast);
+		check_heredoc_limit(shell.ast);
 		setup_signals_heredoc();
 		manage_heredocs(shell.ast, &stash);
 		if (!stash.heredoc_interrupted)

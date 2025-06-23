@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:50:32 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 08:34:06 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:00:48 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
- int	skip(const char *str, int *s)
+int	skip(const char *str, int *s)
 {
 	int	i;
 

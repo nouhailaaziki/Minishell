@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 16:04:23 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 20:05:05 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,78 +52,54 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 		i++;
 	}
 }
-int	run_builtins(char **cmd, t_env **env_list, int status)
+
+void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 {
-	status = 0;
-	if (cmd && cmd[0])
+	is_it_dir(cmd[0]);
+	execcmd(path_list, cmd, envp);
+	if ((ft_strchr(cmd[0], '/') || !path_list) && !access(cmd[0], X_OK))
 	{
-		if (!ft_strcmp("exit", cmd[0]))
-			run_exit(cmd, status);
-		else if (!ft_strcmp("env", cmd[0]))
-			status = env(*env_list);
-		else if (!ft_strcmp("pwd", cmd[0]))
-			status = pwd();
-		else if (!ft_strcmp("echo", cmd[0]))
-			status = echo(cmd);
-		else if (!ft_strcmp("cd", cmd[0]))
-			status = cd(cmd, env_list);
-		else if (!ft_strcmp("unset", cmd[0]))
-			status = unset(env_list, cmd);
-		else if (!ft_strcmp("export", cmd[0]))
-			status = export(cmd, env_list);
-		else
-			status = -1;
+		execve(cmd[0], cmd, envp);
+		perror("execve failed");
+		exit(1);
 	}
-	return (status);
+	errno_manager(cmd[0]);
+	ft_putstr_fd("command not found\n", 2);
+	exit(127);
 }
 
-int	is_parent_builtin(char *cmd)
+void	child_process_handler(char **cmd, t_redir *redirs, \
+t_env **env_list, t_stash *stash)
 {
-	if (!cmd)
-		return (0);
-	return (!ft_strcmp(cmd, "cd") ||
-			!ft_strcmp(cmd, "export") ||
-			!ft_strcmp(cmd, "pwd") ||
-			!ft_strcmp(cmd, "unset") ||
-			!ft_strcmp(cmd, "exit"));
-}
-
-int	execute_command(char **cmd, t_redir *redirs, t_env **env_list, t_stash *stash)
-{
-	char	**path_list;
 	char	**envp;
+	char	**path_list;
 	int		stats;
 
-	stats = 0;
+	envp = get_env_arr(*env_list);
+	path_list = get_path_list(envp);
+	handle_redirs(redirs);
+	stats = run_builtins(cmd, env_list, stash->status);
+	if (stats >= 0)
+		exit(stash->status);
+	run_and_handle_errors(path_list, cmd, envp);
+}
+
+int	execute_command(char **cmd, t_redir *redirs, \
+t_env **env_list, t_stash *stash)
+{
+	pid_t	pid;
+	int		status;
+
 	if (cmd && is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
 		return (run_builtins(cmd, env_list, stash->status));
 	}
-	pid_t pid = fork();
+	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed"), 1);
-	if (!pid)
-	{
-		// setup_signals_child();
-		7889 && (envp = get_env_arr(*env_list), path_list = get_path_list(envp));
-		handle_redirs(redirs);
-		stats = run_builtins(cmd, env_list, stash->status);
-		if (stats >= 0)
-			exit(stash->status);
-		is_it_dir(cmd[0]);
-		execcmd(path_list, cmd, envp);
-		if ((ft_strchr(cmd[0], '/') || !path_list) && !access(cmd[0], X_OK))
-		{
-			execve(cmd[0], cmd, envp);
-			perror("execve failed");
-			exit(1);
-		}
-		errno_manager(cmd[0]);
-		ft_putstr_fd("command not found\n", 2);
-		exit(127);
-	}
-	waitpid(pid, &stats, 0);
-	return (WEXITSTATUS(stats));
-
+	if (pid == 0)
+		child_process_handler(cmd, redirs, env_list, stash);
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
 }
