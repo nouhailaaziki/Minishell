@@ -6,28 +6,27 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 16:18:39 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 08:37:48 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int open_heredoc(t_redir *redir)
+int fill_file(t_redir *redir)
 {
     char *line;
     char *store;
-    int  temp_fd;
-    char filename[] = "/tmp/.l33tshell-XXXXXX";
-
+    
     store = NULL;
     while (1)
     {
+        disable_echoctl();
         line = readline("> ");
+        restore_terminal();        
         if (g_sigint_received)
         {
             if (line)
                 free(line);
-            free(store);
             return (1);
         }
         if (!line)
@@ -41,78 +40,88 @@ int open_heredoc(t_redir *redir)
         store = na_strjoin(store, "\n");
         free(line);
     }
-    temp_fd = na_mkstemp(filename);
-    if (temp_fd == -1)
-        return (perror("na_mkstemp"), 1);
-        if (store)
-        write(temp_fd, store, ft_strlen(store));
-    free(store);
-    unlink(filename);
-    lseek(temp_fd, 0, SEEK_SET);
-    redir->fd = temp_fd;
+    if (store)
+    {
+        write(redir->fd_WR, store, ft_strlen(store));
+        free(store);
+    }
     return (0);
 }
 
-int check_heredocs(t_redir *redir, t_stash *stash)
+int open_heredocs(t_redir *redir, t_stash *stash)
 {
-    int pid;
-    int status;
-
-    if (!redir)
-        return (1);
-    pid = fork();
-    if (!pid)
+    t_redir *redirs;
+    int     status;
+    pid_t   pid;
+    
+    redirs = redir;
+    while (redirs && redirs->type)
     {
-        signal(SIGINT, SIG_DFL);
-        while (redir)
+        if (redirs->type == REDIR_HEREDOC)
         {
-            if (redir->type == REDIR_HEREDOC)
+            stash->heredoc_store = na_strdup("/tmp/.l33tshell-XXXXXX");
+            if (!stash->heredoc_store)
+                return (perror("malloc"), 1);
+            redirs->fd_WR = na_mkstemp(stash->heredoc_store);
+            if (redirs->fd_WR == -1)
+                return (1);
+            redirs->fd_RD = open(stash->heredoc_store, O_RDONLY);
+            if (redirs->fd_RD == -1)
+                return (1);
+            unlink(stash->heredoc_store);
+            pid = fork();
+            if (pid == -1)
+               return (perror("fork"), 1);
+            if (pid == 0)
             {
-                open_heredoc(redir);
-                if (redir->fd == -1)
-                    return (1);
-                else
-                    unlink(stash->heredoc_store);
+                signal(SIGINT, SIG_DFL);
+                status = fill_file(redirs);
+                close(redirs->fd_WR);
+                exit(status);
             }
-            redir = redir->next;
+            close(redirs->fd_WR);
+            signal(SIGINT, SIG_IGN);
+            waitpid(pid, &status, 0);
+            signal(SIGINT, SIG_IGN);
+            if (WIFSIGNALED(status) || WEXITSTATUS(status))
+            {
+                if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+                    write(1, "\n", 1);
+                return (1);
+            }
         }
-        exit(0);
-    }
-    signal(SIGINT, SIG_IGN);
-    wait(&status);
-    if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-    {
-        write(1, "\n", 1);
-        stash->status = 1;
-        return (stash->status);
+        redirs = redirs->next;
     }
     return (0);
 }
 
-int manage_heredocs(t_tree *ast)
+void manage_heredocs(t_tree *ast, t_stash *stash)
 {
-    t_redir *redir;
-
     if (!ast)
-        return (0);
+        return;
     if (ast->type == NODE_COMMAND)
     {
-        redir = ast->redirs;
-        while (redir)
+        t_redir *redir = ast->redirs;
+        int counter = 0;
+        while (redir && redir->type)
         {
             if (redir->type == REDIR_HEREDOC)
-            {
-                if (open_heredoc(redir) != 0)
-                {
-                    return (1);
-                }
-            }
+                counter++;
             redir = redir->next;
         }
+        if (counter > 0)
+        {
+            if (open_heredocs(ast->redirs, stash) != 0)
+            {
+                stash->status = 1;
+                return;
+            }
+        }
     }
-    if (manage_heredocs(ast->left) != 0) return (1);
-    if (manage_heredocs(ast->right) != 0) return (1);
-    return (0);
+    if (ast->left)
+        manage_heredocs(ast->left, stash);
+    if (ast->right)
+        manage_heredocs(ast->right, stash);
 }
 
 void count_heredocs(t_tree *ast)
@@ -134,7 +143,7 @@ void count_heredocs(t_tree *ast)
     if (counter > 16)
     {
         write(2, "L33tShell: maximum here-document count exceeded\n", 49);
-        exit(1);
+        exit(2);
     }
     if (ast->left)
         count_heredocs(ast->left);

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 11:10:28 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/21 08:55:21 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 06:59:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	na_mkstemp(char *template)
 	size_t		len;
 	int			r;
 
-	7889 && (len = strlen(template), attempts = 100);
+	7889 && (len = ft_strlen(template), attempts = 100);
 	charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	if (len < 6 || strcmp(&template[len - 6], "XXXXXX") != 0)
+	if (len < 6 || ft_strcmp(&template[len - 6], "XXXXXX") != 0)
 	{
 		errno = EINVAL;
 		return (-1);

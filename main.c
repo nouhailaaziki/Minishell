@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 16:07:20 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 08:18:10 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		g_sigint_received = 0; // Reset flag at the start of each loop
         setup_signals_prompt(); // Setup signals for the main prompt
+		disable_echoctl();
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
 		add_history(shell.line);
 		if (!shell.line)
@@ -162,21 +163,14 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		}
 		// visualize_tokens(shell.tokens);
-		create_tree(&shell.ast, &shell.tokens, 1);
-		// visualize_ast_tree(shell.ast);
+		create_tree(&shell.ast, &shell.tokens, 1);	// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
 		count_heredocs(shell.ast);
 		setup_signals_heredoc();
-		if (manage_heredocs(shell.ast) != 0)
-        {
-            stash.status = 1;
-            clear_memory(&shell);
-            continue;
-        }
+		manage_heredocs(shell.ast, &stash);
 		execute_ast(shell.ast, &shell.env_list, &stash);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
-
 		clear_memory(&shell);
 	}
 	clear_memory(&shell);

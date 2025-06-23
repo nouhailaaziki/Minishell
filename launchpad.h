@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 16:13:48 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 21:49:24 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ typedef struct s_redir
 	t_token_type	type;
 	char			*file;
 	int				fd;
+	int				fd_RD;
+	int				fd_WR;
 	int				flag;
 	struct s_redir	*next;
 }	t_redir;
@@ -122,7 +124,7 @@ typedef struct s_tree
 typedef struct s_stash
 {
 	int		status;
-	char	heredoc_store[PATH_MAX];
+	char	*heredoc_store;
 }	t_stash;
 
 /*-------------------essential components of a shell------------------*/
@@ -183,8 +185,8 @@ char		*na_substr(char const *s, unsigned int start, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
-int			open_heredoc(t_redir *redir);
-int			manage_heredocs(t_tree *ast);
+// int			open_heredoc(t_redir *redir, t_stash *stash);
+void			manage_heredocs(t_tree *ast, t_stash *stash);
 void    	count_heredocs(t_tree *ast);
 
 /*------------------------------Events--------------------------------*/
@@ -203,6 +205,8 @@ int		execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
 /*------------------------------signals-------------------------------*/
 void		setup_signals_prompt(void);
 void		setup_signals_heredoc(void);
+void		disable_echoctl(void);
+void restore_terminal(void);
 
 /*---------------------------Parsing STUFF----------------------------*/
 void		init_shell(t_shell *shell);

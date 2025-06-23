@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 18:13:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2024/11/21 15:51:45 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:15:22 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
@@ -26,4 +27,12 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	}
 	dst[i] = '\0';
 	return (ft_strlen(src));
+}
+int main()
+{
+	char dst[1] = "h";
+	char src[8] = "nouhaila";
+	ft_strlcpy(dst, src, 7);
+	printf("%s\n", dst);
+
 }

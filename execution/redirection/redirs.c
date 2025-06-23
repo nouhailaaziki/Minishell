@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 10:55:50 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 21:52:10 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	handle_redirs(t_redir *redir)
 		else if (redir->type == REDIR_IN)
 			fd = open(redir->file, O_RDONLY);
 		else if (redir->type == REDIR_HEREDOC)
-			fd = redir->fd;
+			fd = redir->fd_RD;
 		else
 		{
 			redir = redir->next;
