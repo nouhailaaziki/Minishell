@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
+
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
@@ -27,12 +27,4 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	}
 	dst[i] = '\0';
 	return (ft_strlen(src));
-}
-int main()
-{
-	char dst[1] = "h";
-	char src[8] = "nouhaila";
-	ft_strlcpy(dst, src, 7);
-	printf("%s\n", dst);
-
 }

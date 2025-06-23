@@ -52,7 +52,6 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 		i++;
 	}
 }
-
 int	run_builtins(char **cmd, t_env **env_list, int status)
 {
 	status = 0;
@@ -126,4 +125,5 @@ int	execute_command(char **cmd, t_redir *redirs, t_env **env_list, t_stash *stas
 	}
 	waitpid(pid, &stats, 0);
 	return (WEXITSTATUS(stats));
+
 }

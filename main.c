@@ -3,6 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
@@ -118,6 +119,7 @@ void create_tree(t_tree **ast, t_token **tokens ,int flag)
 	{
 		if (flag)
 			refresh_block(tokens);
+
 		// printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
 	}
@@ -127,9 +129,6 @@ void f()
 {
 	system("leaks -q -- minishell");
 }
-
-
-
 
 int main(int argc, char **argv, char **envp)
 {

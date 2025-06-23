@@ -3,6 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
@@ -246,7 +247,6 @@ int			ft_isparentheses(char *c);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
-
 /*--------------------------------free--------------------------------*/
 void		clear_memory(t_shell *shell);
 void		free_cmd(char **cmd);
@@ -258,7 +258,6 @@ void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
 
 /*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
-
 /**
 	 * @brief Main function to visualize the AST tree with colors and structure
 	 * @param root Pointer to the root node of the AST

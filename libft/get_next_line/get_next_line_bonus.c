@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/07 13:59:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/18 19:44:32 by yrhandou         ###   ########.fr       */
+/*   Created: 2024/12/22 14:31:13 by yrhandou          #+#    #+#             */
+/*   Updated: 2025/05/18 20:15:49 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,23 +85,23 @@ static char	*read_buffer(int fd, char *bag)
 	return (free(buffer), bag);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line_bonus(int fd)
 {
-	static char *bag;
-	char	      *line;
-	char        *temp;
+	static char	*bag[FT_OPEN_MAX];
+	char		*line;
+	char		*temp;
 
 	temp = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free(bag), NULL);
-	bag = read_buffer(fd, bag);
-	if (!bag)
-		return (free(bag), bag = NULL, NULL);
-	line = get_one_line(bag);
+		return (NULL);
+	bag[fd] = read_buffer(fd, bag[fd]);
+	if (!bag[fd])
+		return (free(bag[fd]), bag[fd] = NULL, NULL);
+	line = get_one_line(bag[fd]);
 	if (!line)
-		return (free(bag), bag = NULL, NULL);
-	temp = bag;
-	bag = leftovers(bag);
+		return (free(bag[fd]), bag[fd] = NULL, NULL);
+	temp = bag[fd];
+	bag[fd] = leftovers(bag[fd]);
 	free(temp);
 	return (line);
 }

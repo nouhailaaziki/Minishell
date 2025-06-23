@@ -12,6 +12,7 @@ COMPILER = cc
 
 CFLAGS = -g3  -O0  -Wall -Wextra -Werror
 
+
 LIBFT = libft.a
 
 LIBFT_SRC = libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.c libft/ft_isalpha.c libft/ft_isascii.c libft/ft_isdigit.c \
@@ -21,7 +22,7 @@ LIBFT_SRC = libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.
 			   libft/ft_putstr_fd.c libft/ft_putendl_fd.c libft/ft_putnbr_fd.c libft/ft_striteri.c libft/ft_strmapi.c libft/ft_itoa.c libft/ft_split.c \
 			   libft/ft_abs.c libft/ft_count_words.c libft/ft_factors_count.c libft/ft_is_duplicated.c libft/ft_is_int.c libft/ft_is_int_array.c \
 			   libft/ft_is_sorted.c libft/ft_is_uint.c libft/ft_isspace.c libft/ft_lst_new.c libft/ft_lstadd_front.c libft/ft_lstlast.c libft/ft_lstsize.c\
-			   libft/ft_str_isspace.c libft/ft_super_strlen.c libft/ft_atoi_modified.c libft/get_next_line/get_next_line.c \
+			   libft/ft_str_isspace.c libft/ft_super_strlen.c libft/ft_atoi_modified.c libft/get_next_line/get_next_line.c libft/get_next_line/get_next_line_bonus.c \
 			   libft/ft_printf/ft_printchar.c libft/ft_printf/ft_puthex.c libft/ft_printf/ft_printnbr.c libft/ft_printf/ft_putptr.c\
 			   libft/ft_printf/ft_printstr.c libft/ft_printf/ft_putuint.c libft/ft_printf/ft_printf.c
 
@@ -39,6 +40,7 @@ EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/
 			execution/executor/execute_command.c execution/executor/execute_pipe.c execution/setup_signals.c execution/redirection/heredoc.c
 
 
+
 EXEC = ${EXECUTION:.c=.o}
 
 PARSE = $(PARSING:.c=.o)
@@ -50,6 +52,7 @@ HEADER = execution/launchpad.h libft/libft.h
 NAME = minishell
 
 all: ${NAME}
+
 
 ${NAME} : $(LIBFT) ${PARSE} ${EXEC}
 	@echo "${YELLOW} ${BOLD}➤ Launching compilation...${RESET}"
