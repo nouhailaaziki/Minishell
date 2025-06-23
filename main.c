@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/19 19:19:29 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:07:31 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +119,8 @@ void create_tree(t_tree **ast, t_token **tokens ,int flag)
 	{
 		if (flag)
 			refresh_block(tokens);
-		printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
+
+		// printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
 	}
 }
@@ -128,31 +130,33 @@ void f()
 	system("leaks -q -- minishell");
 }
 
-
-
-
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
+	t_stash stash;
 
 	// atexit(f);
-	printf("%d", getpid());
 	(void)argc, (void)argv;
+	stash.status = 0;
+	stash.heredoc_interrupted = 0;
 	init_shell(&shell);
 	build_env(&shell.env_list, envp);
 	while (1)
 	{
-		setup_signals_parent();
+		g_sigint_received = 0; // Reset flag at the start of each loop
+        stash.heredoc_interrupted = 0;
+		setup_signals_prompt(); // Setup signals for the main prompt
+		disable_echoctl();
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
-		shell.line = ft_strdup("Hello");
 		add_history(shell.line);
-		// ? if (!shell.line)
-		// ? {
-		// ? 	free_tokens(&shell.tokens);
-		// ? 	free_all_tracked();
-		// ? 	write(1, "exit\n", 5);
-		// ? 	exit(0);
-		// }
+		if (!shell.line)
+		{
+			free_tokens(&shell.tokens);
+			free_all_tracked();
+			write(1, "exit\n", 5);
+			printf("%d\n", stash.status);
+			exit(stash.status);
+		}
 		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))
 		{
 			free(shell.line);
@@ -160,16 +164,22 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		}
 		// visualize_tokens(shell.tokens);
-		create_tree(&shell.ast, &shell.tokens, 1);
-		visualize_ast_tree(shell.ast);
+		create_tree(&shell.ast, &shell.tokens, 1);	// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
-		execute_ast(shell.ast, &shell.env_list);
+		count_heredocs(shell.ast);
+		setup_signals_heredoc();
+		manage_heredocs(shell.ast, &stash);
+		if (!stash.heredoc_interrupted)
+			execute_ast(shell.ast, &shell.env_list, &stash);
+		else
+		{
+			clear_memory(&shell);
+			continue;
+		}
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
-
 		clear_memory(&shell);
 	}
-
 	clear_memory(&shell);
 	return (0);
 }

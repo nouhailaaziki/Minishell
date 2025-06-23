@@ -3,55 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/19 07:46:15 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/22 21:52:10 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../launchpad.h"
-
-int	handle_heredoc(t_redir *redir)
-{// TODO: multi herdocs | genrate a valid file | and handle signals | handle expand in herdoc
-
-	char	*line;
-	char	*file;
-	int		fd;
-	int		i;
-
-	i = 0;
-	file = "/tmp/.tmp"; 
-	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0644);
-	if (fd < 0)
-	{
-		i++;
-		file = na_strjoin(file, ft_itoa(i));
-		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0644);
-	}
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			break;
-		if (ft_strcmp(line, redir->file) == 0)
-		{
-			free(line);
-			break;
-		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-	close(fd);
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		perror("heredoc: reopen");
-		return (-1);
-	}
-	return (fd);
-}
 
 int	apply_fd_redirection(t_redir *redir, int fd)
 {
@@ -74,6 +33,7 @@ int	apply_fd_redirection(t_redir *redir, int fd)
 int	handle_redirs(t_redir *redir)
 {
 	int	i;
+	int	fd;
 
 	i = 0;
 	if (!redir)
@@ -81,29 +41,21 @@ int	handle_redirs(t_redir *redir)
 	while (redir)
 	{
 		if (redir->type == REDIR_OUT)
-			redir->fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		else if (redir->type == REDIR_APPEND)
-			redir->fd = open(redir->file, O_CREAT | O_WRONLY | O_APPEND, 0644);
+			fd = open(redir->file, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else if (redir->type == REDIR_IN)
-			redir->fd = open(redir->file, O_RDONLY);
+			fd = open(redir->file, O_RDONLY);
 		else if (redir->type == REDIR_HEREDOC)
-		{
-			redir->fd = handle_heredoc(redir);
-			if (redir->fd == -1)
-				return (1);
-			else
-				unlink(".tmp");
-		}
+			fd = redir->fd_RD;
 		else
 		{
 			redir = redir->next;
 			continue;
 		}
-		if(apply_fd_redirection(redir, redir->fd) == -1)
+		if(apply_fd_redirection(redir, fd) == -1)
 			i = 1;
 		redir = redir->next;
 	}
 	return (i);
 }
-
-

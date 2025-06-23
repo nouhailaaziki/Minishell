@@ -6,48 +6,59 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:05:19 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/18 19:03:51 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/22 16:45:10 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-// Ctrl+C: Show a new prompt on a new line | Ctrl+D: in main, it exit the program | ctrl+\: do nothing
+struct termios orig_termios;
 
-void	handle_sigint(int sig)              // it work with Ctrl+C: Show a new prompt on a new line
+void disable_echoctl(void)
 {
-	(void)sig;                              // Ignores the parameter since we don’t use it
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);                 // Clears the current input line (uses readline)
-	rl_on_new_line();                       // Moves to a new line internally
-	rl_redisplay();                         // Shows the prompt again
+    struct termios new_termios;
+    tcgetattr(STDIN_FILENO, &orig_termios);
+    new_termios = orig_termios;
+    new_termios.c_lflag &= ~ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &new_termios);
 }
 
-void	setup_signals_parent(void)          // It configures how the parent process handles signals
+void restore_terminal(void)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
-
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = SA_RESTART;
-	sa_int.sa_handler = handle_sigint;
-	sigaction(SIGINT, &sa_int, NULL);
-	sigemptyset(&sa_quit.sa_mask);
-	sa_quit.sa_flags = SA_RESTART;
-	sa_quit.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa_quit, NULL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
 }
 
-void	setup_signals_child(void)           // It sets the default behavior for signals in the child process
+void handle_sigint_heredoc(int sig)
 {
-	struct sigaction sa;
-
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sa.sa_handler = SIG_DFL;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+    (void)sig;
+    g_sigint_received = 1;
 }
 
+void handle_sigint_prompt(int sig)
+{
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    rl_redisplay();
+}
 
+void setup_signals_prompt(void)
+{
+    struct sigaction sa_int;
 
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_flags = SA_RESTART;
+    sa_int.sa_handler = handle_sigint_prompt;
+    sigaction(SIGINT, &sa_int, NULL);
+}
+
+void setup_signals_heredoc(void)
+{
+    struct sigaction sa_int;
+
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_flags = 0;
+    sa_int.sa_handler = handle_sigint_heredoc;
+    sigaction(SIGINT, &sa_int, NULL);
+}

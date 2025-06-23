@@ -77,6 +77,7 @@ int		ft_isspace(int c);
 int		ft_abs(int num);
 
 char	*get_next_line(int fd);
+
 char	*get_next_line_bonus(int fd);
 
 void	ft_lstadd_front(t_list **lst, t_list *new);

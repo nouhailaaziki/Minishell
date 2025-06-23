@@ -10,7 +10,8 @@ RM = rm -rf
 
 COMPILER = cc
 
-CFLAGS = -g3  -O0 -Wall -Wextra -Werror
+CFLAGS = -g3  -O0  -Wall -Wextra -Werror
+
 
 LIBFT = libft.a
 
@@ -29,44 +30,15 @@ PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c \
 		  parsing/lexer_utils.c parsing/tree_utils.c parsing/parser_utils.c parsing/ft_free.c
 
 
-EXECUTION =	execution/builtins/cd.c \
-			execution/builtins/pwd.c \
-			execution/builtins/echo.c \
-			execution/builtins/exit.c \
-			execution/builtins/unset.c \
-			execution/builtins/export.c \
-			execution/builtins/export_utils.c \
-			execution/builtins/env.c \
-			execution/environment/fill_env_list.c \
-			execution/environment/free_env_list.c \
-			execution/environment/get_env_arr.c \
-			execution/events/puterror_to_exit.c \
-			execution/events/puterror.c \
-			execution/events/errno_manager.c \
-			execution/events/display_intro.c \
-			execution/garbage_collector/free_all_tracked.c \
-			execution/garbage_collector/nalloc.c \
-			execution/utilities/ft_arrlen.c \
-			execution/utilities/ft_atoi.c \
-			execution/utilities/ft_isallchar.c \
-			execution/utilities/ft_isdigit.c \
-			execution/utilities/ft_memset.c \
-			execution/utilities/ft_strchr.c \
-			execution/utilities/ft_strcmp.c \
-			execution/utilities/ft_strncmp.c \
-			execution/utilities/ft_strlen.c \
-			execution/utilities/na_calloc.c \
-			execution/utilities/na_itoa.c \
-			execution/utilities/na_split.c \
-			execution/utilities/na_strdup.c \
-			execution/utilities/na_strjoin.c \
-			execution/utilities/na_substr.c \
-			execution/utilities/strict_atoi.c \
-			execution/utilities/ft_putstr_fd.c \
-			execution/redirection/redirs.c \
-			execution/executor/execute.c main.c\
-			execution/executor/execute_command.c execution/executor/execute_pipe.c \
-			execution/setup_signals.c
+EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c \
+			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/fill_env_list.c execution/environment/free_env_list.c \
+			execution/environment/get_env_arr.c execution/events/puterror_to_exit.c execution/events/puterror.c execution/events/errno_manager.c execution/events/display_intro.c \
+			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/utilities/ft_arrlen.c execution/utilities/ft_atoi.c execution/utilities/ft_isallchar.c \
+			execution/utilities/ft_isdigit.c execution/utilities/ft_memset.c execution/utilities/ft_strchr.c execution/utilities/ft_strcmp.c execution/utilities/ft_strncmp.c execution/utilities/ft_strlen.c \
+			execution/utilities/na_calloc.c execution/utilities/na_itoa.c execution/utilities/na_split.c execution/utilities/na_strdup.c execution/utilities/na_strjoin.c execution/utilities/na_substr.c \
+			execution/utilities/strict_atoi.c execution/utilities/ft_putstr_fd.c execution/utilities/na_mkstemp.c execution/redirection/redirs.c execution/executor/execute.c main.c\
+			execution/executor/execute_command.c execution/executor/execute_pipe.c execution/setup_signals.c execution/redirection/heredoc.c
+
 
 
 EXEC = ${EXECUTION:.c=.o}
@@ -80,7 +52,7 @@ HEADER = execution/launchpad.h libft/libft.h
 NAME = minishell
 
 all: ${NAME}
-	./minishell
+
 
 ${NAME} : $(LIBFT) ${PARSE} ${EXEC}
 	@echo "${YELLOW} ${BOLD}➤ Launching compilation...${RESET}"

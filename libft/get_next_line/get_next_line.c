@@ -87,9 +87,9 @@ static char	*read_buffer(int fd, char *bag)
 
 char	*get_next_line(int fd)
 {
-	static char	*bag;
-	char		*line;
-	char		*temp;
+	static char *bag;
+	char	      *line;
+	char        *temp;
 
 	temp = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
