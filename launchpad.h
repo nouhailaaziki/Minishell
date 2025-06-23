@@ -6,11 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2025/06/19 07:01:03 by yrhandou         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/20 16:51:36 by yrhandou         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2025/06/23 09:51:27 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +57,21 @@ typedef struct s_token
 	int position;
 	char *value;
 	int type;
+	char *err_location;
 	struct s_token *next;
 	struct s_token *prev;
+
 } t_token;
 
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
 {
-	size_t index;
-	t_token_type type;
-	char *file;
-	int fd;
-	int flag;
-	struct s_redir *next;
+	size_t			index;
+	t_token_type 	type;
+	char			*file;
+	int				fd;
+	int				flag;
+	struct s_redir	*next;
 } t_redir;
 
 /*---------------------------Node type enum---------------------------*/
@@ -203,6 +201,7 @@ int handle_quotes(char *str, char quote_type);
 void advanced_token_lexer(t_token **head);
 int ft_syntax_analyzer(char *str);
 int parentheses_counter(char *str);
+int parentheses_counter_v2(t_token *head);
 int handle_parentheses(t_token *head);
 int operator_len(char *str);
 int token_lexer(char *str);
@@ -211,14 +210,8 @@ int skip_spaces(char *str);
 /*-----------Tree Stuff-------------------*/
 t_tree *create_block(t_token **head, int count, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
-<<<<<<< Updated upstream
-t_token *ft_token_search(t_token *head, int type);
-t_tree *create_tree_node(int type, int cmd_count);
-=======
-t_tree *create_tree_node(int type, int cmd_count);
 t_token *ft_token_search(t_token *head, int type, int nav_flag);
-t_token *find_PIPE(t_token *head, int nav_flag);
->>>>>>> Stashed changes
+t_tree *create_tree_node(int type, int cmd_count);
 t_redir *redir_list_maker(t_token **head);
 int block_arg_counter(t_token *head);
 int sub_block_arg_counter(t_token *head);
@@ -227,7 +220,7 @@ int block_identifier(t_token *head);
 t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
 /*---------------------Checkers-------------------*/
-int ft_syntax_err(char *str, t_token **head);
+int ft_syntax_err(char *str);
 int ft_before_x(char *str, int (*f)(char *s));
 int ft_is_bonus_operator(char *str);
 int ft_isparentheses(char *c);

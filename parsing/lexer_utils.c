@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 09:56:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/20 17:02:21 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:14:29 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ int ft_is_operator(char *c)
 {
  	if (ft_is_bonus_operator(c))
 		return (2);
-	else if (ft_is_redir(c))
-		return (ft_is_redir(c));
+	// else if (ft_is_redir(c))
+	// 	return (ft_is_redir(c));
 	else if (*c == '|')
 		return (1);
 	return (0);

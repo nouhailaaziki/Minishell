@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/20 19:47:46 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:20:41 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,62 +96,43 @@ void advanced_token_lexer(t_token **head)
 	{
 		if (current->type == TOKEN_PAREN)
 			parentheses_lexer(&current);
-		if (current->type == TOKEN_REDIR)
+		if (current->type == TOKEN_REDIR && current->next)
 		{
 			current->type = redir_identifier(current->value);
 			current->next->type = R_FILE;
 		}
-		if (current->next && (current->type == TOKEN_WORD || current->type == TOKEN_ARG || current->type == R_FILE) && \
-			(current->next->type == TOKEN_WORD))
+		if (current->next && (current->type == TOKEN_WORD || current->type == TOKEN_ARG \
+		|| current->type == R_FILE) && 	(current->next->type == TOKEN_WORD))
 			current->next->type = TOKEN_ARG;
 		current = current->next;
 	}
 }
 /**
- * @brief Checks the tokens created with the tokenizerfor syntax errors
+ * @brief Checks the tokens created with the tokenizer for syntax errors
  * @param shell
  */
 int parser(t_shell shell)
 {
 	t_token	*current;
 
-	advanced_token_lexer(&shell.tokens);
 	if (!shell.tokens)
 		return 0;
 	current = shell.tokens;
-	if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
-		return ft_syntax_err(current->value, &shell.tokens);
-	while (current && current->next)
+	// if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
+	// 	return ft_syntax_err(current->value);
+	advanced_token_lexer(&shell.tokens);
+	while (current)
 	{
-		if (ft_is_operator(current->value) && !current->next)
-			return ft_syntax_err(current->value, &shell.tokens);
-		if (ft_is_redir(current->value) && ft_isparentheses(current->next->value))
-			return ft_syntax_err(current->value, &shell.tokens);
-		if (current->type == TOKEN_PAREN && !handle_parentheses(&current))
-			return ft_syntax_err(current->value, &shell.tokens);
+		if (ft_is_operator(current->value) && ( !current->next || \
+		ft_is_operator(current->next->value) || current->next->type == TOKEN_PAREN_RIGHT  ))
+			return ft_syntax_err(current->value);
+		if (ft_is_operator(current->value) && (!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
+			return ft_syntax_err(current->value);
+		if (ft_is_redir(current->value ) &&( !current->next  || current->next->type == TOKEN_PAREN))
+			return ft_syntax_err(current->value);
 		current = current->next;
 	}
-	// quote_expander(head);
+	if (!handle_parentheses(shell.tokens))
+		return 0;
 	return (1);
 }
-int i;
-	// t_shell dummy;
-	// int count;
-
-	// count = 0;
-	// if(!p_string)
-	// {
-	// 	printf(RED"FATAL ERROR 0\n"RESET);
-	// 	return 0;
-	// }
-	// i = 1;
-	// dummy.line = &p_string[i];
-	// while (p_string[i] != ')' && p_string[i+1] != '\0')
-	// {
-	// 	i++;
-	// 	count++;
-	// }
-	// printf("len inside () is : %d\n ",count);
-	// if(!lexer(&dummy, 1))
-	// 	return ft_syntax_analyzer(p_string);
-	// return 1;

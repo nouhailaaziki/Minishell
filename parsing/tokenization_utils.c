@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/20 16:17:10 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:19:09 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,9 @@ int token_lookup(char *line)
 	int token_len;
 
 	token_len = count_chars(line);
-	if(!token_len)
+	if (!token_len)
+		token_len = ft_is_redir(line);
+	if (!token_len)
 		token_len = ft_isparentheses(line);
 	if (!token_len)
 		token_len = operator_len(line);
@@ -137,8 +139,8 @@ int operator_len(char *str) // returns the length of the operator on success
 	{
 		if ((ft_special_case(&str[len], type)))
 			break;
-		else if (ft_before_x(&str[len], ft_is_operator))
-			return 0;
+		// else if (ft_before_x(&str[len], ft_is_operator))
+		// 	return 0;
 		else if (!ft_isspace(str[len]))
 			break;
 		len++;
@@ -160,7 +162,7 @@ int	lexer(t_shell *shell, int status_flag)
 		position = i;
 		token_len = token_lookup(&shell->line[i]);
 		if (!token_len)
-			return (ft_syntax_err(&shell->line[i],&(shell)->tokens));
+			return (ft_syntax_err(&shell->line[i]));
 		if(status_flag)
 			break;
 		sub_str = ft_substr(shell->line, position, token_len);

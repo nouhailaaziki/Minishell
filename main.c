@@ -6,17 +6,12 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2025/06/19 07:38:18 by yrhandou         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/20 12:11:09 by yrhandou         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2025/06/23 18:12:39 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-<<<<<<< Updated upstream
 // ? i count the number of tokens until i stumble across a pipe/and/or.
 // ! i check for redirections and fill them in a linked list
 // * i fill inside the node the number of arguments
@@ -28,36 +23,21 @@
 
 void refresh_block(t_token **head)
 {
-	while (*head && (*head)->prev &&  (*head)->prev->type != TOKEN_PIPE)
+	while (*head && (*head)->prev && (*head)->prev->type != TOKEN_PIPE)
 		*head = (*head)->prev;
+}
+
+void create_pseudotree(t_tree **ast, t_token **tokens)
+{
+
+	return;
 }
 
 /**
  * TEMPORARY
  * NAV FLAG
  * refresh block for exit
-*/
-=======
-t_token *find_and_or(t_token *head, int nav_flag)
-{
-	t_token *current;
-
-	current = head;
-	if (nav_flag)
-	{
-		while (current && current->next)
-			current = current->next;
-	}
-	while (current && current->prev && current->position != -1)
-	{
-		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
-			return (current);
-		current = current->prev;
-	}
-	return (NULL);
-}
-
->>>>>>> Stashed changes
+ */
 t_token *find_PIPE(t_token *head, int nav_flag)
 {
 	t_token *current;
@@ -65,9 +45,9 @@ t_token *find_PIPE(t_token *head, int nav_flag)
 	if (!head)
 		return printf("This is not supposed to happen.\n"), NULL;
 	current = head;
-	if(nav_flag)
+	if (nav_flag)
 	{
-		while(current && current->next)
+		while (current && current->next)
 			current = current->next;
 	}
 	while (current && current->prev && current->position != -1)
@@ -86,7 +66,6 @@ t_token *find_PIPE(t_token *head, int nav_flag)
  */
 int create_subtree(t_tree **ast, t_token **tokens, int flag)
 {
-	int count;
 	t_token *pipe_token;
 
 	if (!tokens || !*tokens)
@@ -94,7 +73,7 @@ int create_subtree(t_tree **ast, t_token **tokens, int flag)
 	pipe_token = find_PIPE(*tokens, flag);
 	if (pipe_token && pipe_token->type == TOKEN_PIPE)
 	{
-		*ast = create_block(&pipe_token, 1, block_identifier(pipe_token)); // ! infinite loop here for some reason (redir maker )
+		*ast = create_block(&pipe_token, 1, block_identifier(pipe_token));
 		printf("Created a Pipe Node\n");
 		pipe_token->position = -1;
 		if (pipe_token->next)
@@ -107,31 +86,44 @@ int create_subtree(t_tree **ast, t_token **tokens, int flag)
 	}
 	else
 	{
-		if(flag)
+		// create_pseudotree(ast,tokens);// for parentheses check
+		if (flag)
 			refresh_block(tokens);
-		count = sub_block_arg_counter(*tokens);
-		*ast = create_block(tokens, count, block_identifier(*tokens));
+		*ast = create_block(tokens, sub_block_arg_counter(*tokens), block_identifier(*tokens));
 	}
 	return 1;
 }
-<<<<<<< Updated upstream
 t_token *find_and_or(t_token *head, int nav_flag)
 {
 	t_token *current;
-=======
->>>>>>> Stashed changes
 
+	if (!head)
+		return printf("This is not supposed to happen.\n"), NULL;
+	current = head;
+	if (nav_flag)
+	{
+		while (current && current->next)
+			current = current->next;
+	}
+	while (current && current->prev && current->position != -1)
+	{
+		if (current->type == TOKEN_PIPE)
+			return (current);
+		current = current->prev;
+	}
+	return (NULL);
+}
 /**
  * * Recursion: look for and_or
  * * 	create the block for the op and th command on its right.
  * *  call this function but the result would be put to the left
  */
-void create_one_tree(t_tree **ast, t_token **tokens ,int flag)
+void create_one_tree(t_tree **ast, t_token **tokens, int flag)
 {
 	t_token *and_or;
 
 	if (!tokens || !*tokens)
-		return ;
+		return;
 	and_or = find_and_or(*tokens, flag);
 	if (and_or && (and_or->type == TOKEN_AND || and_or->type == TOKEN_OR))
 	{
@@ -145,8 +137,6 @@ void create_one_tree(t_tree **ast, t_token **tokens ,int flag)
 	}
 	else
 	{
-		// if (flag)
-		// 	refresh_block(tokens);
 		printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
 	}
@@ -168,9 +158,8 @@ int main(int argc, char **argv, char **envp)
 	build_env(&shell.env_list, envp);
 	while (1)
 	{
-		setup_signals_parent();
+		// setup_signals_parent();
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
-<<<<<<< Updated upstream
 		if (!shell.line) // Ctrl+D should exit the shell using this.
 		{
 			free_tokens(&shell.tokens);
@@ -180,41 +169,22 @@ int main(int argc, char **argv, char **envp)
 		}
 		// shell.line = ft_strdup("make ");
 		add_history(shell.line);
-=======
-		// shell.line = ft_strdup("Hello");
-		add_history(shell.line);
-		 if (!shell.line)
-		 {
-		 	free_tokens(&shell.tokens);
-		 	free_all_tracked();
-		 	write(1, "exit\n", 5);
-		 	exit(0);
-		}
->>>>>>> Stashed changes
 		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))
 		{
 			free(shell.line);
 			free_tokens(&shell.tokens);
 			continue;
 		}
-<<<<<<< Updated upstream
 		// visualize_tokens(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens, 1);
-=======
-		visualize_tokens(shell.tokens);
-		// create_tree(&shell.ast, &shell.tokens, 1);
->>>>>>> Stashed changes
 		// visualize_ast_tree(shell.ast);
-		// print_tree(shell.ast);
+		print_tree(shell.ast);
 		// execute_ast(shell.ast, &shell.env_list);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
-		free(shell.line);
 		clear_memory(&shell);
 	}
-	free(shell.line);
-	clear_memory(&shell);
-	return (0);
+	return 0;
 }
 //?  // if (current->type != TOKEN_WORD)
 //?  // {
