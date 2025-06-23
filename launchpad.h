@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 21:49:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 08:49:51 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_stash
 {
 	int		status;
 	char	*heredoc_store;
+	int		heredoc_interrupted;
 }	t_stash;
 
 /*-------------------essential components of a shell------------------*/

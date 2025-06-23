@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 08:18:10 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 08:52:58 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,14 @@ int main(int argc, char **argv, char **envp)
 	// atexit(f);
 	(void)argc, (void)argv;
 	stash.status = 0;
+	stash.heredoc_interrupted = 0;
 	init_shell(&shell);
 	build_env(&shell.env_list, envp);
 	while (1)
 	{
 		g_sigint_received = 0; // Reset flag at the start of each loop
-        setup_signals_prompt(); // Setup signals for the main prompt
+        stash.heredoc_interrupted = 0;
+		setup_signals_prompt(); // Setup signals for the main prompt
 		disable_echoctl();
 		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
 		add_history(shell.line);
@@ -168,6 +170,13 @@ int main(int argc, char **argv, char **envp)
 		count_heredocs(shell.ast);
 		setup_signals_heredoc();
 		manage_heredocs(shell.ast, &stash);
+		if (!stash.heredoc_interrupted)
+			execute_ast(shell.ast, &shell.env_list, &stash);
+		else
+		{
+			clear_memory(&shell);
+			continue;
+		}
 		execute_ast(shell.ast, &shell.env_list, &stash);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;

@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 08:37:48 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 08:57:14 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int fill_file(t_redir *redir)
+int fill_file(t_redir *redir, t_stash *stash)
 {
     char *line;
     char *store;
@@ -22,11 +22,12 @@ int fill_file(t_redir *redir)
     {
         disable_echoctl();
         line = readline("> ");
-        restore_terminal();        
+        restore_terminal();
         if (g_sigint_received)
         {
             if (line)
                 free(line);
+            stash->heredoc_interrupted = 1;
             return (1);
         }
         if (!line)
@@ -40,21 +41,17 @@ int fill_file(t_redir *redir)
         store = na_strjoin(store, "\n");
         free(line);
     }
-    if (store)
-    {
+    if (store && !g_sigint_received)
         write(redir->fd_WR, store, ft_strlen(store));
-        free(store);
-    }
     return (0);
 }
 
 int open_heredocs(t_redir *redir, t_stash *stash)
 {
-    t_redir *redirs;
-    int     status;
-    pid_t   pid;
-    
-    redirs = redir;
+    t_redir *redirs = redir;
+    int status;
+    pid_t pid;
+
     while (redirs && redirs->type)
     {
         if (redirs->type == REDIR_HEREDOC)
@@ -71,24 +68,25 @@ int open_heredocs(t_redir *redir, t_stash *stash)
             unlink(stash->heredoc_store);
             pid = fork();
             if (pid == -1)
-               return (perror("fork"), 1);
+                return (perror("fork"), 1);
             if (pid == 0)
             {
                 signal(SIGINT, SIG_DFL);
-                status = fill_file(redirs);
+                status = fill_file(redirs, stash);
                 close(redirs->fd_WR);
                 exit(status);
             }
             close(redirs->fd_WR);
             signal(SIGINT, SIG_IGN);
             waitpid(pid, &status, 0);
-            signal(SIGINT, SIG_IGN);
-            if (WIFSIGNALED(status) || WEXITSTATUS(status))
+            if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
             {
-                if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-                    write(1, "\n", 1);
+                write(1, "\n", 1);
+                stash->heredoc_interrupted = 1;
                 return (1);
             }
+            if (WEXITSTATUS(status))
+                return (1);
         }
         redirs = redirs->next;
     }
@@ -97,7 +95,7 @@ int open_heredocs(t_redir *redir, t_stash *stash)
 
 void manage_heredocs(t_tree *ast, t_stash *stash)
 {
-    if (!ast)
+    if (!ast || stash->heredoc_interrupted)
         return;
     if (ast->type == NODE_COMMAND)
     {
