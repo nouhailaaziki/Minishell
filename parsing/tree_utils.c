@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/23 16:44:44 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:26:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 t_tree *create_tree_node(int type,int cmd_count)
 {
@@ -106,6 +106,8 @@ int block_identifier(t_token *head)
 		return NODE_AND;
 	else if (head->type == TOKEN_PIPE)
 		return NODE_PIPE;
+	else if (head->type == TOKEN_PAREN_LEFT)
+		return NODE_PARENTHS;
 	else
 		return NODE_COMMAND;
 }
@@ -124,7 +126,7 @@ t_redir *redir_list_maker(t_token **head)
 		return (NULL);;
 	}
 	tmp = *head;
-	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR)
+	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && tmp->type != TOKEN_PIPE)
 	{
 		if (tmp->type > R_FILE)
 		{
@@ -159,7 +161,7 @@ int sub_block_arg_counter(t_token *head)
 	int count;
 
 	count = 0;
-	while (head)
+	while (head && head->position != -1)
 	{
 		if (head->type == TOKEN_PIPE)
 			break;

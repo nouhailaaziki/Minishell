@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: clang build active file",
+            "label": "Build Minishell",
             "command": "/usr/bin/clang",
             "args": [
                 "-fcolor-diagnostics",

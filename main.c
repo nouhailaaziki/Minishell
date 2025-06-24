@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 18:12:39 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:55:08 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,10 @@ void refresh_block(t_token **head)
 		*head = (*head)->prev;
 }
 
-void create_pseudotree(t_tree **ast, t_token **tokens)
-{
-
-	return;
-}
-
 /**
- * TEMPORARY
- * NAV FLAG
- * refresh block for exit
+ * @brief Creates a subtree with a pipe as the root node if a Pipe is found in tokens
+ * @param head Root node
+ * @param nav_flag Navigation flag for search
  */
 t_token *find_PIPE(t_token *head, int nav_flag)
 {
@@ -86,10 +80,11 @@ int create_subtree(t_tree **ast, t_token **tokens, int flag)
 	}
 	else
 	{
-		// create_pseudotree(ast,tokens);// for parentheses check
-		if (flag)
-			refresh_block(tokens);
-		*ast = create_block(tokens, sub_block_arg_counter(*tokens), block_identifier(*tokens));
+		printf("Checking for parentheses \n");
+		create_pseudotree(ast, tokens, flag);
+		// if (flag)
+		// 	refresh_block(tokens);
+		// *ast = create_block(tokens, sub_block_arg_counter(*tokens), block_identifier(*tokens));
 	}
 	return 1;
 }
@@ -107,7 +102,7 @@ t_token *find_and_or(t_token *head, int nav_flag)
 	}
 	while (current && current->prev && current->position != -1)
 	{
-		if (current->type == TOKEN_PIPE)
+		if (current->type == TOKEN_AND || current->type == TOKEN_OR)
 			return (current);
 		current = current->prev;
 	}
@@ -139,6 +134,49 @@ void create_one_tree(t_tree **ast, t_token **tokens, int flag)
 	{
 		printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
+	}
+}
+t_token *find_Parentheses(t_token *head, int nav_flag)
+{
+	t_token *current;
+
+	if (!head)
+		return printf("This is not supposed to happen.\n"), NULL;
+	current = head;
+	if (nav_flag)
+	{
+		while (current && current->next)
+			current = current->next;
+	}
+	while (current && current->prev && current->position != -1)
+	{
+		if (current->type == TOKEN_PAREN_LEFT)
+			return (current);
+		current = current->prev;
+	}
+	return (NULL);
+}
+void create_pseudotree(t_tree **ast, t_token **tokens, int flag)
+{
+	t_token *parentheses;
+
+	if (!tokens || !*tokens)
+		return;
+	parentheses = find_Parentheses(*tokens, TOKEN_PAREN_LEFT);
+	if (parentheses)
+	{
+		*ast = create_block(&parentheses, 1, block_identifier(parentheses));
+		printf("Created a Parentheses Node\n");
+		if (parentheses->next)
+			create_one_tree(&(*ast)->right, tokens, flag);
+	}
+	else
+	{
+		printf("No parentheses Found ! creating a simple node\n");
+		if (flag)
+			refresh_block(tokens);
+		// create_pseudotree(ast, tokens, 0); // for parentheses check
+		*ast = create_block(tokens, sub_block_arg_counter(*tokens), block_identifier(*tokens));
 	}
 }
 
@@ -175,10 +213,10 @@ int main(int argc, char **argv, char **envp)
 			free_tokens(&shell.tokens);
 			continue;
 		}
-		// visualize_tokens(shell.tokens);
+		visualize_tokens(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens, 1);
-		// visualize_ast_tree(shell.ast);
-		print_tree(shell.ast);
+		visualize_ast_tree(shell.ast);
+		// print_tree(shell.ast);
 		// execute_ast(shell.ast, &shell.env_list);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;

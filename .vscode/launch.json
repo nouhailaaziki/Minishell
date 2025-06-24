@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "(lldb) Launch",
+			"name": "Debug Minishell",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
@@ -14,20 +14,8 @@
 			"cwd": "${workspaceFolder}",
 			"environment": [],
 			"externalConsole": true,
-
 			"MIMode": "lldb",
-			"preLaunchTask": "C/C++: clang build active file"
+			"preLaunchTask": "Build Minishell"
 		},
-		{
-			"name": "(lldb) Attach",
-			"type": "cppdbg",
-			"request": "attach",
-<<<<<<< Updated upstream
-			"program": "${workspaceFolder}/minishell",
-=======
-			"program": "${workspaceFolder}/a.out",
->>>>>>> Stashed changes
-			"MIMode": "lldb"
-		}
 	]
 }

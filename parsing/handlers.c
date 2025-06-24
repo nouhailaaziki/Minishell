@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/23 16:23:14 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 09:27:45 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 int handle_quotes(char *str, char c) // Handle quote expansion during tokenization
 {
@@ -51,7 +51,7 @@ int parentheses_counter(char *str)
 
 	parentheses = 1;
 	i = 1;
-	while (str[i] && parentheses != 0) // TODO: look at this again
+	while (str[i] && parentheses != 0)
 	{
 		if (str[i] == '(')
 			parentheses += 1;
@@ -75,7 +75,7 @@ int parentheses_counter_v2(t_token *head)
 
 	parentheses = 0;
 	current = head;
-	while (current) // TODO: look at this again
+	while (current)
 	{
 		if (current->type == TOKEN_PAREN_LEFT)
 			parentheses += 1;
