@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/19 18:16:39 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:46:51 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static const char *get_node_type_string(t_node_type type)
 		return "AND";
 	case NODE_OR:
 		return "OR";
-	case NODE_PARENTHS:
+	case NODE_PARENTHESES:
 		return "PARENTHS";
 	default:
 		return "UNKNOWN";
@@ -149,7 +149,7 @@ static const char *get_node_color(t_node_type type)
 		return COLOR_YELLOW;
 	case NODE_OR:
 		return COLOR_RED;
-	case NODE_PARENTHS:
+	case NODE_PARENTHESES:
 		return COLOR_MAGENTA;
 	default:
 		return COLOR_WHITE;

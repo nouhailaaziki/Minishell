@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 21:15:13 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:43:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef enum e_node_type
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
-	NODE_PARENTHS
+	NODE_PARENTHESES
 }	t_node_type;
 
 /*----------------Linked list of environment variables----------------*/
@@ -204,7 +204,7 @@ int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
 int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
-
+int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash);
 /*------------------------------signals-------------------------------*/
 void		handle_sigint_heredoc(int sig);
 void		handle_sigint_prompt(int sig);

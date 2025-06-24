@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 11:13:58 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:56:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,7 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 		if (stash->status != 0)
 			stash->status = execute_ast(ast->right, env, stash);
 	}
+	else if (ast->type == NODE_PARENTHESES)
+		stash->status = execute_parentheses(ast, env, stash);
 	return (stash->status);
 }

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 10:33:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:54:21 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int main(int argc, char **argv, char **envp)
 
 	// atexit(f);
 	(void)argc, (void)argv;
+	rl_catch_signals = 0;
 	stash.status = 0;
 	stash.heredoc_interrupted = 0;
 	init_shell(&shell);
@@ -148,7 +149,7 @@ int main(int argc, char **argv, char **envp)
         stash.heredoc_interrupted = 0;
 		setup_signals_prompt(); // Setup signals for the main prompt
 		disable_echoctl(&stash);
-		shell.line = readline(PINK BOLD "╰┈➤ L33tShell-N.Y ✗ " RESET);
+		shell.line = readline("L33tShell-N.Y$ ");
 		add_history(shell.line);
 		if (!shell.line)
 		{
@@ -165,7 +166,8 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		}
 		// visualize_tokens(shell.tokens);
-		create_tree(&shell.ast, &shell.tokens, 1);	// visualize_ast_tree(shell.ast);
+		create_tree(&shell.ast, &shell.tokens, 1);
+		// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
 		check_heredoc_limit(shell.ast);
 		setup_signals_heredoc();

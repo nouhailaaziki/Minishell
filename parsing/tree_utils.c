@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/19 11:43:45 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:47:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ const char *get_node_type_str(t_node_type type)
 		return ANSI_YELLOW "||" ANSI_RESET;
 	case NODE_AND:
 		return ANSI_YELLOW "&&" ANSI_RESET;
-	case NODE_PARENTHS:
+	case NODE_PARENTHESES:
 		return ANSI_CYAN "()" ANSI_RESET;
 	default:
 		return ANSI_RED "UNKNOWN" ANSI_RESET;
@@ -258,7 +258,7 @@ void print_node_details(t_tree *node, char *prefix, int is_last)
 			printf("(none)\n");
 		}
 	}
-	else if (node->type == NODE_PARENTHS)
+	else if (node->type == NODE_PARENTHESES)
 	{
 		// Print parentheses node header
 		printf("%s%s %sOperator Node: %s%s\n", prefix, is_last ? "└──" : "├──",
