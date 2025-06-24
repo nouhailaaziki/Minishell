@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 21:11:51 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/24 08:24:25 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	fill_file(t_redir *redir, t_stash *stash)
 	}
 	if (store && !g_sigint_received)
 		write(redir->fd_WR, store, ft_strlen(store));
-	if (store)
-		free(store);
 	return (stash->heredoc_interrupted);
 }
 

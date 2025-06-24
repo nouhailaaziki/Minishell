@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:47:01 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 20:01:46 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/24 08:21:25 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_stash *stash, int *pipes)
 	close(pipes[0]);
 	dup2(pipes[1], STDOUT_FILENO);
 	close(pipes[1]);
-	execute_command(ast->left->cmd, ast->left->redirs, env_list, stash);
+	execute_ast(ast->left, env_list, stash);
 	exit(stash->status);
 }
 
@@ -28,7 +28,7 @@ t_stash *stash, int *pipes)
 	close(pipes[1]);
 	dup2(pipes[0], STDIN_FILENO);
 	close(pipes[0]);
-	execute_command(ast->right->cmd, ast->right->redirs, env_list, stash);
+	execute_ast(ast->right, env_list, stash);
 	exit(stash->status);
 }
 
