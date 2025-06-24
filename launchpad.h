@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 09:51:27 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:29:54 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,9 @@ int skip_spaces(char *str);
 /*-----------Tree Stuff-------------------*/
 t_tree *create_block(t_token **head, int count, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
-t_token *ft_token_search(t_token *head, int type, int nav_flag);
 t_tree *create_tree_node(int type, int cmd_count);
+t_token *ft_token_search(t_token *head, int type, int nav_flag);
+t_token *find_PIPE(t_token *head, int nav_flag);
 t_redir *redir_list_maker(t_token **head);
 int block_arg_counter(t_token *head);
 int sub_block_arg_counter(t_token *head);
