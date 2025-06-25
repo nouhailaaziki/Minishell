@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 08:49:51 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:43:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +83,7 @@ typedef enum e_node_type
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
-	NODE_PARENTHS
+	NODE_PARENTHESES
 }	t_node_type;
 
 /*----------------Linked list of environment variables----------------*/
@@ -127,6 +126,7 @@ typedef struct s_stash
 	int		status;
 	char	*heredoc_store;
 	int		heredoc_interrupted;
+	struct termios orig_termios;
 }	t_stash;
 
 /*-------------------essential components of a shell------------------*/
@@ -149,17 +149,19 @@ void		build_env(t_env **env_list, char **envp);
 int			pwd(void);
 int			echo(char **cmd);
 int			env(t_env *env_list);
+int			is_parent_builtin(char *cmd);
+void		ft_putstr_fd(char *s, int fd);
+void		sort_env_list(t_env **env_list);
 int			cd(char **cmd, t_env **env_list);
 int			unset(t_env **env_list, char **cmd);
 int			export(char **cmd, t_env **env_list);
+int			check_validity(char *argv, char *cmd);
 void		run_exit(char **cmd, int exit_status);
 void		handle_argument(t_env **env_list, char *cmd);
-t_env		*create_node(char *argv, size_t key_len, char *sign);
-void		sort_env_list(t_env **env_list);
-int			check_validity(char *argv, char *cmd);
 void		add_value(t_env **env_list, char *argv, char *key);
+int			run_builtins(char **cmd, t_env **env_list, int status);
 void		update_env(t_env **env_list, char *argv, char *key, int start);
-void		ft_putstr_fd(char *s, int fd);
+t_env		*create_node(char *argv, size_t key_len, char *sign);
 
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
@@ -171,7 +173,6 @@ char		*na_itoa(int n);
 int			ft_isdigit(int c);
 int			ft_arrlen(char **arr);
 int			ft_atoi(const char *str);
-int			na_mkstemp(char *template);
 size_t		ft_strlen(const char *s);
 char		*na_strdup(const char *s);
 long		strict_atoi(const char *str);
@@ -181,34 +182,36 @@ char		**na_split(char const *s, char c);
 int			ft_isallchar(const char *str, char c);
 void		*na_calloc(size_t count, size_t size);
 void		*ft_memset(void *b, int c, size_t len);
+int			na_mkstemp(char *template, t_redir *redir);
 char		*na_strjoin(char const *s1, char const *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
-// int			open_heredoc(t_redir *redir, t_stash *stash);
-void			manage_heredocs(t_tree *ast, t_stash *stash);
-void    	count_heredocs(t_tree *ast);
+void		manage_heredocs(t_tree *ast, t_stash *stash);
+void    	check_heredoc_limit(t_tree *ast);
+int			open_heredocs(t_redir *redir, t_stash *stash);
 
 /*------------------------------Events--------------------------------*/
 void		display_intro(void);
 void		is_it_dir(char *cmd);
 void		errno_manager(char *cmd);
-int			puterror(char *cmd, char *error);
-void		puterror_to_exit(char *cmd, char *error, int ex);
+int			puterror(int program, char *cmd, char *arg, char *error);
 
 /*-------------------------execute fonctions--------------------------*/
 int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
-int		execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
-
+int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
+int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash);
 /*------------------------------signals-------------------------------*/
-void		setup_signals_prompt(void);
+void		handle_sigint_heredoc(int sig);
+void		handle_sigint_prompt(int sig);
 void		setup_signals_heredoc(void);
-void		disable_echoctl(void);
-void restore_terminal(void);
+void		setup_signals_prompt(void);
+void		disable_echoctl(t_stash *stash);
+void		restore_terminal(t_stash *stash);
 
 /*---------------------------Parsing STUFF----------------------------*/
 void		init_shell(t_shell *shell);
@@ -247,6 +250,7 @@ int			ft_isparentheses(char *c);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
+
 /*--------------------------------free--------------------------------*/
 void		clear_memory(t_shell *shell);
 void		free_cmd(char **cmd);
@@ -258,6 +262,7 @@ void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
 
 /*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
+
 /**
 	 * @brief Main function to visualize the AST tree with colors and structure
 	 * @param root Pointer to the root node of the AST

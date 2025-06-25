@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:06:29 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/16 10:35:57 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:02:41 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
- size_t	ft_counter(char const *s, char c)
+size_t	ft_counter(char const *s, char c)
 {
 	size_t	i;
 	size_t	count;
@@ -35,7 +35,7 @@
 	return (count);
 }
 
- void	**ft_free(char **arr, size_t count)
+void	**ft_free(char **arr, size_t count)
 {
 	size_t	i;
 
@@ -49,7 +49,7 @@
 	return (NULL);
 }
 
- char	**ft_fill_arr(char const *s, char c, char **arr)
+char	**ft_fill_arr(char const *s, char c, char **arr)
 {
 	size_t		i;
 	size_t		j;

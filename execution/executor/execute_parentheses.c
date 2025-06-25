@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   execute_parentheses.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:29:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 17:28:31 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/24 17:56:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	pwd(void)
+int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash)
 {
-	char	*pwd;
+	pid_t	pid;
+	int		status;
+	int		exit_status;
 
-	pwd = getcwd(0, 0);
-	if (!pwd)
-		return (1);
-	printf("%s\n", pwd);
-	return (0);
+	pid = fork();
+	if (pid == -1)
+		return (perror("fork failed"), 1);
+	if (pid == 0)
+	{
+		exit_status = execute_ast(ast->left, env, stash);
+		exit(exit_status);
+	}
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
 }

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/22 08:37:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 17:59:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void	refresh_pwd(t_env **env_list)
 
 char	*get_env_value(t_env **env_list, char *key)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = *env_list;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, key))
-			return (tmp->value) ;
+			return (tmp->value);
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -56,35 +56,26 @@ char	*get_env_value(t_env **env_list, char *key)
 int	cd(char **cmd, t_env **env_list)
 {
 	struct stat	sb;
-	char 		*path;
+	char		*path;
 
 	if (!cmd[1])
 	{
 		path = get_env_value(env_list, "HOME");
 		if (!path)
-		{
-			ft_putstr_fd("cd: HOME not set\n", 2);
-			return (1);
-		}
+			return (puterror(0, "cd: ", NULL, "HOME not set"));
 		chdir(path);
 	}
 	else
 	{
 		if (access(cmd[1], F_OK) != 0)
-		{
-			printf("L33tShell: cd: %s: No such file or directory\n", cmd[2]);
-			return (1);
-		}
+			return (puterror(1, "cd: ", cmd[2], ": No such file or directory"));
 		if (stat(cmd[1], &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
 		{
 			chdir(cmd[1]);
 			refresh_pwd(env_list);
 		}
 		else
-		{
-			printf("L33tShell: cd: %s: Not a directory\n", cmd[2]);
-			return (1);
-		}
+			return (puterror(1, "cd: ", cmd[2], ": Not a directory"));
 	}
 	return (0);
 }

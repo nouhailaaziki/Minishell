@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 11:46:47 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/16 11:21:14 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:08:44 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ long	strict_atoi(const char *str)
 		if ((r == 922337203685477580 && ((i >= 18 && s == 1 && str[i] > '7')
 					|| (i >= 19 && s == -1 && str[i] > '8')))
 			|| r > 922337203685477580)
-			puterror_to_exit("exit", ": numeric argument required\n", 255);
+		{
+			puterror(0, "exit", NULL, ": numeric argument required\n");
+			exit(255);
+		}
 		else
 			r = r * 10 + str[i] - 48;
 		i++;

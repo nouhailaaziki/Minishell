@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   terminal_control.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:29:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 17:28:31 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/23 11:30:50 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/23 11:31:48 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	pwd(void)
+void	disable_echoctl(t_stash *stash)
 {
-	char	*pwd;
+	struct termios	new_termios;
 
-	pwd = getcwd(0, 0);
-	if (!pwd)
-		return (1);
-	printf("%s\n", pwd);
-	return (0);
+	tcgetattr(STDIN_FILENO, &stash->orig_termios);
+	new_termios = stash->orig_termios;
+	new_termios.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &new_termios);
+}
+
+void	restore_terminal(t_stash *stash)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &stash->orig_termios);
 }

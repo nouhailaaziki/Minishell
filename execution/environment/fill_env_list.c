@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/17 10:58:59 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 17:59:40 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	add_if_missing(t_env **env_list)
 		i++;
 	}
 }
-
 
 void	upp_shlvl(t_env *node, int nbr)
 {

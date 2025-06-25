@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterror_to_exit.c                                 :+:      :+:    :+:   */
+/*   handle_sigint.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 19:23:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Created: 2025/06/23 11:17:39 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/23 11:25:26 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	puterror_to_exit(char *cmd, char *error, int ex)
+void	handle_sigint_heredoc(int sig)
 {
-	char	*message;
+	(void)sig;
+	g_sigint_received = 1;
+}
 
-	message = na_strjoin("LeetShell: ", cmd);
-	message = na_strjoin(message, error);
-	write(1, message, ft_strlen(message));
-	free_all_tracked();
-	exit (ex);
+void	handle_sigint_prompt(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }

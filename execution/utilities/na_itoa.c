@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 09:47:20 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/16 10:35:57 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:01:36 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
- int	counter(int n)
+int	counter(int n)
 {
 	int	count;
 

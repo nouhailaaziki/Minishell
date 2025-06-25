@@ -3,105 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 13:59:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/18 19:44:32 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:25:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-static char	*leftovers(char *s)
+char	*find_line(int fd, char *rest, char *buffer)
 {
-	char	*left;
+	ssize_t		read_char;
+	char		*tmp;
+
+	while (!ft_strchr(rest, '\n'))
+	{
+		read_char = read(fd, buffer, BUFFER_SIZE);
+		if (read_char < 0)
+		{
+			free(buffer);
+			free(rest);
+			return (NULL);
+		}
+		if (read_char == 0)
+			break ;
+		buffer[read_char] = '\0';
+		tmp = rest;
+		rest = ft_strjoin(tmp, buffer);
+		free (tmp);
+	}
+	return (free (buffer), rest);
+}
+
+char	*fix_line(char *bufl)
+{
+	char	*rest;
 	size_t	i;
 
 	i = 0;
-	if (!s || s[0] == '\0')
-		return (NULL);
-	while (s[i])
-	{
-		if (s[i] == '\n')
-		{
-			i++;
-			break ;
-		}
+	while (bufl[i] != '\0' && bufl[i] != '\n')
 		i++;
-	}
-	if (!ft_strchr(s, '\n'))
+	rest = ft_substr(bufl, i + 1, ft_strlen(bufl) - i);
+	if (!rest)
 		return (NULL);
-	left = ft_substr(s, i, ft_strlen(ft_strchr(s, '\n')));
-	if (!left)
-		return (NULL);
-	return (left);
-}
-
-static char	*get_one_line(const char *str)
-{
-	char	*one_line;
-	size_t	i;
-
-	if (!str || str[0] == '\0')
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\n')
-		{
-			i++;
-			break ;
-		}
-		i++;
-	}
-	one_line = ft_substr(str, 0, i);
-	if (!one_line)
-		return (NULL);
-	return (one_line);
-}
-
-static char	*read_buffer(int fd, char *bag)
-{
-	ssize_t	byte_count;
-	char	*temp;
-	char	*buffer;
-
-	temp = 0;
-	buffer = malloc(BUFFER_SIZE + 1 * sizeof(char));
-	if (!buffer)
-		return (free(bag), bag = NULL, NULL);
-	while (ft_strchr(bag, '\n') == NULL)
-	{
-		byte_count = read(fd, buffer, BUFFER_SIZE);
-		if (byte_count < 0)
-			return (free(buffer), free(bag), NULL);
-		if (byte_count == 0)
-			break ;
-		buffer[byte_count] = '\0';
-		temp = bag;
-		bag = ft_strjoin(bag, buffer);
-		free(temp);
-	}
-	return (free(buffer), bag);
+	if (bufl[i] != 0)
+		bufl[i + 1] = '\0';
+	return (rest);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *bag;
-	char	      *line;
-	char        *temp;
+	static char	*rest;
+	char		*line;
+	char		*buffer;
 
-	temp = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free(bag), NULL);
-	bag = read_buffer(fd, bag);
-	if (!bag)
-		return (free(bag), bag = NULL, NULL);
-	line = get_one_line(bag);
+		return (free (rest), rest = NULL, NULL);
+	buffer = malloc(BUFFER_SIZE + 1 * sizeof(char));
+	if (!buffer)
+		return (free (rest), rest = NULL, NULL);
+	line = find_line(fd, rest, buffer);
 	if (!line)
-		return (free(bag), bag = NULL, NULL);
-	temp = bag;
-	bag = leftovers(bag);
-	free(temp);
-	return (line);
+		return (rest = NULL, NULL);
+	rest = fix_line(line);
+	if (!rest)
+		return (free(line), NULL);
+	if (line[0] == 0)
+		return (free (rest), free (line), rest = NULL);
+	buffer = ft_strdup(line);
+	free(line);
+	if (!buffer)
+		return (free(rest), rest = NULL, NULL);
+	return (buffer);
 }

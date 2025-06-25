@@ -11,7 +11,7 @@ LIBFT_SRC = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isasci
 			   ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_striteri.c ft_strmapi.c ft_itoa.c ft_split.c \
 			   ft_abs.c ft_count_words.c ft_factors_count.c ft_is_duplicated.c ft_is_int.c ft_is_int_array.c \
 			   ft_is_sorted.c ft_is_uint.c ft_isspace.c ft_lst_new.c ft_lstadd_front.c ft_lstlast.c ft_lstsize.c\
-			   ft_str_isspace.c ft_super_strlen.c ft_atoi_modified.c get_next_line/get_next_line.c get_next_line/get_next_line_bonus.c
+			   ft_str_isspace.c ft_super_strlen.c ft_atoi_modified.c get_next_line/get_next_line.c
 
 PRINTF_SRC = ft_printf/ft_printchar.c ft_printf/ft_puthex.c ft_printf/ft_printnbr.c ft_printf/ft_putptr.c\
 			 ft_printf/ft_printstr.c ft_printf/ft_putuint.c ft_printf/ft_printf.c
