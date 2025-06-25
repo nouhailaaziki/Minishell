@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/19 18:18:45 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:50:19 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 /// @brief Free The redirections of the Linked List
 /// @param redirs

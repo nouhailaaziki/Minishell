@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 17:43:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 09:43:29 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,18 @@ typedef enum e_token_type
 	TOKEN_WORD = 1,
 	TOKEN_ARG,
 	TOKEN_PAREN,
+	TOKEN_PAREN_LEFT,
+	TOKEN_PAREN_RIGHT,
 	TOKEN_AND,
 	TOKEN_OR,
 	TOKEN_PIPE,
 	TOKEN_REDIR,
 	R_FILE,
-	REDIR_IN = 10,
+	REDIR_IN = 20,
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-}	t_token_type;
+} t_token_type;
 
 /*--------------------Linked list of parsed tokens--------------------*/
 typedef struct s_token
@@ -59,8 +61,10 @@ typedef struct s_token
 	int				position;
 	char			*value;
 	int				type;
+	char *err_location;
 	struct s_token	*next;
 	struct s_token	*prev;
+
 }	t_token;
 
 /*--------------------Redirection info for a command------------------*/
@@ -213,49 +217,50 @@ void		setup_signals_prompt(void);
 void		disable_echoctl(t_stash *stash);
 void		restore_terminal(t_stash *stash);
 
-/*---------------------------Parsing STUFF----------------------------*/
-void		init_shell(t_shell *shell);
-int			lexer(t_shell *shell, int status_flag);
-int			parentheses_lexer(char *p_string);
-void		link_token(t_token **head, t_token *node);
-int			handle_quotes(char *str, char quote_type);
-int			advanced_token_lexer(t_token **head);
-int			ft_syntax_analyzer(char *str);
-int			handle_parentheses(char *str);
-// void 	free_tokens(t_token **head);
-int			operator_len(char *str);
-int			token_lexer(char *str);
-int			parser(t_shell shell);
-int			skip_spaces(char *str);
 
-/*-----------------------------Tree Stuff-----------------------------*/
-void		create_tree(t_tree **ast, t_token **tokens, int flag);
-t_tree		*create_block(t_token **head, int count, int type);
-void		link_redir(t_redir **list, t_redir *new_redir);
-t_tree		*create_tree_node(int type, int cmd_count);
-t_token		*ft_token_search(t_token *head, int type);
-t_token		*find_PIPE(t_token *head, int nav_flag);
-t_redir		*redir_list_maker(t_token **head);
-int			sub_block_arg_counter(t_token *head);
-t_redir		*redir_maker(t_token **data);
-void		refresh_block(t_token **head);
-int			block_identifier(t_token *head);
-int			count_chars(char *str);
+/*---------------------Parsing STUFF------------------------------------------*/
+void init_shell(t_shell *shell);
+int lexer(t_shell *shell, int status_flag);
+void parentheses_lexer(t_token **head);
+void link_token(t_token **head, t_token *node);
+int handle_quotes(char *str, char quote_type);
+void advanced_token_lexer(t_token **head);
+int ft_syntax_analyzer(char *str);
+int parentheses_counter(char *str);
+int parentheses_counter_v2(t_token *head);
+int handle_parentheses(t_token *head);
+int operator_len(char *str);
+int token_lexer(char *str);
+int parser(t_shell shell);
+int skip_spaces(char *str);
+/*-----------Tree Stuff-------------------*/
+t_tree *create_block(t_token **head, int count, int type);
+void link_redir(t_redir **list, t_redir *new_redir);
+t_tree *create_tree_node(int type, int cmd_count);
+t_token *ft_token_search(t_token *head, int type, int nav_flag);
+t_token *find_PIPE(t_token *head, int nav_flag);
+t_redir *redir_list_maker(t_token **head);
+void create_pseudotree(t_tree **ast, t_token **tokens, int flag);
+int block_arg_counter(t_token *head);
+int sub_block_arg_counter(t_token *head);
+t_token *find_PIPE(t_token *head, int nav_flag);
+int block_identifier(t_token *head);
+t_redir *redir_maker(t_token **data);
+int count_chars(char *str);
+/*---------------------Checkers-------------------*/
+int ft_syntax_err(char *str);
+int ft_before_x(char *str, int (*f)(char *s));
+int ft_is_bonus_operator(char *str);
+int ft_isparentheses(char *c);
+int ft_is_operator(char *c);
+int ft_is_redir(char *c);
+char ft_isquote(char c);
+/*-----------free-------------*/
+void clear_memory(t_shell *shell);
+void free_cmd(char **cmd);
+void free_tree(t_tree **ast);
+void free_tokens(t_token **head);
 
-/*------------------------------Checkers------------------------------*/
-int			ft_syntax_err(char *str, t_token **head);
-int			ft_before_x(char *str, int (*f)(char *s));
-int			ft_is_bonus_operator(char *str);
-int			ft_isparentheses(char *c);
-int			ft_is_operator(char *c);
-int			ft_is_redir(char *c);
-char		ft_isquote(char c);
-
-/*--------------------------------free--------------------------------*/
-void		clear_memory(t_shell *shell);
-void		free_cmd(char **cmd);
-void		free_tree(t_tree **ast);
-void		free_tokens(t_token **head);
 // ! REMOVE THS LATER
 void		print_tokens(t_token **head);
 void		print_redirs(t_redir *redir);

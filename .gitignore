@@ -1,0 +1,11 @@
+*/*/*.o
+*/*.o
+*.o
+.DS_Store
+.excalidraw
+*.tldr
+<<<<<<< Updated upstream
+=======
+libft.a
+*/Contents/*
+>>>>>>> Stashed changes

@@ -6,15 +6,15 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 09:56:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/16 18:05:01 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/24 08:30:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 int ft_isparentheses(char *c)
 {
-	if (c[0] == '(' || c[0] == ')')
+	if (c && (c[0] == '(' || c[0] == ')'))
 		return 1;
 	return 0;
 }
@@ -69,8 +69,8 @@ int ft_is_operator(char *c)
 {
  	if (ft_is_bonus_operator(c))
 		return (2);
-	else if (ft_is_redir(c))
-		return (ft_is_redir(c));
+	// else if (ft_is_redir(c))
+	// 	return (ft_is_redir(c));
 	else if (*c == '|')
 		return (1);
 	return (0);

@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/24 17:47:39 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 09:49:06 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 t_tree *create_tree_node(int type,int cmd_count)
 {
@@ -30,16 +30,29 @@ t_tree *create_tree_node(int type,int cmd_count)
 	return (head);
 }
 
-t_token *ft_token_search(t_token *head, int type)
+t_token *ft_token_search(t_token *head, int type, int nav_flag)
 {
-	t_token	*current;
+	t_token *current;
+	int pipe_int;
 
+	if(!head)
+		return (printf("This is not supposed to happen\n"),NULL);
+	pipe_int = 0;
 	current = head;
-	while(current)
+	if (nav_flag)
 	{
-		if(current->type == type)
+		while (current && current->next)
+			current = current->next;
+	}
+	if(type == TOKEN_PIPE)
+		pipe_int = 1;
+	while (current && current->prev && current->position != -1)
+	{
+		if (!pipe_int && (current->type == type++ || current->type == type-- ))
 			return (current);
-		current = current->next;
+		else if(pipe_int && current->type == TOKEN_PIPE)
+			return (current);
+		current = current->prev;
 	}
 	return (NULL);
 }
@@ -93,6 +106,8 @@ int block_identifier(t_token *head)
 		return NODE_AND;
 	else if (head->type == TOKEN_PIPE)
 		return NODE_PIPE;
+	else if (head->type == TOKEN_PAREN_LEFT)
+		return NODE_PARENTHS;
 	else
 		return NODE_COMMAND;
 }
@@ -126,7 +141,7 @@ int sub_block_arg_counter(t_token *head)
 	int count;
 
 	count = 0;
-	while (head)
+	while (head && head->position != -1)
 	{
 		if (head->type == TOKEN_PIPE || head->type == TOKEN_AND || head->type == TOKEN_OR)
 			break;
@@ -165,7 +180,6 @@ t_tree *create_block(t_token **head, int count, int type)
 		tree->cmd[i] = NULL;
 	return (tree);
 }
-
 // ANSI color codes
 #define ANSI_RESET "\033[0m"
 #define ANSI_CYAN "\033[36m"
@@ -187,7 +201,7 @@ const char *get_node_type_str(t_node_type type)
 		return ANSI_YELLOW "||" ANSI_RESET;
 	case NODE_AND:
 		return ANSI_YELLOW "&&" ANSI_RESET;
-	case NODE_PARENTHESES:
+	case NODE_PARENTHS:
 		return ANSI_CYAN "()" ANSI_RESET;
 	default:
 		return ANSI_RED "UNKNOWN" ANSI_RESET;
@@ -258,7 +272,7 @@ void print_node_details(t_tree *node, char *prefix, int is_last)
 			printf("(none)\n");
 		}
 	}
-	else if (node->type == NODE_PARENTHESES)
+	else if (node->type == NODE_PARENTHS)
 	{
 		// Print parentheses node header
 		printf("%s%s %sOperator Node: %s%s\n", prefix, is_last ? "└──" : "├──",
