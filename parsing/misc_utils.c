@@ -6,18 +6,12 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/25 09:49:47 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 09:57:17 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-void refresh_block(t_token **head)
-{
-	while (*head && (*head)->prev && (*head)->prev->type != TOKEN_PIPE \
-	 && (*head)->prev->type != TOKEN_AND && (*head)->prev->type != TOKEN_OR)
-		*head = (*head)->prev;
-}
 void init_shell(t_shell *shell)
 {
 	display_intro();
@@ -151,7 +145,7 @@ static const char *get_node_color(t_node_type type)
 		return COLOR_YELLOW;
 	case NODE_OR:
 		return ORANGE;
-	case NODE_PARENTHS:
+	case NODE_PARENTHESES:
 		return PINK;
 	default:
 		return COLOR_WHITE;

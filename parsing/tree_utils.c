@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/25 09:49:06 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 09:55:08 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int block_identifier(t_token *head)
 	else if (head->type == TOKEN_PIPE)
 		return NODE_PIPE;
 	else if (head->type == TOKEN_PAREN_LEFT)
-		return NODE_PARENTHS;
+		return NODE_PARENTHESES;
 	else
 		return NODE_COMMAND;
 }
@@ -201,7 +201,7 @@ const char *get_node_type_str(t_node_type type)
 		return ANSI_YELLOW "||" ANSI_RESET;
 	case NODE_AND:
 		return ANSI_YELLOW "&&" ANSI_RESET;
-	case NODE_PARENTHS:
+	case NODE_PARENTHESES:
 		return ANSI_CYAN "()" ANSI_RESET;
 	default:
 		return ANSI_RED "UNKNOWN" ANSI_RESET;
@@ -272,7 +272,7 @@ void print_node_details(t_tree *node, char *prefix, int is_last)
 			printf("(none)\n");
 		}
 	}
-	else if (node->type == NODE_PARENTHS)
+	else if (node->type == NODE_PARENTHESES)
 	{
 		// Print parentheses node header
 		printf("%s%s %sOperator Node: %s%s\n", prefix, is_last ? "└──" : "├──",

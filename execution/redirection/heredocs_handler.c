@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 08:24:25 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 10:00:05 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	setup_heredoc_file(t_redir *redirs, t_stash *stash)
 		return (1);
 	}
 	unlink(stash->heredoc_store);
-	free(stash->heredoc_store);
 	stash->heredoc_store = NULL;
 	return (0);
 }

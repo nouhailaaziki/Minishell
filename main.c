@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 09:46:31 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 09:57:49 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void create_subtree(t_tree **ast, t_token **tokens, int flag)
 	if (pipe_token && pipe_token->type == TOKEN_PIPE)
 	{
 		*ast = create_block(&pipe_token, 1, block_identifier(pipe_token));
-		printf("Created a Pipe Node\n");
+		// printf("Created a Pipe Node\n");
 		pipe_token->position = -1;
 		if (pipe_token->next)
 			create_subtree(&(*ast)->right, &(pipe_token->next), 1);
@@ -128,17 +128,17 @@ void create_one_tree(t_tree **ast, t_token **tokens, int flag)
 	and_or = find_and_or(*tokens, flag);
 	if (and_or && (and_or->type == TOKEN_AND || and_or->type == TOKEN_OR))
 	{
-		printf("creating a { %s } block\n", and_or->value);
+		// printf("creating a { %s } block\n", and_or->value);
 		*ast = create_block(&and_or, 1, block_identifier(and_or));
 		and_or->position = -1;
 		if (and_or->next)
 			create_subtree(&((*ast)->right), &and_or->next, 1);
 		if (and_or->prev)
-			create_tree(&((*ast)->left), &and_or->prev, 0);
+			create_one_tree(&((*ast)->left), &and_or->prev, 0);
 	}
 	else
 	{
-		printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
+		// printf(BLU "no more {||/&&} found ,Checking for pipes!!!\n" RESET);
 		create_subtree(ast, tokens, 1);
 	}
 }
@@ -172,13 +172,13 @@ void create_pseudotree(t_tree **ast, t_token **tokens, int flag)
 	if (parentheses)
 	{
 		*ast = create_block(&parentheses, 1, block_identifier(parentheses));
-		printf("Created a Parentheses Node\n");
+		// printf("Created a Parentheses Node\n");
 		if (parentheses->next)
 			create_one_tree(&(*ast)->right, tokens, flag);
 	}
 	else
 	{
-		printf("No parentheses Found ! creating a simple node\n");
+		// printf("No parentheses Found ! creating a simple node\n");
 		if (flag)
 			refresh_block(tokens);
 		// create_pseudotree(ast, tokens, 0); // for parentheses check
