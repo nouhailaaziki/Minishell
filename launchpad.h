@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 09:43:29 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 15:41:42 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ char		*na_substr(char const *s, unsigned int start, size_t len);
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
-void    	check_heredoc_limit(t_tree *ast);
+void    	check_heredoc_limit(t_shell *shell, t_tree *ast);
 int			open_heredocs(t_redir *redir, t_stash *stash);
 
 /*------------------------------Events--------------------------------*/
@@ -241,14 +241,19 @@ t_token *ft_token_search(t_token *head, int type, int nav_flag);
 t_token *find_PIPE(t_token *head, int nav_flag);
 t_redir *redir_list_maker(t_token **head);
 void create_pseudotree(t_tree **ast, t_token **tokens, int flag);
-int block_arg_counter(t_token *head);
 int sub_block_arg_counter(t_token *head);
 t_token *find_PIPE(t_token *head, int nav_flag);
 int block_identifier(t_token *head);
 t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
-/*---------------------Checkers-------------------*/
-int ft_syntax_err(char *str);
+void create_one_tree(t_tree **ast, t_token **tokens, int flag);
+void create_pseudotree(t_tree **ast, t_token **tokens, int flag);
+	t_token *find_Parentheses(t_token *head, int nav_flag);
+t_token *find_and_or(t_token *head, int nav_flag);
+t_token *find_PIPE(t_token *head, int nav_flag) ;
+void refresh_block(t_token **head);
+	/*---------------------Checkers-------------------*/
+	int ft_syntax_err(char *str);
 int ft_before_x(char *str, int (*f)(char *s));
 int ft_is_bonus_operator(char *str);
 int ft_isparentheses(char *c);

@@ -23,10 +23,9 @@ LIBFT_SRC = libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.
 			   libft/ft_is_sorted.c libft/ft_is_uint.c libft/ft_isspace.c libft/ft_lst_new.c libft/ft_lstadd_front.c libft/ft_lstlast.c libft/ft_lstsize.c\
 			   libft/ft_str_isspace.c libft/ft_super_strlen.c libft/ft_atoi_modified.c libft/get_next_line/get_next_line.c \
 			   libft/ft_printf/ft_printchar.c libft/ft_printf/ft_puthex.c libft/ft_printf/ft_printnbr.c libft/ft_printf/ft_putptr.c\
-			   libft/ft_printf/ft_printstr.c libft/ft_printf/ft_putuint.c libft/ft_printf/ft_printf.c 
+			   libft/ft_printf/ft_printstr.c libft/ft_printf/ft_putuint.c libft/ft_printf/ft_printf.c
 
-PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c \
-		  parsing/lexer_utils.c parsing/tree_utils.c parsing/parser_utils.c parsing/ft_free.c
+PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c parsing/lexer_utils.c parsing/tree_utils.c parsing/parser_utils.c parsing/ft_free.c parsing/advanced_tree_utils.c
 
 
 EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c \

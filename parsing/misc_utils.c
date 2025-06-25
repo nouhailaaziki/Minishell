@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/25 09:57:17 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 15:53:43 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,11 +262,11 @@ static void print_redirections(t_redir *r, const char *prefix)
 	int i = 0;
 	for (; r; r = r->next, ++i)
 	{
-		const char *mark = r->next ? "├─" : "└─";
-		printf("%s    %s│ %s[%zu] %s%s%s → \"%s\"%s",
+		const char *mark = r->next ? TREE_BRANCH : TREE_LAST;
+		printf("%s%s %s[%zu] %s%s%s → \"%s\"%s",
 			   prefix,
-			   COLOR_CYAN,
 			   mark,
+			   COLOR_CYAN,
 			   r->index,
 			   COLOR_CYAN,
 			   get_redir_type_string(r->type),
@@ -278,18 +278,18 @@ static void print_redirections(t_redir *r, const char *prefix)
 		printf("\n");
 	}
 }
-
 /*-----------------------Command Args Print----------------------*/
-static void print_command_args(char **cmd, const char *prefix)
+static void print_command_args(char **cmd, const char *prefix, int is_last)
 {
+	const char *mark = is_last ? TREE_LAST : TREE_BRANCH;
 	if (!cmd || !cmd[0])
 	{
-		printf("%s    %s┌─ Command: %s(empty)%s\n",
-			   prefix, COLOR_GREEN, COLOR_RED, COLOR_RESET);
+		printf("%s%s %sCommand: %s(empty)%s\n",
+			   prefix, mark, COLOR_GREEN, COLOR_RED, COLOR_RESET);
 		return;
 	}
-	printf("%s    %s┌─ Command: %s\"%s\"%s",
-		   prefix, COLOR_GREEN, COLOR_YELLOW, cmd[0], COLOR_RESET);
+	printf("%s%s %sCommand: %s\"%s\"%s",
+		   prefix, mark, COLOR_GREEN, COLOR_YELLOW, cmd[0], COLOR_RESET);
 	for (int i = 1; cmd[i]; ++i)
 		printf(" \"%s\"", cmd[i]);
 	printf("\n");
@@ -300,12 +300,13 @@ static void visualize_tree_recursive(t_tree *node,
 									 const char *prefix,
 									 int is_last)
 {
-	char np[1024];
 	if (!node)
 	{
 		printf("%s%s%s(null)%s\n", prefix, TREE_LAST, COLOR_RED, COLOR_RESET);
 		return;
 	}
+
+	// Print the current node's line
 	const char *branch = is_last ? TREE_LAST : TREE_BRANCH;
 	const char *ncol = get_node_color(node->type);
 	printf("%s%s %s%s%s %s[%s%s%s]%s (argc: %zu)%s\n",
@@ -322,30 +323,36 @@ static void visualize_tree_recursive(t_tree *node,
 		   node->argc,
 		   COLOR_RESET);
 
-	// Print command details + redirs
+	// Prepare the prefix for all children and details of this node
+	char next_prefix[1024];
+	snprintf(next_prefix, sizeof(next_prefix), "%s%s", prefix, is_last ? TREE_SPACE : TREE_VERT);
+
+	// Print command details + redirs using the new, correct prefix
 	if (node->type == NODE_COMMAND)
 	{
-		print_command_args(node->cmd, prefix);
+		// Pass the next_prefix, and tell it if it's the last detail line
+		print_command_args(node->cmd, next_prefix, node->redirs == NULL);
 		if (node->redirs)
-			print_redirections(node->redirs, prefix);
+			print_redirections(node->redirs, next_prefix);
 	}
 
-	// Prepare prefix for children
-	snprintf(np, sizeof(np), "%s%s", prefix, is_last ? TREE_SPACE : TREE_VERT);
-
-	// Recurse left/right
-	if (node->left)
+	// Recurse for left/right children
+	if (node->left || node->right)
 	{
-		printf("%s%s Left:%s\n", prefix, COLOR_YELLOW, COLOR_RESET);
-		visualize_tree_recursive(node->left, np, node->right == NULL);
-	}
-	if (node->right)
-	{
-		printf("%s%s Right:%s\n", prefix, COLOR_YELLOW, COLOR_RESET);
-		visualize_tree_recursive(node->right, np, 1);
+		if (node->left)
+		{
+			// Use next_prefix to indent the "Left:" label correctly
+			printf("%s%sLeft:%s\n", next_prefix, COLOR_YELLOW, COLOR_RESET);
+			visualize_tree_recursive(node->left, next_prefix, node->right == NULL);
+		}
+		if (node->right)
+		{
+			// Use next_prefix to indent the "Right:" label correctly
+			printf("%s%sRight:%s\n", next_prefix, COLOR_YELLOW, COLOR_RESET);
+			visualize_tree_recursive(node->right, next_prefix, 1);
+		}
 	}
 }
-
 /*-----------------------AST Visualizer Entry Point----------------------*/
 void visualize_ast_tree(t_tree *root)
 {
@@ -367,18 +374,34 @@ void visualize_ast_tree(t_tree *root)
 
 	visualize_tree_recursive(root, "", 1);
 
-	// Legend
-	printf("\n%sLegend:%s\n", COLOR_WHITE, COLOR_RESET);
-	printf("  %sNode Types:%s COMMAND=●GREEN, PIPE=●BLUE, AND=●YELLOW, OR=●ORANGE, PARENTHS=●PINK\n",
-		   COLOR_WHITE, COLOR_RESET);
-	printf("  %sTokens:%s WORD/ARG=WHITE, AND/OR=YELLOW, PIPE=BLUE, REDIR=CYAN, R_FILE=MAGENTA,\n"
-		   "           PAREN=GREEN, PAREN_LEFT/RIGHT=PINK\n",
-		   COLOR_WHITE, COLOR_RESET);
-	printf("  %sPosition: integer index in token list%s\n\n",
-		   COLOR_WHITE, COLOR_RESET);
-}
+	// --- LEGEND (FIXED) ---
+	printf("\n%sLegend:%s\n", BOLD, COLOR_RESET);
+	printf("  %sNode Types: %sCOMMAND%s, %sPIPE%s, %sAND%s, %sOR%s, %sPARENTHS%s\n",
+		   COLOR_WHITE,
+		   get_node_color(NODE_COMMAND), COLOR_RESET,
+		   get_node_color(NODE_PIPE), COLOR_RESET,
+		   get_node_color(NODE_AND), COLOR_RESET,
+		   get_node_color(NODE_OR), COLOR_RESET,
+		   get_node_color(NODE_PARENTHESES), COLOR_RESET);
 
+	printf("  %sTokens:     %sWORD/ARG%s, %sOPERATOR%s, %sREDIR%s, %sFILENAME%s, %sPARENTHESES%s\n",
+		   COLOR_WHITE,
+		   get_token_color(TOKEN_WORD), COLOR_RESET,
+		   get_token_color(TOKEN_AND), COLOR_RESET,
+		   get_token_color(TOKEN_REDIR), COLOR_RESET,
+		   get_token_color(R_FILE), COLOR_RESET,
+		   get_token_color(TOKEN_PAREN_LEFT), COLOR_RESET);
+
+	printf("  %sStatus:     %sOK%s, %sAMBIGUOUS%s\n",
+		   COLOR_WHITE,
+		   COLOR_GREEN, COLOR_RESET,
+		   COLOR_RED, COLOR_RESET);
+	printf("\n");
+}
 /*-----------------------Token List Visualizer----------------------*/
+/*-----------------------Token List Visualizer----------------------*/
+// FIX: Updated to use the token's color for the tree branch and index.
+// Also improved the header box for better centering.
 void visualize_tokens(t_token *head)
 {
 	if (!head)
@@ -387,19 +410,24 @@ void visualize_tokens(t_token *head)
 		return;
 	}
 	printf("\n%s╔══════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-	printf("%s║     %sTOKEN VISUALIZER%s     ║%s\n",
-		   COLOR_CYAN, COLOR_WHITE, COLOR_CYAN, COLOR_RESET);
-	printf("%s╚══════════════════════════════════╝%s\n\n", COLOR_CYAN, COLOR_RESET);
+	printf("%s║        %sTOKEN VISUALIZER%s          ║%s\n",
+		   COLOR_CYAN, BOLD, COLOR_CYAN, COLOR_RESET);
+	printf("%s╚══════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
+
+	// Add a small indent for the list
+	if (!head->next)
+		printf("  ");
 
 	int idx = 0;
 	for (t_token *cur = head; cur; cur = cur->next, ++idx)
 	{
 		const char *mark = cur->next ? TREE_BRANCH : TREE_LAST;
 		const char *tcol = get_token_color(cur->type);
-		printf("%s%s [%02d] %s%-14s%s \"%s\" %s(pos:%d)%s\n",
-			   COLOR_CYAN,
+		printf("  %s%s [%02d]%s %s%-14s%s \"%s\" %s(pos:%d)%s\n",
+			   tcol,
 			   mark,
 			   idx,
+			   COLOR_RESET,
 			   tcol,
 			   get_token_type_string(cur->type),
 			   COLOR_RESET,
