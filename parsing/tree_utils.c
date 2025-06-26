@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tree_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/25 09:55:08 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:37:30 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-t_tree *create_tree_node(int type,int cmd_count)
+t_tree *allocate_tree_node(int type,int cmd_count)
 {
 	t_tree *head;
 
@@ -20,41 +20,21 @@ t_tree *create_tree_node(int type,int cmd_count)
 	head->cmd = NULL;
 	if (!head)
 		return (NULL);
-	if(cmd_count)
+	if(type == NODE_COMMAND)
+	{
 		head->cmd = ft_calloc(cmd_count +1,sizeof(char **));
+		head->argc = cmd_count;
+	}
+	else
+	{
+		head->cmd = NULL;
+		head->argc = 0;
+	}
 	head->redirs = NULL;
 	head->type = type;
-	head->argc = cmd_count;
 	head->left = NULL;
 	head->right = NULL;
 	return (head);
-}
-
-t_token *ft_token_search(t_token *head, int type, int nav_flag)
-{
-	t_token *current;
-	int pipe_int;
-
-	if(!head)
-		return (printf("This is not supposed to happen\n"),NULL);
-	pipe_int = 0;
-	current = head;
-	if (nav_flag)
-	{
-		while (current && current->next)
-			current = current->next;
-	}
-	if(type == TOKEN_PIPE)
-		pipe_int = 1;
-	while (current && current->prev && current->position != -1)
-	{
-		if (!pipe_int && (current->type == type++ || current->type == type-- ))
-			return (current);
-		else if(pipe_int && current->type == TOKEN_PIPE)
-			return (current);
-		current = current->prev;
-	}
-	return (NULL);
 }
 
 t_redir *redir_maker(t_token **data)
@@ -65,6 +45,8 @@ t_redir *redir_maker(t_token **data)
 	if(!redir)
 		return (NULL);
 	redir->fd = -1;
+	redir->fd_RD = -1;
+	redir->fd_WR = -1;
 	redir->flag = 0;
 	if((*data)->next)
 	{
@@ -111,6 +93,22 @@ int block_identifier(t_token *head)
 	else
 		return NODE_COMMAND;
 }
+t_token *last_rp_token(t_token *head)
+{
+	t_token *current;
+	t_token *last_rp_token;
+	if (!head)
+		return (printf("This is not supposed to happen\n"), NULL);
+	current = head;
+	last_rp_token = NULL;
+	while (current && current->next && current->next->position != -1)
+	{
+		if (current->type == TOKEN_PAREN_RIGHT && current->next)
+			last_rp_token = current->next;
+		current = current->next;
+	}
+	return (last_rp_token);
+}
  /**
  * links the redirections nodes to a linked list
 */
@@ -126,9 +124,11 @@ t_redir *redir_list_maker(t_token **head)
 		return (NULL);;
 	}
 	tmp = *head;
-	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && tmp->type != TOKEN_PIPE)
+	if((*head)->type == TOKEN_PAREN_LEFT)
+		tmp = last_rp_token(*head);
+	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_PAREN_LEFT && tmp->type != TOKEN_PAREN_RIGHT)
 	{
-		if (tmp->type > R_FILE)
+		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
 		{
 			link_redir(&redir_list, redir_maker(&tmp));
 		}
@@ -136,16 +136,16 @@ t_redir *redir_list_maker(t_token **head)
 	}
 	return (redir_list);
 }
-int sub_block_arg_counter(t_token *head)
+int count_cmd_args(t_token *head)
 {
 	int count;
 
 	count = 0;
 	while (head && head->position != -1)
 	{
-		if (head->type == TOKEN_PIPE || head->type == TOKEN_AND || head->type == TOKEN_OR)
+		if (head->type == TOKEN_PIPE || head->type == TOKEN_AND || head->type == TOKEN_OR || head->type == TOKEN_PAREN_RIGHT)
 			break;
-		else if (head->type >= R_FILE)
+		else if (head->type == R_FILE || head->type == REDIR_IN || head->type == REDIR_OUT || head->type == REDIR_APPEND || head->type == REDIR_HEREDOC)
 		{
 			head = head->next;
 			continue;
@@ -155,6 +155,77 @@ int sub_block_arg_counter(t_token *head)
 	}
 	return (count);
 }
+
+t_token	*get_reds(t_token *tok)
+{
+	int	expectations = 1;
+	t_token	*curr  = tok->next;
+
+	while (curr && expectations)
+	{
+		if (curr->type == TOKEN_PAREN_LEFT)
+			expectations++;
+		else if (curr->type == TOKEN_PAREN_RIGHT)
+			expectations--;
+		curr = curr->next;
+	}
+	return curr;
+}
+
+t_tree *expand_block(t_token *token)
+{
+	t_tree	*root = malloc(sizeof(t_tree));
+	t_token	*block = NULL;
+	t_token	*reds = NULL;
+	if (!root)
+		return (NULL);
+	printf("here\n");
+	ft_bzero(root, sizeof(t_tree));
+	root->type = NODE_PARENTHESES;
+	if (token->prev)
+		token->prev->next = token->next;
+	// free(token->value);
+	// free(token);
+	block = token->next;
+	reds = get_reds(token);
+	printf("%s\n", reds->value);
+	if (reds->prev && reds->prev->prev)
+		reds->prev->prev->next = NULL;
+	// free(reds->prev->value);
+	// free(reds->prev);
+	root->left = create_tree(block);
+	root->redirs = redir_list_maker(&reds);
+	root->right = NULL;
+	return (root);
+
+}
+t_tree *create_p_block(t_token **head, int count, int type)
+{
+	t_tree *p_block;
+	t_token * current;
+	int i ;
+
+	i =0;
+	p_block = allocate_tree_node(type, count);
+	if(!p_block)
+		return (NULL);
+	p_block->redirs = redir_list_maker(head) ;
+	current = *head;
+	if (current->type != TOKEN_WORD && current->type != TOKEN_ARG)
+		count = 0;
+	while (current && i < count)
+	{
+		if (current->type == TOKEN_WORD || current->type == TOKEN_ARG)
+		{
+			p_block->cmd[i++] = ft_strdup(current->value);
+			current->position = -1;
+		}
+		current = current->next;
+	}
+	if (p_block->cmd)
+		p_block->cmd[i] = NULL;
+	return (p_block);
+}
 t_tree *create_block(t_token **head, int count, int type)
 {
 	t_tree	*tree;
@@ -162,206 +233,25 @@ t_tree *create_block(t_token **head, int count, int type)
 	t_token	*current;
 
 	i = 0;
-	tree = NULL;
-	tree = create_tree_node(type, count);
+	if ((*head)->type == TOKEN_PAREN_LEFT)
+		return (create_p_block(head,count, type));
+	tree = allocate_tree_node(type, count);
 	if (!tree)
 		return NULL;
 	tree->redirs = redir_list_maker(head);
 	current = *head;
+	if (current->type != TOKEN_WORD && current->type != TOKEN_ARG)
+		count = 0;
 	while (current && i < count)
-	{
-		if (current->type < TOKEN_PAREN )
 		{
-			tree->cmd[i++] = ft_strdup(current->value);
+			if (current->type == TOKEN_WORD || current->type == TOKEN_ARG)
+			{
+				tree->cmd[i++] = ft_strdup(current->value);
+				current->position = -1;
+			}
+			current = current->next;
 		}
-		current = current->next;
-	}
 	if(tree->cmd)
 		tree->cmd[i] = NULL;
 	return (tree);
-}
-// ANSI color codes
-#define ANSI_RESET "\033[0m"
-#define ANSI_CYAN "\033[36m"
-#define ANSI_YELLOW "\033[33m"
-#define ANSI_GREEN "\033[32m"
-#define ANSI_MAGENTA "\033[35m"
-#define ANSI_RED "\033[31m"
-
-// Get node type string
-const char *get_node_type_str(t_node_type type)
-{
-	switch (type)
-	{
-	case NODE_COMMAND:
-		return ANSI_CYAN "CMD" ANSI_RESET;
-	case NODE_PIPE:
-		return ANSI_YELLOW "PIPE" ANSI_RESET;
-	case NODE_OR:
-		return ANSI_YELLOW "||" ANSI_RESET;
-	case NODE_AND:
-		return ANSI_YELLOW "&&" ANSI_RESET;
-	case NODE_PARENTHESES:
-		return ANSI_CYAN "()" ANSI_RESET;
-	default:
-		return ANSI_RED "UNKNOWN" ANSI_RESET;
-	}
-}
-
-// Get redirection type string
-const char *get_redir_type_str(t_token_type type)
-{
-	switch (type)
-	{
-	case REDIR_IN:
-		return ANSI_MAGENTA "< (REDIR_IN)" ANSI_RESET;
-	case REDIR_OUT:
-		return ANSI_MAGENTA "> (REDIR_OUT)" ANSI_RESET;
-	case REDIR_APPEND:
-		return ANSI_MAGENTA ">> (REDIR_APPEND)" ANSI_RESET;
-	case REDIR_HEREDOC:
-		return ANSI_MAGENTA "<< (REDIR_HEREDOC)" ANSI_RESET;
-	default:
-		return ANSI_RED "Unknown (REDIR_NONE)" ANSI_RESET;
-	}
-}
-
-// Print command, parentheses, and redirection details for a node
-void print_node_details(t_tree *node, char *prefix, int is_last)
-{
-	if (node->type == NODE_COMMAND)
-	{
-		// Print command node header
-		printf("%s%s %sCommand Node: %u%s\n", prefix, is_last ? "└──" : "├──",
-			   ANSI_CYAN, node->type, ANSI_RESET);
-
-		// Print command
-		printf("%s%s  %sCmd: %s", prefix, is_last ? "    " : "│   ", ANSI_GREEN, ANSI_RESET);
-		if (node->cmd && node->cmd[0])
-		{
-			for (int i = 0; node->cmd[i]; i++)
-				printf("%s ", node->cmd[i]);
-			printf("\n");
-		}
-		else
-		{
-			printf("(none)\n");
-		}
-
-		// Print redirections
-		printf("%s%s  %sRedirs: %s", prefix, is_last ? "    " : "│   ", ANSI_MAGENTA, ANSI_RESET);
-		if (node->redirs)
-		{
-			printf("\n");
-			t_redir *curr = node->redirs;
-			while (curr)
-			{
-				printf("%s%s    %sIndex     : %s%zu\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, curr->index);
-				printf("%s%s    %sType      : %s%s\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, get_redir_type_str(curr->type));
-				printf("%s%s    %sFile      : %s%s\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, curr->file ? curr->file : "(null)");
-				printf("%s%s    %sFD        : %s%d\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, curr->fd);
-				curr = curr->next;
-			}
-		}
-		else
-		{
-			printf("(none)\n");
-		}
-	}
-	else if (node->type == NODE_PARENTHESES)
-	{
-		// Print parentheses node header
-		printf("%s%s %sOperator Node: %s%s\n", prefix, is_last ? "└──" : "├──",
-			   ANSI_CYAN, get_node_type_str(node->type), ANSI_RESET);
-
-		// Print redirections
-		printf("%s%s  %sRedirs: %s", prefix, is_last ? "    " : "│   ", ANSI_MAGENTA, ANSI_RESET);
-		if (node->redirs)
-		{
-			printf("\n");
-			t_redir *curr = node->redirs;
-			while (curr)
-			{
-				printf("%s%s    %sIndex     : %s%zu\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, curr->index);
-				printf("%s%s    %sType      : %s%s\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, get_redir_type_str(curr->type));
-				printf("%s%s    %sFile      : %s%s\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, curr->file ? curr->file : "(null)");
-				printf("%s%s    %sFD        : %s%d\n", prefix, is_last ? "    " : "│   ",
-					   ANSI_YELLOW, ANSI_RESET, curr->fd);
-				curr = curr->next;
-			}
-		}
-		else
-		{
-			printf("(none)\n");
-		}
-	}
-	else
-	{
-		// Print other operator nodes
-		printf("%s%s %sOperator Node: %s%s\n", prefix, is_last ? "└──" : "├──",
-			   ANSI_YELLOW, get_node_type_str(node->type), ANSI_RESET);
-	}
-}
-
-// Get annotation for a node
-void get_node_annotation(t_tree *node, t_tree *parent, int is_left, char *buffer, size_t buf_size)
-{
-	char node_str[256];
-	snprintf(node_str, sizeof(node_str), "%s", node->type == NODE_COMMAND ? "CMD" : get_node_type_str(node->type));
-
-	if (!parent)
-	{
-		snprintf(buffer, buf_size, "%s// Root%s", ANSI_GREEN, ANSI_RESET);
-	}
-	else
-	{
-		char parent_str[256];
-		snprintf(parent_str, sizeof(parent_str), "%s", parent->type == NODE_COMMAND ? "CMD" : get_node_type_str(parent->type));
-		snprintf(buffer, buf_size, "%s// %s subtree of %s%s", ANSI_GREEN, is_left ? "Left" : "Right", parent_str, ANSI_RESET);
-	}
-}
-
-// Recursive function to print tree
-void print_tree_recursive(t_tree *node, char *prefix, int is_last, t_tree *parent, int is_left, int level)
-{
-	if (!node)
-		return;
-
-	// Print node details
-	print_node_details(node, prefix, is_last);
-
-	// Print annotation
-	char annotation[512];
-	get_node_annotation(node, parent, is_left, annotation, sizeof(annotation));
-	printf("%s%s%s\n", prefix, is_last ? "    " : "│   ", annotation);
-
-	// Prepare prefix for children
-	char new_prefix[256];
-	snprintf(new_prefix, sizeof(new_prefix), "%s%s", prefix, is_last ? "    " : "│   ");
-
-	// Recursively print children
-	if (node->left || node->right)
-	{
-		if (node->left)
-			print_tree_recursive(node->left, new_prefix, node->right == NULL, node, 1, level + 1);
-		if (node->right)
-			print_tree_recursive(node->right, new_prefix, 1, node, 0, level + 1);
-	}
-}
-// Main function to print tree
-void print_tree(t_tree *node)
-{
-	if (!node)
-	{
-		printf("%sEmpty tree%s\n", ANSI_RED, ANSI_RESET);
-		return;
-	}
-	print_tree_recursive(node, "", 1, NULL, 0, 0);
 }

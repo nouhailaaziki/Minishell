@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 15:41:42 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:19:58 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,22 +236,19 @@ int skip_spaces(char *str);
 /*-----------Tree Stuff-------------------*/
 t_tree *create_block(t_token **head, int count, int type);
 void link_redir(t_redir **list, t_redir *new_redir);
-t_tree *create_tree_node(int type, int cmd_count);
-t_token *ft_token_search(t_token *head, int type, int nav_flag);
-t_token *find_PIPE(t_token *head, int nav_flag);
+t_tree *allocate_tree_node(int type, int cmd_count);
+t_token *last_rp_token(t_token *head);
+t_token *find_PIPE(t_token *head);
 t_redir *redir_list_maker(t_token **head);
-void create_pseudotree(t_tree **ast, t_token **tokens, int flag);
-int sub_block_arg_counter(t_token *head);
-t_token *find_PIPE(t_token *head, int nav_flag);
+int count_cmd_args(t_token *head);
 int block_identifier(t_token *head);
 t_redir *redir_maker(t_token **data);
 int count_chars(char *str);
-void create_one_tree(t_tree **ast, t_token **tokens, int flag);
-void create_pseudotree(t_tree **ast, t_token **tokens, int flag);
-	t_token *find_Parentheses(t_token *head, int nav_flag);
-t_token *find_and_or(t_token *head, int nav_flag);
-t_token *find_PIPE(t_token *head, int nav_flag) ;
-void refresh_block(t_token **head);
+void create_one_tree(t_tree **ast, t_token **tokens);
+void create_pseudotree(t_tree **ast, t_token **tokens);
+t_token *find_Parentheses(t_token *head);
+t_token *find_and_or(t_token *head);
+void refresh_block(t_token **head, int type);
 	/*---------------------Checkers-------------------*/
 	int ft_syntax_err(char *str);
 int ft_before_x(char *str, int (*f)(char *s));
@@ -265,15 +262,17 @@ void clear_memory(t_shell *shell);
 void free_cmd(char **cmd);
 void free_tree(t_tree **ast);
 void free_tokens(t_token **head);
+void create_subtree(t_tree **ast, t_token **tokens);
 
-// ! REMOVE THS LATER
-void		print_tokens(t_token **head);
+	// ! REMOVE THS LATER
+	void print_tokens(t_token **head);
 void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
+t_tree *create_tree(t_token *tokens);
 
-/*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
+	/*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
 
-/**
+	/**
 	 * @brief Main function to visualize the AST tree with colors and structure
 	 * @param root Pointer to the root node of the AST
 	 *
@@ -282,8 +281,8 @@ void		print_tree(t_tree *tree);
 	 * - Command arguments
 	 * - Redirection information
 	 * - Tree depth and node count
-*/
-	void	visualize_ast_tree(t_tree *root);
+	 */
+	void visualize_ast_tree(t_tree *root);
 
 /**
  * @brief Print a simplified flat representation of the tree

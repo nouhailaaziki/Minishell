@@ -21,6 +21,11 @@
 		"vector": "c",
 		"fcntl.h": "c",
 		"stdio.h": "c",
-		"unistd.h": "c"
+		"unistd.h": "c",
+		"__functional_base_03": "c",
+		"__hash_table": "c",
+		"__tuple": "c",
+		"array": "c",
+		"utility": "c"
 	}
 }

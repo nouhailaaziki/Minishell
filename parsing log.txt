@@ -6,7 +6,7 @@
 #    By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 16:09:25 by yrhandou          #+#    #+#              #
-#    Updated: 2025/06/24 10:38:13 by yrhandou         ###   ########.fr        #
+#    Updated: 2025/06/25 21:54:31 by yrhandou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -114,4 +114,7 @@ if found
 -------------------
 valid parentheses commands :
 	(echo hi)
-	(echo hi) > x 
+	(echo hi) > x
+
+
+modified find_ functions in volatile.

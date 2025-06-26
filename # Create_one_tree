@@ -1,0 +1,19 @@
+# Create_one_tree
+1)looks for the last AND or OR in the linked list
+#### if it is found :
+2)create a node for the operator, then create_subtree()
+from the right since its is the next in order of priorities is the pipe
+3)call itself to check for AND or OR before the last one.
+#### if it is not found:
+2)call create_subtree().
+
+
+#create_subtree()
+1) looks for a pipe in the linked list ?
+####if found:
+2)create a pipe node
+
+
+
+###if not found:
+	call_psoeudotree()

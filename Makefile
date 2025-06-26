@@ -10,7 +10,7 @@ RM = rm -rf
 
 COMPILER = cc
 
-CFLAGS = -g3  -O0  -Wall -Wextra -Werror
+CFLAGS = -g3  -O0  # -Wall -Wextra -Werror  -fsanitize=address
 
 LIBFT = libft.a
 
@@ -25,7 +25,8 @@ LIBFT_SRC = libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.
 			   libft/ft_printf/ft_printchar.c libft/ft_printf/ft_puthex.c libft/ft_printf/ft_printnbr.c libft/ft_printf/ft_putptr.c\
 			   libft/ft_printf/ft_printstr.c libft/ft_printf/ft_putuint.c libft/ft_printf/ft_printf.c
 
-PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c parsing/lexer_utils.c parsing/tree_utils.c parsing/parser_utils.c parsing/ft_free.c parsing/advanced_tree_utils.c
+PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c parsing/lexer_utils.c parsing/tree_utils.c parsing/parser_utils.c\
+		  parsing/ft_free.c parsing/advanced_tree_utils.c basic_visualiser.c advanced_visualizer.c
 
 
 EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c \
@@ -44,7 +45,7 @@ PARSE = $(PARSING:.c=.o)
 
 LIBFT_OBJ = $(LIBFT_SRC:.c=.o)
 
-HEADER = execution/launchpad.h libft/libft.h
+HEADER = launchpad.h libft/libft.h
 
 NAME = minishell
 
