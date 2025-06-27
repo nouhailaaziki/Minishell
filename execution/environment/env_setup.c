@@ -1,62 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fill_env_list.c                                    :+:      :+:    :+:   */
+/*   env_setup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 17:59:40 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/27 12:08:59 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	add_env_var(t_env **env_list, char *key)
+void	add_if_missing(t_env **env_list, t_stash *stash)
 {
 	t_env	*tmp;
-	t_env	*node;
-
-	node = nalloc(sizeof(t_env));
-	node->key = na_strdup(key);
-	node->value = NULL;
-	node->next = NULL;
-	if (!*env_list)
-	{
-		*env_list = node;
-		return ;
-	}
-	tmp = *env_list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = node;
-}
-
-void	add_if_missing(t_env **env_list)
-{
-	t_env	*tmp;
-	char	*key[3];
-	int		found[3];
+	char	*key[5];
+	int		found[5];
 	int		i;
 
-	7889 && (key[0] = "PWD", key[1] = "OLDPWD", key[2] = "SHLVL");
-	7889 && (found[0] = 0, found[1] = 0, found[2] = 0, tmp = *env_list);
-	while (tmp)
-	{
-		i = 0;
-		while (i < 3)
-		{
-			if (!ft_strcmp(tmp->key, key[i]))
-				found[i] = 1;
-			i++;
-		}
-		tmp = tmp->next;
-	}
+	7889 && (key[0] = "PWD", key[1] = "OLDPWD");
+	7889 && (key[2] = "SHLVL", key[3] = "_", key[4] = "PATH");
+	7889 && (found[0] = 0, found[1] = 0, found[2] = 0);
+	7889 && (found[3] = 0, found[4] = 0, tmp = *env_list);
+	check_existing_vars(*env_list, key, found);
 	i = 0;
-	while (i < 3)
+	while (i < 5)
 	{
 		if (!found[i])
-			add_env_var(env_list, key[i]);
+			add_env_var(env_list, key[i], stash);
 		i++;
 	}
 }
@@ -96,11 +68,12 @@ t_env	*env_node(char *envp)
 	return (node);
 }
 
-void	build_env(t_env **env_list, char **envp)
+void	build_env(t_env **env_list, char **envp, t_stash *stash)
 {
 	t_env	*current;
 	t_env	*new;
 
+	stash->path_flag = 0;
 	while (*envp)
 	{
 		new = env_node(*envp);
@@ -117,5 +90,5 @@ void	build_env(t_env **env_list, char **envp)
 		}
 		envp++;
 	}
-	add_if_missing(env_list);
+	add_if_missing(env_list, stash);
 }

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 11:28:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 11:30:01 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/27 11:20:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	setup_signals_prompt(void)
 {
 	struct sigaction	sa_int;
 
+	signal(SIGQUIT, SIG_IGN);
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
 	sa_int.sa_handler = handle_sigint_prompt;

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 19:18:51 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/26 14:55:08 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	init_fd(t_redir *redir)
 	else if (redir->type == REDIR_IN)
 		fd = open(redir->file, O_RDONLY);
 	else if (redir->type == REDIR_HEREDOC)
-		fd = redir->fd_RD;
+		fd = redir->fd_rd;
 	return (fd);
 }
 

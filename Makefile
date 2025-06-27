@@ -30,22 +30,24 @@ PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/misc_utils.c \
 
 
 EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c \
-			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/fill_env_list.c execution/environment/free_env_list.c \
-			execution/environment/get_env_arr.c execution/events/puterror.c execution/events/errno_manager.c execution/events/display_intro.c execution/builtins/manage_builtins.c \
-			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/utilities/ft_arrlen.c execution/utilities/ft_atoi.c execution/utilities/ft_isallchar.c \
-			execution/utilities/ft_isdigit.c execution/utilities/ft_memset.c execution/utilities/ft_strchr.c execution/utilities/ft_strcmp.c execution/utilities/ft_strncmp.c execution/utilities/ft_strlen.c \
-			execution/utilities/na_calloc.c execution/utilities/na_itoa.c execution/utilities/na_split.c execution/utilities/na_strdup.c execution/utilities/na_strjoin.c execution/utilities/na_substr.c \
-			execution/utilities/strict_atoi.c execution/utilities/ft_putstr_fd.c execution/utilities/na_mkstemp.c execution/redirection/redirs.c execution/executor/execute.c main.c\
-			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/redirection/heredocs_manager.c \
-			execution/signals/handle_sigint.c execution/signals/setup_signals.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c
-
+			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c \
+			execution/environment/get_env_arr.c execution/events/puterror.c execution/events/errno_manager.c execution/events/display_intro.c \
+			execution/builtins/manage_builtins.c execution/utilities/ft_isallchar.c execution/executor/execute.c execution/redirection/heredocs_manager.c \
+			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/utilities/ft_arrlen.c execution/utilities/ft_atoi.c \
+			execution/utilities/ft_isdigit.c execution/utilities/ft_memset.c execution/utilities/ft_strchr.c execution/utilities/ft_strcmp.c \
+			execution/utilities/ft_strncmp.c execution/utilities/ft_strlen.c execution/utilities/na_strjoin.c execution/utilities/na_substr.c \
+			execution/utilities/na_calloc.c execution/utilities/na_itoa.c execution/utilities/na_split.c execution/utilities/na_strdup.c main.c \
+			execution/utilities/strict_atoi.c execution/utilities/ft_putstr_fd.c execution/utilities/na_mkstemp.c execution/redirection/redirs.c \
+			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
+			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
+			execution/executor/execute_command_utils.c 
 EXEC = ${EXECUTION:.c=.o}
 
 PARSE = $(PARSING:.c=.o)
 
 LIBFT_OBJ = $(LIBFT_SRC:.c=.o)
 
-HEADER = execution/launchpad.h libft/libft.h
+HEADER = launchpad.h libft/libft.h
 
 NAME = minishell
 

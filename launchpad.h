@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 09:43:29 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/27 12:13:20 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ typedef struct s_redir
 	t_token_type	type;
 	char			*file;
 	int				fd;
-	int				fd_RD;
-	int				fd_WR;
+	int				fd_rd;
+	int				fd_wr;
 	int				flag;
 	struct s_redir	*next;
 }	t_redir;
@@ -128,6 +128,7 @@ typedef struct s_tree
 typedef struct s_stash
 {
 	int		status;
+	int		path_flag;
 	char	*heredoc_store;
 	int		heredoc_interrupted;
 	struct termios orig_termios;
@@ -147,23 +148,26 @@ typedef struct s_shell
 t_env		*env_node(char *envp);
 char		**get_env_arr(t_env *env_list);
 void		upp_shlvl(t_env *node, int nbr);
-void		build_env(t_env **env_list, char **envp);
+void		build_env(t_env **env_list, char **envp, t_stash *stash);
+char		*add_env_value(char *key, t_stash *stash);
+void		add_env_var(t_env **env_list, char *key, t_stash *stash);
+void		check_existing_vars(t_env *env_list, char **keys, int *found);
 
 /*-------------------------Builtins fonctions-------------------------*/
 int			pwd(void);
 int			echo(char **cmd);
-int			env(t_env *env_list);
+int			env(t_env *env_list, t_stash *stash);
 int			is_parent_builtin(char *cmd);
 void		ft_putstr_fd(char *s, int fd);
 void		sort_env_list(t_env **env_list);
 int			cd(char **cmd, t_env **env_list);
 int			unset(t_env **env_list, char **cmd);
-int			export(char **cmd, t_env **env_list);
-int			check_validity(char *argv, char *cmd);
+int			export(char **cmd, t_env **env_list, t_stash *stash);
+int			check_validity(char	*argv, char *initial, char *cmd);
 void		run_exit(char **cmd, int exit_status);
 void		handle_argument(t_env **env_list, char *cmd);
 void		add_value(t_env **env_list, char *argv, char *key);
-int			run_builtins(char **cmd, t_env **env_list, int status);
+int			run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash);
 void		update_env(t_env **env_list, char *argv, char *key, int start);
 t_env		*create_node(char *argv, size_t key_len, char *sign);
 
@@ -204,11 +208,14 @@ void		errno_manager(char *cmd);
 int			puterror(int program, char *cmd, char *arg, char *error);
 
 /*-------------------------execute fonctions--------------------------*/
+char		**get_path_list(char **env);
+void		handle_special_cases(char **path_list, char **cmd);
 int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
-int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
-t_stash *stash);
 int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
 int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash);
+int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
+t_stash *stash);
+
 /*------------------------------signals-------------------------------*/
 void		handle_sigint_heredoc(int sig);
 void		handle_sigint_prompt(int sig);

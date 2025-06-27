@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/26 08:37:33 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,19 @@ void	handle_argument(t_env **env_list, char *cmd)
 	j = 0;
 	while (cmd[j] && cmd[j] != '=')
 		j++;
+	if (j == 0)
+		printf("L33tShell: export: `%s': not a valid identifier\n", cmd);
 	if (j > 0 && cmd[j - 1] == '+' && cmd[j] == '=')
 		j--;
+	if (j == 0 && cmd[j] == '+')
+		printf("L33tShell: export: `%s': not a valid identifier\n", cmd);
 	str = na_substr(cmd, 0, j);
 	if (!str)
 		return ;
-	check_validity(str, "export");
+	check_validity(str, cmd, "export");
 	n = j + 1;
 	if (cmd[j] == '+' && j > 0 && cmd[j + 1] && cmd[j + 1] == '=')
 		add_value(env_list, cmd, str);
 	else if (cmd[j] == '=' || !cmd[j])
 		update_env(env_list, cmd, str, n);
-	free (str);
 }
