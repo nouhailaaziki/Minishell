@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 11:54:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 09:39:25 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/27 18:17:08 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	run_exit(char **cmd, int exit_status)
 		free_all_tracked();
 		exit((unsigned char)exit_status);
 	}
-	if (len > 2)
+	if (len > 2 && is_numeric(cmd[1]))
 	{
 		free_all_tracked();
 		printf("L33tShell: exit: too many arguments\n");
