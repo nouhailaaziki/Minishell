@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/26 18:19:58 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:35:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,23 +234,24 @@ int token_lexer(char *str);
 int parser(t_shell shell);
 int skip_spaces(char *str);
 /*-----------Tree Stuff-------------------*/
+t_tree *create_p_block(t_token **head);
 t_tree *create_block(t_token **head, int count, int type);
+void create_pseudotree(t_tree **ast, t_token **tokens);
+void create_one_tree(t_tree **ast, t_token **tokens);
 void link_redir(t_redir **list, t_redir *new_redir);
 t_tree *allocate_tree_node(int type, int cmd_count);
-t_token *last_rp_token(t_token *head);
-t_token *find_PIPE(t_token *head);
+void refresh_tokens(t_token **head, int type);
 t_redir *redir_list_maker(t_token **head);
-int count_cmd_args(t_token *head);
-int block_identifier(t_token *head);
+t_token *find_first_lp(t_token *head);
+t_token *last_rp_token(t_token **head);
 t_redir *redir_maker(t_token **data);
-int count_chars(char *str);
-void create_one_tree(t_tree **ast, t_token **tokens);
-void create_pseudotree(t_tree **ast, t_token **tokens);
-t_token *find_Parentheses(t_token *head);
 t_token *find_and_or(t_token *head);
-void refresh_block(t_token **head, int type);
-	/*---------------------Checkers-------------------*/
-	int ft_syntax_err(char *str);
+int block_identifier(t_token *head);
+int count_cmd_args(t_token *head);
+t_token *find_PIPE(t_token *head);
+int count_chars(char *str);
+/*---------------------Checkers-------------------*/
+int ft_syntax_err(char *str);
 int ft_before_x(char *str, int (*f)(char *s));
 int ft_is_bonus_operator(char *str);
 int ft_isparentheses(char *c);
@@ -265,7 +266,7 @@ void free_tokens(t_token **head);
 void create_subtree(t_tree **ast, t_token **tokens);
 
 	// ! REMOVE THS LATER
-	void print_tokens(t_token **head);
+void print_tokens(t_token **head);
 void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
 t_tree *create_tree(t_token *tokens);
@@ -283,24 +284,6 @@ t_tree *create_tree(t_token *tokens);
 	 * - Tree depth and node count
 	 */
 	void visualize_ast_tree(t_tree *root);
-
-/**
- * @brief Print a simplified flat representation of the tree
- * @param node Current node to print
- * @param level Indentation level
- *
- * Displays a simple indented list showing the tree structure
- */
-void print_flat_ast(t_tree *node, int level);
-
-/**
- * @brief Export the AST to DOT format for graphviz visualization
- * @param root Pointer to the root node of the AST
- * @param filename Output filename for the DOT file
- *
- * Creates a .dot file that can be rendered with graphviz:
- * dot -Tpng filename.dot -o output.png
- */
-void visualize_tokens(t_token *head);
+	void visualize_tokens(t_token *head);
 
 #endif

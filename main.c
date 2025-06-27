@@ -6,40 +6,12 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/26 18:53:26 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:58:00 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-/**
- * @brief Creates a tree for content inside parentheses
- * @param ast Root node
- * @param tokens Tokenizer Tokens
- * @param flag Navigation flag for search
- */
-void create_pseudotree(t_tree **ast, t_token **tokens)
-{
-	t_token *parentheses;
-
-	if (!tokens || !*tokens)
-		return;
-	refresh_block(tokens,0);
-	parentheses = find_Parentheses(*tokens);
-	if (parentheses)
-	{
-		*ast = create_block(&parentheses, 1, block_identifier(parentheses));
-		parentheses->position = -1;
-		// printf("Created a Parentheses Node\n");
-		if (parentheses->next)
-			create_one_tree(&(*ast)->left, &parentheses->next);
-	}
-	else
-	{
-		// printf("No parentheses Found ! creating a simple node\n");
-		*ast = create_block(tokens, count_cmd_args(*tokens), block_identifier(*tokens));
-	}
-}
 // int create_p_block(t_token **head, int count, int type)
 // {
 // 	t_token * current;
@@ -118,11 +90,6 @@ t_tree *create_tree(t_token *tokens)
 	return node;
 }
 
-void f()
-{
-	system("leaks -q -- minishell");
-}
-
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
@@ -155,8 +122,8 @@ int main(int argc, char **argv, char **envp)
 			free_tokens(&shell.tokens);
 			continue;
 		}
-		// visualize_tokens(shell.tokens);
 		// shell.ast = create_tree(shell.tokens);
+		visualize_tokens(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens);
 		visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);

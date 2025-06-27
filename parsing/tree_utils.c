@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/26 18:37:30 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:40:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,11 @@ t_redir *redir_maker(t_token **data)
 	redir->fd_RD = -1;
 	redir->fd_WR = -1;
 	redir->flag = 0;
+	(*data)->position = -1;
 	if((*data)->next)
 	{
-		(*data)->position = -1;
 		redir->file = ft_strdup((*data)->next->value);
+		(*data)->next->position = -1;
 		if(!redir->file)
 			return printf("This is not supposed to happen.\n") ,NULL;
 	}
@@ -61,14 +62,14 @@ t_redir *redir_maker(t_token **data)
 	return (redir);
 }
 
-void link_redir(t_redir **list,t_redir *new_redir)
+void link_redir(t_redir **head,t_redir *new_redir)
 {
 	t_redir *tmp;
 
-	tmp = *list;
-	if (!*list)
+	tmp = *head;
+	if (!*head)
 	{
-		*list = new_redir;
+		*head = new_redir;
 		new_redir->next = NULL;
 		new_redir->index = 0;
 		return ;
@@ -93,20 +94,22 @@ int block_identifier(t_token *head)
 	else
 		return NODE_COMMAND;
 }
-t_token *last_rp_token(t_token *head)
+t_token *last_rp_token(t_token **head)
 {
 	t_token *current;
 	t_token *last_rp_token;
 	if (!head)
 		return (printf("This is not supposed to happen\n"), NULL);
-	current = head;
+	current = *head;
 	last_rp_token = NULL;
 	while (current && current->next && current->next->position != -1)
 	{
-		if (current->type == TOKEN_PAREN_RIGHT && current->next)
+		if (current->type == TOKEN_PAREN_RIGHT)
 			last_rp_token = current->next;
 		current = current->next;
 	}
+	if(last_rp_token != NULL)
+		last_rp_token->position = -1;
 	return (last_rp_token);
 }
  /**
@@ -125,7 +128,7 @@ t_redir *redir_list_maker(t_token **head)
 	}
 	tmp = *head;
 	if((*head)->type == TOKEN_PAREN_LEFT)
-		tmp = last_rp_token(*head);
+		tmp = last_rp_token(head);
 	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_PAREN_LEFT && tmp->type != TOKEN_PAREN_RIGHT)
 	{
 		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
@@ -199,31 +202,17 @@ t_tree *expand_block(t_token *token)
 	return (root);
 
 }
-t_tree *create_p_block(t_token **head, int count, int type)
+t_tree *
+create_p_block(t_token **head)
 {
 	t_tree *p_block;
-	t_token * current;
 	int i ;
 
 	i =0;
-	p_block = allocate_tree_node(type, count);
+	p_block = allocate_tree_node(NODE_PARENTHESES, 0);
 	if(!p_block)
 		return (NULL);
 	p_block->redirs = redir_list_maker(head) ;
-	current = *head;
-	if (current->type != TOKEN_WORD && current->type != TOKEN_ARG)
-		count = 0;
-	while (current && i < count)
-	{
-		if (current->type == TOKEN_WORD || current->type == TOKEN_ARG)
-		{
-			p_block->cmd[i++] = ft_strdup(current->value);
-			current->position = -1;
-		}
-		current = current->next;
-	}
-	if (p_block->cmd)
-		p_block->cmd[i] = NULL;
 	return (p_block);
 }
 t_tree *create_block(t_token **head, int count, int type)
@@ -233,8 +222,6 @@ t_tree *create_block(t_token **head, int count, int type)
 	t_token	*current;
 
 	i = 0;
-	if ((*head)->type == TOKEN_PAREN_LEFT)
-		return (create_p_block(head,count, type));
 	tree = allocate_tree_node(type, count);
 	if (!tree)
 		return NULL;
