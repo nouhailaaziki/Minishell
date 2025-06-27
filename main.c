@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 14:58:00 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:59:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		}
 		// shell.ast = create_tree(shell.tokens);
-		visualize_tokens(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens);
+		visualize_tokens(shell.tokens);
 		visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
 		// check_heredoc_limit(&shell,shell.ast); // ? Changed the freeing to include clear memory.

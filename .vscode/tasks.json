@@ -46,7 +46,7 @@
 					},
 					"presentation": {
 						"reveal": "always",
-						"panel": "new"
+						"panel": "shared"
 					},
 					"problemMatcher": [
 						"$gcc"

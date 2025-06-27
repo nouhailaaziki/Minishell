@@ -6,7 +6,7 @@
 #    By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 16:09:25 by yrhandou          #+#    #+#              #
-#    Updated: 2025/06/25 21:54:31 by yrhandou         ###   ########.fr        #
+#    Updated: 2025/06/27 16:40:58 by yrhandou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -118,3 +118,41 @@ valid parentheses commands :
 
 
 modified find_ functions in volatile.
+
+
+
+
+syntax error
+ ls >| wc -l
+
+
+"ls"     -la
+
+╔══════════════════════════════════╗
+║     TOKEN VISUALIZER     ║
+╚══════════════════════════════════╝
+
+└── [00] WORD           ""ls"   -la" (pos:0)
+
+
+╔══════════════════════════════════╗
+║   AST TREE VISUALIZER   ║
+║ Depth: 1  │ Nodes: 1  ║
+╚══════════════════════════════════╝
+
+└── COMMAND [OK] (argc: 1)
+   └── Command: ""ls"   -la"
+
+
+
+
+
+
+syntax error
+ > asaas (ls  || wc -l)
+
+((< a < b < c) | b) incorrect output
+
+
+
+

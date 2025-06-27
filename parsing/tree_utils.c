@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/27 14:40:32 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:24:54 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,20 +97,20 @@ int block_identifier(t_token *head)
 t_token *last_rp_token(t_token **head)
 {
 	t_token *current;
-	t_token *last_rp_token;
+	t_token *r_parenth;
 	if (!head)
 		return (printf("This is not supposed to happen\n"), NULL);
 	current = *head;
-	last_rp_token = NULL;
-	while (current && current->next && current->next->position != -1)
+	r_parenth = NULL;
+	while (current && current->position != -1)
 	{
 		if (current->type == TOKEN_PAREN_RIGHT)
-			last_rp_token = current->next;
+			r_parenth = current;
 		current = current->next;
 	}
-	if(last_rp_token != NULL)
-		last_rp_token->position = -1;
-	return (last_rp_token);
+	if(r_parenth)
+		r_parenth->position = -1;
+	return (r_parenth);
 }
  /**
  * links the redirections nodes to a linked list
@@ -124,11 +124,9 @@ t_redir *redir_list_maker(t_token **head)
 	if( !head ||!*head)
 	{
 		printf("This is not supposed to happen.\n");
-		return (NULL);;
+		return (NULL);
 	}
 	tmp = *head;
-	if((*head)->type == TOKEN_PAREN_LEFT)
-		tmp = last_rp_token(head);
 	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_PAREN_LEFT && tmp->type != TOKEN_PAREN_RIGHT)
 	{
 		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
@@ -139,6 +137,30 @@ t_redir *redir_list_maker(t_token **head)
 	}
 	return (redir_list);
 }
+
+t_redir *p_redirs_maker(t_token **head)
+{
+	t_token *tmp;
+	t_redir *redir_list;
+
+	if (!head || !*head)
+		return (printf("This is not supposed to happen.\n"), NULL);
+	redir_list = NULL;
+	tmp = last_rp_token(head);
+	if(tmp && tmp->next)
+		tmp= tmp->next;
+	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_PAREN_LEFT && tmp->type != TOKEN_PAREN_RIGHT)
+	{
+		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
+		{
+			link_redir(&redir_list, redir_maker(&tmp));
+		}
+		tmp = tmp->next;
+	}
+	return (redir_list);
+}
+
+
 int count_cmd_args(t_token *head)
 {
 	int count;
@@ -202,8 +224,7 @@ t_tree *expand_block(t_token *token)
 	return (root);
 
 }
-t_tree *
-create_p_block(t_token **head)
+t_tree *create_p_block(t_token **head)
 {
 	t_tree *p_block;
 	int i ;
@@ -212,7 +233,7 @@ create_p_block(t_token **head)
 	p_block = allocate_tree_node(NODE_PARENTHESES, 0);
 	if(!p_block)
 		return (NULL);
-	p_block->redirs = redir_list_maker(head) ;
+	p_block->redirs = p_redirs_maker(head) ;
 	return (p_block);
 }
 t_tree *create_block(t_token **head, int count, int type)

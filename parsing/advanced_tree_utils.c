@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:16:33 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/27 14:35:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:44:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,25 @@
  * @param flag Navigation flag for search
  */
 void create_pseudotree(t_tree **ast, t_token **tokens)
- {
-	 t_token *parentheses;
+{
+	t_token *parentheses;
+	t_token *r;
 
-	 if (!tokens || !*tokens)
-		 return;
-	 refresh_tokens(tokens, 0);
-	 parentheses = find_first_lp(*tokens);
-	 if (parentheses)
-	 {
-		 *ast = create_p_block(&parentheses);
-		 parentheses->position = -1;
-		 printf("Created a Parentheses Node\n");
-		 if (parentheses->next)
-			 create_one_tree(&(*ast)->left, &parentheses->next);
-	 }
-	 else
-		 *ast = create_block(tokens, count_cmd_args(*tokens), block_identifier(*tokens));
- }
+	if (!tokens || !*tokens)
+		return;
+	refresh_tokens(tokens, 0);
+	parentheses = find_first_lp(*tokens);
+	if (parentheses)
+	{
+		*ast = create_p_block(&parentheses);
+		parentheses->position = -1;
+		printf("Created a Parentheses Node\n");
+		if (parentheses->next)
+			create_one_tree(&(*ast)->left, &parentheses->next);
+	}
+	else
+		*ast = create_block(tokens, count_cmd_args(*tokens), block_identifier(*tokens));
+}
 /**
  * @brief looks if a parentheses is found in tokens
  * @param head Head of tokens list
@@ -136,13 +137,13 @@ t_token *find_and_or(t_token *head)
 	in_parenthese = 0;
 	current = head;
 	last_and_or = NULL;
-	while (current && current->position != -1)
+	while (current && current->position !=-1)
 	{
 		if (current->type == TOKEN_PAREN_LEFT)
 			in_parenthese++;
 		if (current->type == TOKEN_PAREN_RIGHT)
 			in_parenthese--;
-		if (current->type == TOKEN_AND || current->type == TOKEN_OR && !in_parenthese)
+		if ((current->type == TOKEN_AND || current->type == TOKEN_OR )&& !in_parenthese)
 			last_and_or = current;
 		current = current->next;
 	}

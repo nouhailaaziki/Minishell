@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/26 15:03:57 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:47:37 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,13 +118,12 @@ int parser(t_shell shell)
 	if (!shell.tokens)
 		return 0;
 	current = shell.tokens;
-	// if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
-	// 	return ft_syntax_err(current->value);
+	if (ft_is_bonus_operator(current->value) || (current->type == TOKEN_PIPE))
+		return ft_syntax_err(current->value);
 	advanced_token_lexer(&shell.tokens);
 	while (current)
 	{
-		if (ft_is_operator(current->value) && ( !current->next || \
-		ft_is_operator(current->next->value) || current->next->type == TOKEN_PAREN_RIGHT  ))
+		if (ft_is_operator(current->value) && (!current->next || ft_is_operator(current->next->value) || current->next->type == TOKEN_PAREN_RIGHT ))
 			return ft_syntax_err(current->value);
 		if (ft_is_operator(current->value) && (!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
 			return ft_syntax_err(current->value);
@@ -132,7 +131,7 @@ int parser(t_shell shell)
 			return ft_syntax_err(current->value);
 		current = current->next;
 	}
-	// if (!handle_parentheses(shell.tokens))
-	// 	return 0;
+	if (!handle_parentheses(shell.tokens))
+		return 0;
 	return (1);
 }
