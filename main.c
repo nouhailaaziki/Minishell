@@ -6,96 +6,26 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 17:59:48 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:46:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-// int create_p_block(t_token **head, int count, int type)
-// {
-// 	t_token * current;
-
-// 	current = *head;
-// 	while()
-// 	return 1;
-// }
-
-t_token *get_root(t_token *toks)
+void init_shell(t_shell *shell)
 {
-	t_token	*curr;
-	int	pipe  = 0;
-	int	and_or = 0;
-	int	parenthese = 0;
-	t_token *r = NULL;
-	curr = toks;
-	while(curr)
-	{
-		if (curr->type == TOKEN_PAREN_LEFT)
-			parenthese ++;
-		else if (curr->type == TOKEN_PAREN_RIGHT)
-			parenthese--;
-		if ((curr->type == TOKEN_AND || curr->type == TOKEN_OR) && !parenthese)
-		{
-			r = curr;
-			and_or = 1;
-		}
-		if (curr->type == TOKEN_PIPE && !and_or && !parenthese)
-		{
-			r = curr;
-			pipe = 1;
-		}
-		curr = curr->next;
-	}
-	return (r);
+	display_intro();
+	shell->env_list = NULL;
+	shell->line = NULL;
+	shell->tokens = NULL;
+	shell->current = NULL;
+	shell->ast = NULL;
 }
-
-t_token	*make_left(t_token *toks, t_token *root)
+int	main(int argc, char **argv, char **envp)
 {
-	t_token *curr = toks;
-	while (curr && curr!=root)
-		curr = curr->next;
-	curr->prev->next = NULL;
-	return (toks);
-}
+	t_shell	shell;
+	t_stash	stash;
 
-t_tree *create_block_2(t_token *tok)
-{
-	t_tree *node = malloc(sizeof(t_tree));
-	if (!node)
-		return (NULL);
-	printf("%s\n", tok->value);
-	return (NULL);
-}
-t_tree *create_tree(t_token *tokens)
-{
-	t_token	*root;
-	t_tree	*node;
-	t_token	*l, *r;
-	root = get_root(tokens);
-	if (!root)
-		return create_block(&tokens, count_cmd_args(tokens),NODE_COMMAND);
-	printf("root ; %d\n", root->type);
-	node = malloc(sizeof(t_tree));
-	if (!node)
-		return (NULL);
-	ft_bzero(node, sizeof(t_tree));
-	node->type = block_identifier(root);
-	r = root->next;
-	l = make_left(tokens, root);
-	free(root->value);
-	free(root);
-	node->left = create_tree(l);
-	node->right = create_tree(r);
-	return node;
-}
-
-int main(int argc, char **argv, char **envp)
-{
-	t_shell shell;
-	t_stash stash;
-
-	// atexit(f);
 	(void)argc, (void)argv;
 	rl_catch_signals = 0;
 	stash.status = 0;
@@ -116,11 +46,11 @@ int main(int argc, char **argv, char **envp)
 			free_all_tracked();
 			exit(stash.status);
 		}
-		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell, 0) || !parser(shell))
+		if (!shell.line || ft_str_isspace(shell.line) || !lexer(&shell) || !parser(shell))
 		{
 			free(shell.line);
 			free_tokens(&shell.tokens);
-			continue;
+			continue ;
 		}
 		// shell.ast = create_tree(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens);
@@ -137,10 +67,7 @@ int main(int argc, char **argv, char **envp)
 		// 	clear_memory(&shell);
 		// 	continue;
 		// }
-		// if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
-		// 	break;
 		clear_memory(&shell);
 	}
-	// clear_memory(&shell);
 	return (0);
 }

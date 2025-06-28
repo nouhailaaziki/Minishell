@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/24 08:29:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:31:46 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	token_lexer(char *str)
 	}
 	if (str[0] == '<' || str[0] == '>')
 		return (TOKEN_REDIR);
-	else if(ft_isparentheses(&str[0]))
+	else if (ft_isparentheses(&str[0]))
 		return (TOKEN_PAREN);
 	return ((TOKEN_WORD));
 }
@@ -50,9 +50,9 @@ void	link_token(t_token **head, t_token *node)
 {
 	t_token	*tmp;
 
-	if(!node)
+	if (!node)
 	{
-		ft_putendl_fd("Error Token is Empty\n",2);
+		ft_putendl_fd("Error Token is Empty\n", 2);
 		return ;
 	}
 	if (!head || !*head)
@@ -83,77 +83,23 @@ t_token	*new_token(char *value, int type)
 	if (value)
 	{
 		token->value = ft_strdup(value);
-		if(!token->value)
-			return (free(token), ft_putendl_fd(" StrdupError\n", 2), NULL);
+		if (!token->value)
+			return (free(token), ft_putendl_fd("Strdup Failure\n", 2), NULL);
 	}
 	else
-		return (free(token), ft_putendl_fd("malloc Error\n", 2), NULL);
+		return (free(token), ft_putendl_fd("Malloc Error\n", 2), NULL);
 	token->next = NULL;
 	token->prev = NULL;
 	token->position = -1;
 	return (token);
 }
 
-int token_lookup(char *line)
+int	lexer(t_shell *shell)
 {
-	int token_len;
-
-	token_len = count_chars(line);
-	if (!token_len)
-		token_len = ft_is_redir(line);
-	if (!token_len)
-		token_len = ft_isparentheses(line);
-	if (!token_len)
-		token_len = operator_len(line);
-	return token_len;
-}
-
-int count_chars(char *str)
-{
-	int i;
-	int set;
-
-	i = 0;
-	if (ft_isparentheses(str))
-		return 0;
-	set = ft_syntax_analyzer(&str[i]);
-	if (!set )//|| ft_before_x(&str[i], ft_isparentheses)) // ||(head && tokens_init(head,&str[i])))
-		return (0);
-	i += set;
-	return (i);
-}
-int operator_len(char *str) // returns the length of the operator on success
-{
-	int i;
-	int len;
-	int type;
-
-	i = 0;
-	len = ft_is_operator(&str[i]);
-	if (!len)
-		return (0);
-	type = token_lexer(&str[i]);
-	i += len; // if(!str[i]) 	return 0;
-	len = i;
-	while (str[len])
-	{
-		if ((ft_special_case(&str[len], type)))
-			break;
-		// else if (ft_before_x(&str[len], ft_is_operator))
-		// 	return 0;
-		else if (!ft_isspace(str[len]))
-			break;
-		len++;
-	}
-	return (i);
-}
-
-int	lexer(t_shell *shell, int status_flag)
-{
-	int	i;
-	int	token_len;
-	int	position;
-	char *sub_str;
+	int		i;
+	int		token_len;
+	int		position;
+	char	*sub_str;
 
 	i = 0;
 	while (shell->line[i])
@@ -163,10 +109,9 @@ int	lexer(t_shell *shell, int status_flag)
 		token_len = token_lookup(&shell->line[i]);
 		if (!token_len)
 			return (ft_syntax_err(&shell->line[i]));
-		if(status_flag)
-			break;
 		sub_str = ft_substr(shell->line, position, token_len);
-		link_token(&shell->tokens, new_token(sub_str,(token_lexer(&shell->line[position]))));
+		link_token(&shell->tokens, new_token(sub_str, (token_lexer \
+			(&shell->line[position]))));
 		free(sub_str);
 		i += token_len;
 		if (ft_str_isspace(&shell->line[i]))

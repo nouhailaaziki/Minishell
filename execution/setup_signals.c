@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   setup_signals.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:05:19 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 09:50:09 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 11:51:56 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-//
-
-/// @brief Ctrl+C: Show a new prompt on a new line | Ctrl+D: in main, it exit the program | ctrl+\: do nothing
-/// @paragraph it work with Ctrl+C: Show a new prompt on a new line,
+/**
+ * @brief Ctrl+C: Show a new prompt on a new line |
+ * Ctrl+D: in main, it exit the program | ctrl+\: do nothing
+ * @paragraph it work with Ctrl+C: Show a new prompt on a new line,
+*/
 void	handle_sigint(int sig)
 {
 	(void)sig;
@@ -24,13 +25,14 @@ void	handle_sigint(int sig)
 	rl_on_new_line();                       // Moves to a new line internally
 	rl_redisplay();                         // Shows the prompt again
 }
- /**
+
+/**
  * @brief It configures how the parent process handles signals
  */
 void	setup_signals_parent(void)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
@@ -41,12 +43,13 @@ void	setup_signals_parent(void)
 	sa_quit.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
+
 /**
  * @brief It sets the default behavior for signals in the child process
 */
 void	setup_signals_child(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -54,7 +57,3 @@ void	setup_signals_child(void)
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 }
-
-
-
-
