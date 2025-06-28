@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 11:35:21 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 13:33:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,21 @@ int	execute_command(char **cmd, t_redir *redirs, \
 t_env **env_list, t_stash *stash)
 {
 	pid_t	pid;
+	int		i;
 	int		status;
+	int		restore[2];
 
+	restore[0] = dup(STDIN_FILENO);
+	restore[1] = dup(STDOUT_FILENO);
 	if (cmd && is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
-		return (run_builtins(cmd, env_list, stash->status, stash));
+		i = run_builtins(cmd, env_list, stash->status, stash);
+		dup2(restore[0], STDIN_FILENO);
+		dup2(restore[1], STDOUT_FILENO);
+		close(restore[0]);
+		close(restore[1]);
+		return (i);
 	}
 	pid = fork();
 	if (pid == -1)

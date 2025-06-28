@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 11:19:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 17:51:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,19 @@ int	cd(char **cmd, t_env **env_list, t_stash *stash)
 	}
 	else
 	{
-		if (access(cmd[1], F_OK) != 0)
-			return (puterror(1, "cd: ", cmd[2], ": No such file or directory"));
+		if (access(cmd[1], F_OK) != 0){
+			return (puterror(1, "cd: ", cmd[1], ": No such file or directory"));
+		}
 		if (stat(cmd[1], &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
 		{
-			chdir(cmd[1]);
+			if (chdir(cmd[1]) == -1)
+				return (puterror(1, "cd: ", cmd[1], ": Permission denied"));
 			refresh_pwd(env_list, stash, cmd[1]);
 		}
 		else
-			return (puterror(1, "cd: ", cmd[2], ": Not a directory"));
+		{
+			return (puterror(1, "cd: ", cmd[1], ": Not a directory"));
+		}
 	}
 	return (0);
 }
