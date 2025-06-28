@@ -1,0 +1,25 @@
+Makefile
+TREE.tldr
+a
+a.tldr
+advanced_visualizer.c
+advanced_visualizer.o
+basic_visualiser.c
+basic_visualiser.o
+echo
+execution
+f
+launchpad.h
+libft
+main.c
+main.o
+minishell
+misc_utils.c
+misc_utils.o
+parentheses.excalidraw
+parsing
+parsing log.txt
+s
+utilities
+x
+z

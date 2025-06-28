@@ -6,7 +6,7 @@
 #    By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 16:09:25 by yrhandou          #+#    #+#              #
-#    Updated: 2025/06/27 16:40:58 by yrhandou         ###   ########.fr        #
+#    Updated: 2025/06/28 17:22:26 by yrhandou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -154,5 +154,98 @@ syntax error
 ((< a < b < c) | b) incorrect output
 
 
+bash-3.2$ >>&&">>"
+bash: syntax error near unexpected token `&&'
 
 
+
+bash-3.2$ <<&&\
+bash: syntax error near unexpected token `&&'
+bash-3.2$ <<&&a
+bash: syntax error near unexpected token `&&'
+bash-3.2$
+
+
+bash-3.2$ <<&&'>'
+bash: syntax error near unexpected token `&&'
+bash-3.2$
+
+
+
+ash-3.2$  >> || 'd'
+bash: syntax error near unexpected token `||'
+bash-3.2$
+
+
+
+bash-3.2$ >> || ddd
+bash: syntax error near unexpected token `||'
+bash-3.2$
+
+
+bash-3.2$ >> | '||'
+bash: syntax error near unexpected token `|'
+
+
+bash-3.2$ ls >< | ls | ls
+bash: syntax error near unexpected token `<'
+bash-3.2$
+
+
+bash-3.2$ ls >< | ls&& fff | ls
+bash: syntax error near unexpected token `<'
+bash-3.2$
+
+
+
+bash-3.2$ ls  | ls | > | fff | ls
+bash: syntax error near unexpected token `|'
+bash-3.2$
+
+
+bash-3.2$ ls  | ls | >< | fff | ls
+bash: syntax error near unexpected token `<'
+bash-3.2$
+
+
+
+bash-3.2$ ls  | ls | >&&< | fff | ls
+bash: syntax error near unexpected token `&'
+bash-3.2$
+
+
+bash-3.2$ ls |     >       | ls
+bash: syntax error near unexpected token `|'
+bash-3.2$
+
+
+
+bash-3.2$ ls | aefaefaeef><>>>><<><><> | awfaefaef | aefaefae |aefeaf |ls
+bash: syntax error near unexpected token `<>'
+bash-3.2$
+
+
+bash-3.2$  cl>||ls
+bash: syntax error near unexpected token `|'
+bash-3.2$
+
+
+
+bash-3.2$ cl>>|ls
+bash: syntax error near unexpected token `|'
+bash-3.2$
+
+
+
+bash-3.2$ lsk | (wdwd>><<><><><><>wdwD) | edwDwd
+bash: syntax error near unexpected token `<<'
+bash-3.2$
+
+bash-3.2$ ls || (ls | ls > | >> << ldk | << >> | lsk && deded || adedaed)
+bash: syntax error near unexpected token `|'
+bash-3.2$
+
+
+
+bash-3.2$ L>       |       ''
+bash: syntax error near unexpected token `|'

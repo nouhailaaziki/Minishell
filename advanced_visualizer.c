@@ -374,8 +374,6 @@ void visualize_tokens(t_token *head)
 			   COLOR_RESET);
 
 		// Show error location if it exists
-		if (cur->err_location)
-			printf(" %s[ERR: \"%s\"]%s", COLOR_RED, cur->err_location, COLOR_RESET);
 
 		printf("\n");
 	}
