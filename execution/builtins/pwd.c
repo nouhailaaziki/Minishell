@@ -6,19 +6,23 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:29:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 17:28:31 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 10:06:01 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	pwd(void)
+int	pwd(t_stash *stash)
 {
 	char	*pwd;
 
 	pwd = getcwd(0, 0);
 	if (!pwd)
-		return (1);
+	{
+		pwd = na_strdup(stash->pwd_backup);
+		if (!pwd)
+			return (1);
+	}
 	printf("%s\n", pwd);
 	return (0);
 }

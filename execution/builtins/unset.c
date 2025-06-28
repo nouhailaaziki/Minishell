@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:00:49 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:48:35 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	check_validity(char	*argv, char *cmd)
+int	check_validity(char	*argv, char *initial, char *cmd)
 {
 	int	i;
 
@@ -23,7 +23,11 @@ int	check_validity(char	*argv, char *cmd)
 				|| (i > 0 && argv[i] >= '0' && argv[i] <= '9')
 				|| argv[i] == '_' || (argv[i] >= 'A' && argv[i] <= 'Z')))
 		{
-			printf("L33tShell: %s: `%s`: not a valid identifier\n", cmd, argv);
+			ft_putstr_fd("L33tShell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putstr_fd(": `", 2);
+			ft_putstr_fd(initial, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			return (1);
 		}
 		i++;
@@ -38,9 +42,9 @@ void	del_node(t_env **curr, t_env **env_list, char *argv, t_env **prev)
 	if (ft_strcmp((*curr)->key, argv) == 0)
 	{
 		tmp = (*curr)->next;
-		free((*curr)->key);
-		free((*curr)->value);
-		free(*curr);
+		(*curr)->key = NULL;
+		(*curr)->value = NULL;
+		*curr = NULL;
 		if (*prev)
 			(*prev)->next = tmp;
 		else
@@ -54,7 +58,7 @@ void	del_node(t_env **curr, t_env **env_list, char *argv, t_env **prev)
 	}
 }
 
-int	unset(t_env **env_list, char **cmd)
+int	unset(t_env **env_list, char **cmd, t_stash *stash)
 {
 	t_env	*curr;
 	t_env	*prev;
@@ -63,8 +67,9 @@ int	unset(t_env **env_list, char **cmd)
 	i = 1;
 	while (cmd[i])
 	{
-		if (check_validity(cmd[i], "unset"))
+		if (check_validity(cmd[i], cmd[i], "unset"))
 		{
+			stash->return_status = 1;
 			i++;
 			continue ;
 		}
@@ -74,5 +79,5 @@ int	unset(t_env **env_list, char **cmd)
 			del_node(&curr, env_list, cmd[i], &prev);
 		i++;
 	}
-	return (0);
+	return (stash->return_status);
 }

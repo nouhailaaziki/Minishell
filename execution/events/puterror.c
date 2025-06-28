@@ -6,13 +6,12 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:19:41 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 17:57:55 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/27 12:14:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-// exemple : "L33tShell: cd: file_x: No such file or directory\n"
 int	puterror(int program, char *cmd, char *arg, char *error)
 {
 	char	*message;

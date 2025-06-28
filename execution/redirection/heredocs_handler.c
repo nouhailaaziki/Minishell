@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 10:09:16 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:34:52 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	fill_file(t_redir *redir, t_stash *stash)
 			break ;
 	}
 	if (store && !g_sigint_received)
-		write(redir->fd_WR, store, ft_strlen(store));
+		write(redir->fd_wr, store, ft_strlen(store));
 	return (stash->heredoc_interrupted);
 }
 
@@ -58,13 +58,13 @@ int	setup_heredoc_file(t_redir *redirs, t_stash *stash)
 	stash->heredoc_store = na_strdup("/tmp/.l33tshell-XXXXXX");
 	if (!stash->heredoc_store)
 		return (perror("malloc"), 1);
-	redirs->fd_WR = na_mkstemp(stash->heredoc_store, redirs);
-	if (redirs->fd_WR == -1)
+	redirs->fd_wr = na_mkstemp(stash->heredoc_store, redirs);
+	if (redirs->fd_wr == -1)
 		return (1);
-	redirs->fd_RD = open(stash->heredoc_store, O_RDONLY);
-	if (redirs->fd_RD == -1)
+	redirs->fd_rd = open(stash->heredoc_store, O_RDONLY);
+	if (redirs->fd_rd == -1)
 	{
-		close(redirs->fd_WR);
+		close(redirs->fd_wr);
 		return (1);
 	}
 	unlink(stash->heredoc_store);
@@ -84,11 +84,11 @@ int	process_single_heredoc(t_redir *redirs, t_stash *stash)
 	{
 		signal(SIGINT, SIG_DFL);
 		status = fill_file(redirs, stash);
-		close(redirs->fd_WR);
-		close(redirs->fd_RD);
+		close(redirs->fd_wr);
+		close(redirs->fd_rd);
 		exit(status);
 	}
-	close(redirs->fd_WR);
+	close(redirs->fd_wr);
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
@@ -113,7 +113,7 @@ int	open_heredocs(t_redir *redir, t_stash *stash)
 				return (1);
 			if (process_single_heredoc(current, stash) != 0)
 			{
-				close(current->fd_RD);
+				close(current->fd_rd);
 				return (1);
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:27:23 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 20:06:37 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 13:04:47 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,26 @@ int	is_parent_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "exit"));
 }
 
-int	run_builtins(char **cmd, t_env **env_list, int status)
+int	run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash)
 {
 	status = 0;
+	stash->return_status = 0;
 	if (cmd && cmd[0])
 	{
 		if (!ft_strcmp("exit", cmd[0]))
-			run_exit(cmd, status);
+			run_exit(cmd, stash);
 		else if (!ft_strcmp("env", cmd[0]))
-			status = env(*env_list);
+			status = env(*env_list, stash);
 		else if (!ft_strcmp("pwd", cmd[0]))
-			status = pwd();
+			status = pwd(stash);
 		else if (!ft_strcmp("echo", cmd[0]))
 			status = echo(cmd);
 		else if (!ft_strcmp("cd", cmd[0]))
-			status = cd(cmd, env_list);
+			status = cd(cmd, env_list, stash);
 		else if (!ft_strcmp("unset", cmd[0]))
-			status = unset(env_list, cmd);
+			status = unset(env_list, cmd, stash);
 		else if (!ft_strcmp("export", cmd[0]))
-			status = export(cmd, env_list);
+			status = export(cmd, env_list, stash);
 		else
 			status = -1;
 	}

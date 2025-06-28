@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 09:57:49 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 09:12:22 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,8 +191,14 @@ void f()
 	system("leaks -q -- minishell");
 }
 
+// void	na_close_fds()
+// {
+// 	size_t	i;
 
-
+// 	i = 3;
+// 	while (i < OPEN_MAX)
+// 		close(i++);
+// }
 
 int main(int argc, char **argv, char **envp)
 {
@@ -201,11 +207,11 @@ int main(int argc, char **argv, char **envp)
 
 	// atexit(f);
 	(void)argc, (void)argv;
-	rl_catch_signals = 0;
+	// rl_catch_signals = 0;
 	stash.status = 0;
 	stash.heredoc_interrupted = 0;
 	init_shell(&shell);
-	build_env(&shell.env_list, envp);
+	build_env(&shell.env_list, envp, &stash);
 	while (1)
 	{
 		g_sigint_received = 0; // Reset flag at the start of each loop
@@ -213,6 +219,7 @@ int main(int argc, char **argv, char **envp)
 		setup_signals_prompt(); // Setup signals for the main prompt
 		disable_echoctl(&stash);
 		shell.line = readline("L33tShell-N.Y$ ");
+		restore_terminal(&stash);
 		add_history(shell.line);
 		if (!shell.line)
 		{
@@ -228,7 +235,7 @@ int main(int argc, char **argv, char **envp)
 			free_tokens(&shell.tokens);
 			continue;
 		}
-		visualize_tokens(shell.tokens);
+		// visualize_tokens(shell.tokens);
 		create_one_tree(&shell.ast, &shell.tokens, 1);
 		// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
@@ -239,12 +246,16 @@ int main(int argc, char **argv, char **envp)
 			execute_ast(shell.ast, &shell.env_list, &stash);
 		else
 		{
+			dprintf(2, "EXIT STATUS %d\n", stash.status);
 			clear_memory(&shell);
 			continue;
 		}
+		dprintf(2, "EXIT STATUS %d\n", stash.status);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
 		clear_memory(&shell);
+		// na_close_fds();
+
 	}
 	clear_memory(&shell);
 	return (0);

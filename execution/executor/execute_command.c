@@ -6,31 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 17:00:25 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 13:33:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
-char	**get_path_list(char **env)
-{
-	int		i;
-	char	*str;
-	char	**arr;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], "PATH=", 5))
-		{
-			str = na_substr(env[i], 5, ft_strlen(env[i]) - 5);
-			arr = na_split(str, ':');
-			return (arr);
-		}
-		i++;
-	}
-	return (NULL);
-}
 
 void	execcmd(char **path_list, char **cmd, char **envp)
 {
@@ -55,7 +35,7 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 
 void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 {
-	is_it_dir(cmd[0]);
+	handle_special_cases(path_list, cmd);
 	execcmd(path_list, cmd, envp);
 	if ((ft_strchr(cmd[0], '/') || !path_list) && !access(cmd[0], X_OK))
 	{
@@ -63,8 +43,12 @@ void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 		perror("execve failed");
 		exit(1);
 	}
-	errno_manager(cmd[0]);
-	ft_putstr_fd("command not found\n", 2);
+	if (ft_strchr(cmd[0], '/') || !path_list
+		|| !path_list[0] || !ft_strcmp(path_list[0], ""))
+		errno_manager(cmd[0]);
+	ft_putstr_fd("L33tShell: ", 2);
+	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 	exit(127);
 }
 
@@ -75,12 +59,14 @@ t_env **env_list, t_stash *stash)
 	char	**path_list;
 	int		stats;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	envp = get_env_arr(*env_list);
 	path_list = get_path_list(envp);
 	handle_redirs(redirs);
-	stats = run_builtins(cmd, env_list, stash->status);
+	stats = run_builtins(cmd, env_list, stash->status, stash);
 	if (stats >= 0)
-		exit(stash->status);
+		exit(stats);
 	run_and_handle_errors(path_list, cmd, envp);
 }
 
@@ -88,18 +74,31 @@ int	execute_command(char **cmd, t_redir *redirs, \
 t_env **env_list, t_stash *stash)
 {
 	pid_t	pid;
+	int		i;
 	int		status;
+	int		restore[2];
 
+	restore[0] = dup(STDIN_FILENO);
+	restore[1] = dup(STDOUT_FILENO);
 	if (cmd && is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
-		return (run_builtins(cmd, env_list, stash->status));
+		i = run_builtins(cmd, env_list, stash->status, stash);
+		dup2(restore[0], STDIN_FILENO);
+		dup2(restore[1], STDOUT_FILENO);
+		close(restore[0]);
+		close(restore[1]);
+		return (i);
 	}
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed"), 1);
 	if (pid == 0)
 		child_process_handler(cmd, redirs, env_list, stash);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+		return (WTERMSIG(status) + 128);
 	return (WEXITSTATUS(status));
 }

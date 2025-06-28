@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:00:55 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/09 08:07:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/28 12:08:13 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	add_value(t_env	**env_list, char *argv, char *key)
 			new_val = na_strjoin(tmp->value, sign + 1);
 			if (!new_val)
 				return ;
-			free(tmp->value);
 			tmp->value = new_val;
 			i = 1;
 		}
@@ -82,7 +81,6 @@ void	update_env(t_env **env_list, char *argv, char *key, int start)
 			new_val = na_substr(argv, start, len);
 			if (!new_val)
 				return ;
-			free(tmp->value);
 			tmp->value = new_val;
 			i = 1;
 		}
@@ -92,7 +90,7 @@ void	update_env(t_env **env_list, char *argv, char *key, int start)
 		add_node(env_list, argv);
 }
 
-void	print_env(t_env **env_list)
+void	print_env(t_env **env_list, t_stash *stash)
 {
 	t_env	*tmp;
 
@@ -100,15 +98,21 @@ void	print_env(t_env **env_list)
 	tmp = *env_list;
 	while (tmp)
 	{
-		if (tmp->value)
+		if (tmp && stash->path_flag == 1 && !ft_strcmp(tmp->key, "PATH"))
+		{
+			tmp = tmp->next;
+			if (!tmp)
+				break ;
+		}
+		if (tmp && tmp->value && ft_strcmp(tmp->key, "_"))
 			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
-		else
+		if (tmp && !tmp->value && ft_strcmp(tmp->key, "_"))
 			printf("declare -x %s\n", tmp->key);
 		tmp = tmp->next;
 	}
 }
 
-int	export(char **cmd, t_env **env_list)
+int	export(char **cmd, t_env **env_list, t_stash *stash)
 {
 	int	i;
 	int	len;
@@ -116,11 +120,11 @@ int	export(char **cmd, t_env **env_list)
 	i = 1;
 	len = ft_arrlen(cmd);
 	if (len == 1)
-		print_env(env_list);
+		print_env(env_list, stash);
 	while (cmd[i])
 	{
-		handle_argument(env_list, cmd[i]);
+		handle_argument(env_list, cmd[i], stash);
 		i++;
 	}
-	return (0);
+	return (stash->return_status);
 }
