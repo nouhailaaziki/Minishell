@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/26 17:20:09 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 09:12:22 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,9 +246,11 @@ int main(int argc, char **argv, char **envp)
 			execute_ast(shell.ast, &shell.env_list, &stash);
 		else
 		{
+			dprintf(2, "EXIT STATUS %d\n", stash.status);
 			clear_memory(&shell);
 			continue;
 		}
+		dprintf(2, "EXIT STATUS %d\n", stash.status);
 		if (ft_strnstr(shell.line, "leaks", ft_strlen(shell.line)))
 			break;
 		clear_memory(&shell);

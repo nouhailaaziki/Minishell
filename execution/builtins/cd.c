@@ -6,45 +6,63 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 11:55:41 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 11:19:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	refresh_oldpwd(t_env **env_list, char *oldpwd)
+void	handle_failed_getcwd(t_env *pwd_node, t_stash *stash, char *cmd)
 {
-	t_env	*tmp;
-
-	tmp = *env_list;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->key, "OLDPWD") == 0 && oldpwd)
-		{
-			tmp->value = na_strdup(oldpwd);
-			if (!tmp->value)
-				return (perror("malloc"));
-		}
-		tmp = tmp->next;
-	}
+	pwd_node->value = na_strjoin(stash->pwd_backup, "/");
+	if (!pwd_node->value)
+		return (perror("malloc"));
+	pwd_node->value = na_strjoin(pwd_node->value, cmd);
+	if (!pwd_node->value)
+		return (perror("malloc"));
+	stash->pwd_backup = na_strdup(pwd_node->value);
+	if (!pwd_node->value)
+		return (perror("malloc"));
+	ft_putstr_fd("cd: error retrieving current directory: ", 2);
+	ft_putstr_fd("getcwd: cannot access parent directories:", 2);
+	ft_putstr_fd(" No such file or directory\n", 2);
 }
 
-void	refresh_pwd(t_env **env_list)
+char	*update_pwd_node(t_env *pwd_node, t_stash *stash, \
+char *new_pwd, char *cmd)
+{
+	char	*oldpwd_val;
+
+	oldpwd_val = na_strdup(pwd_node->value);
+	if (new_pwd)
+	{
+		pwd_node->value = na_strdup(new_pwd);
+		if (!pwd_node->value)
+			perror("malloc");
+	}
+	else
+		handle_failed_getcwd(pwd_node, stash, cmd);
+	return (oldpwd_val);
+}
+
+void	refresh_pwd(t_env **env_list, t_stash *stash, char *cmd)
 {
 	char	*pwd;
 	char	*oldpwd;
 	t_env	*tmp;
 
-	1 && (tmp = *env_list, oldpwd = NULL);
+	tmp = *env_list;
+	oldpwd = NULL;
 	pwd = getcwd(0, 0);
+	if (pwd)
+		stash->pwd_backup = na_strdup(pwd);
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, "PWD") == 0)
 		{
-			oldpwd = na_strdup(tmp->value);
-			tmp->value = na_strdup(pwd);
-			if (!tmp->value)
-				return (perror("malloc"));
+			oldpwd = update_pwd_node(tmp, stash, pwd, cmd);
+			if (!oldpwd)
+				perror("malloc");
 		}
 		tmp = tmp->next;
 	}
@@ -66,7 +84,7 @@ char	*get_env_value(t_env **env_list, char *key)
 	return (NULL);
 }
 
-int	cd(char **cmd, t_env **env_list)
+int	cd(char **cmd, t_env **env_list, t_stash *stash)
 {
 	struct stat	sb;
 	char		*path;
@@ -76,8 +94,8 @@ int	cd(char **cmd, t_env **env_list)
 		path = get_env_value(env_list, "HOME");
 		if (!path)
 			return (puterror(0, "cd: ", NULL, "HOME not set"));
-		refresh_pwd(env_list);
 		chdir(path);
+		refresh_pwd(env_list, stash, cmd[1]);
 	}
 	else
 	{
@@ -86,7 +104,7 @@ int	cd(char **cmd, t_env **env_list)
 		if (stat(cmd[1], &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
 		{
 			chdir(cmd[1]);
-			refresh_pwd(env_list);
+			refresh_pwd(env_list, stash, cmd[1]);
 		}
 		else
 			return (puterror(1, "cd: ", cmd[2], ": Not a directory"));

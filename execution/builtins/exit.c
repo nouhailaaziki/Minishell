@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 11:54:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 18:17:08 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 07:01:49 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-void	run_exit(char **cmd, int exit_status)
+void	run_exit(char **cmd, t_stash *stash)
 {
 	int	len;
 
@@ -37,12 +37,13 @@ void	run_exit(char **cmd, int exit_status)
 	if (len == 1)
 	{
 		free_all_tracked();
-		exit((unsigned char)exit_status);
+		exit((unsigned char)stash->status);
 	}
 	if (len > 2 && is_numeric(cmd[1]))
 	{
 		free_all_tracked();
 		printf("L33tShell: exit: too many arguments\n");
+		stash->status = 1;
 		return ;
 	}
 	if (!is_numeric(cmd[1]))

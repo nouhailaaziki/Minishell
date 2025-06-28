@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 12:13:20 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 10:45:25 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,9 @@ typedef struct s_tree
 typedef struct s_stash
 {
 	int		status;
+	int		return_status;
 	int		path_flag;
+	char 	*pwd_backup;
 	char	*heredoc_store;
 	int		heredoc_interrupted;
 	struct termios orig_termios;
@@ -154,23 +156,23 @@ void		add_env_var(t_env **env_list, char *key, t_stash *stash);
 void		check_existing_vars(t_env *env_list, char **keys, int *found);
 
 /*-------------------------Builtins fonctions-------------------------*/
-int			pwd(void);
+int			pwd(t_stash *stash);
 int			echo(char **cmd);
 int			env(t_env *env_list, t_stash *stash);
 int			is_parent_builtin(char *cmd);
 void		ft_putstr_fd(char *s, int fd);
 void		sort_env_list(t_env **env_list);
-int			cd(char **cmd, t_env **env_list);
-int			unset(t_env **env_list, char **cmd);
+int			cd(char **cmd, t_env **env_list, t_stash *stash);
+int			unset(t_env **env_list, char **cmd, t_stash *stash);
 int			export(char **cmd, t_env **env_list, t_stash *stash);
 int			check_validity(char	*argv, char *initial, char *cmd);
-void		run_exit(char **cmd, int exit_status);
-void		handle_argument(t_env **env_list, char *cmd);
+void		run_exit(char **cmd, t_stash *stash);
+void		handle_argument(t_env **env_list, char *cmd, t_stash *stash);
 void		add_value(t_env **env_list, char *argv, char *key);
 int			run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash);
 void		update_env(t_env **env_list, char *argv, char *key, int start);
 t_env		*create_node(char *argv, size_t key_len, char *sign);
-
+void		refresh_oldpwd(t_env **env_list, char *oldpwd);
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);

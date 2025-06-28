@@ -10,7 +10,7 @@ RM = rm -rf
 
 COMPILER = cc
 
-CFLAGS = -g3  -O0  -Wall -Wextra -Werror
+CFLAGS = -g3  -O0  -Wall -Wextra -Werror #-fsanitize=address
 
 LIBFT = libft.a
 
@@ -40,7 +40,7 @@ EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/
 			execution/utilities/strict_atoi.c execution/utilities/ft_putstr_fd.c execution/utilities/na_mkstemp.c execution/redirection/redirs.c \
 			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
 			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
-			execution/executor/execute_command_utils.c 
+			execution/executor/execute_command_utils.c execution/builtins/cd_utils.c
 EXEC = ${EXECUTION:.c=.o}
 
 PARSE = $(PARSING:.c=.o)

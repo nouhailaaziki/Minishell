@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:00:55 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/26 10:54:33 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 12:08:13 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,12 @@ void	print_env(t_env **env_list, t_stash *stash)
 	tmp = *env_list;
 	while (tmp)
 	{
-		if (stash->path_flag == 1 && !ft_strcmp(tmp->key, "PATH"))
+		if (tmp && stash->path_flag == 1 && !ft_strcmp(tmp->key, "PATH"))
+		{
 			tmp = tmp->next;
+			if (!tmp)
+				break ;
+		}
 		if (tmp && tmp->value && ft_strcmp(tmp->key, "_"))
 			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		if (tmp && !tmp->value && ft_strcmp(tmp->key, "_"))
@@ -119,8 +123,8 @@ int	export(char **cmd, t_env **env_list, t_stash *stash)
 		print_env(env_list, stash);
 	while (cmd[i])
 	{
-		handle_argument(env_list, cmd[i]);
+		handle_argument(env_list, cmd[i], stash);
 		i++;
 	}
-	return (0);
+	return (stash->return_status);
 }

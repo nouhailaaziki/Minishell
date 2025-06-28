@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:29:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 10:06:01 by noaziki          ###   ########.fr       */
+/*   Created: 2025/06/28 10:44:34 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/28 11:20:35 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	pwd(t_stash *stash)
+void	refresh_oldpwd(t_env **env_list, char *oldpwd)
 {
-	char	*pwd;
+	t_env	*tmp;
 
-	pwd = getcwd(0, 0);
-	if (!pwd)
+	tmp = *env_list;
+	if (!oldpwd)
+		return ;
+	while (tmp)
 	{
-		pwd = na_strdup(stash->pwd_backup);
-		if (!pwd)
-			return (1);
+		if (ft_strcmp(tmp->key, "OLDPWD") == 0 && oldpwd)
+		{
+			tmp->value = na_strdup(oldpwd);
+			if (!tmp->value)
+				return (perror("malloc"));
+		}
+		tmp = tmp->next;
 	}
-	printf("%s\n", pwd);
-	return (0);
 }

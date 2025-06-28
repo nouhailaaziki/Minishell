@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/26 08:37:33 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 08:44:16 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,15 @@ t_env	*create_node(char *argv, size_t key_len, char *sign)
 	return (node);
 }
 
-void	handle_argument(t_env **env_list, char *cmd)
+int	export_error(char *cmd)
+{
+	ft_putstr_fd("L33tShell: export: `", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	return (1);
+}
+
+void	handle_argument(t_env **env_list, char *cmd, t_stash *stash)
 {
 	int		j;
 	int		n;
@@ -77,15 +85,16 @@ void	handle_argument(t_env **env_list, char *cmd)
 	while (cmd[j] && cmd[j] != '=')
 		j++;
 	if (j == 0)
-		printf("L33tShell: export: `%s': not a valid identifier\n", cmd);
+		stash->return_status = export_error(cmd);
 	if (j > 0 && cmd[j - 1] == '+' && cmd[j] == '=')
 		j--;
 	if (j == 0 && cmd[j] == '+')
-		printf("L33tShell: export: `%s': not a valid identifier\n", cmd);
+		stash->return_status = export_error(cmd);
 	str = na_substr(cmd, 0, j);
 	if (!str)
 		return ;
-	check_validity(str, cmd, "export");
+	if (check_validity(str, cmd, "export"))
+		stash->return_status = 1;
 	n = j + 1;
 	if (cmd[j] == '+' && j > 0 && cmd[j + 1] && cmd[j + 1] == '=')
 		add_value(env_list, cmd, str);
