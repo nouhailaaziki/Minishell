@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/24 17:56:39 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 18:54:13 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash)
+int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, t_redir *redir)
 {
 	pid_t	pid;
 	int		status;
@@ -23,6 +23,7 @@ int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash)
 		return (perror("fork failed"), 1);
 	if (pid == 0)
 	{
+		handle_redirs(redir);
 		exit_status = execute_ast(ast->left, env, stash);
 		exit(exit_status);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 18:25:02 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:55:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ char		**get_path_list(char **env);
 void		handle_special_cases(char **path_list, char **cmd);
 int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
 int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
-int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash);
+int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
 
