@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 21:07:33 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 21:14:42 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/25 10:31:11 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ void	manage_heredocs(t_tree *ast, t_stash *stash)
 	manage_heredocs(ast->right, stash);
 }
 
-void	check_heredoc_limit(t_tree *ast)
+void	check_heredoc_limit(t_shell *shell, t_tree *ast)
 {
 	int		counter;
 	t_redir	*redir;
 
 	counter = 0;
-	if (ast && ast->type == NODE_COMMAND)
+	if (shell->ast && shell->ast->type == NODE_COMMAND)
 	{
-		redir = ast->redirs;
+		redir = shell->ast->redirs;
 		while (redir && redir->type)
 		{
 			if (redir->type == REDIR_HEREDOC)
@@ -67,10 +67,11 @@ void	check_heredoc_limit(t_tree *ast)
 	{
 		write(2, "L33tShell: maximum here-document count exceeded\n", 49);
 		free_all_tracked();
+		clear_memory(shell);
 		exit(2);
 	}
 	if (ast->left)
-		check_heredoc_limit(ast->left);
+		check_heredoc_limit(shell, ast->left);
 	if (ast->right)
-		check_heredoc_limit(ast->right);
+		check_heredoc_limit(shell, ast->right);
 }

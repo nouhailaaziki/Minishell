@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/25 09:50:19 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/28 11:44:47 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-/// @brief Free The redirections of the Linked List
-/// @param redirs
-void free_redirs(t_redir **redirs)
+/**
+* @brief Free The redirections of the Linked List
+* @param redirs
+*/
+void	free_redirs(t_redir **redirs)
 {
-	t_redir *next;
-	t_redir *tmp;
+	t_redir	*next;
+	t_redir	*tmp;
 
 	if (!redirs || !*redirs)
-		return;
+		return ;
 	tmp = *redirs;
 	while (tmp)
 	{
@@ -33,16 +35,17 @@ void free_redirs(t_redir **redirs)
 	}
 	(*redirs) = NULL;
 }
+
 /**
  * @brief Free the tree's 2d Array of strings
  * @param cmd : Command
  */
-void free_cmd(char **cmd)
+void	free_cmd(char **cmd)
 {
-	int count;
+	int	count;
 
 	if (!cmd)
-		return;
+		return ;
 	count = 0;
 	while (cmd[count])
 	{
@@ -55,13 +58,14 @@ void free_cmd(char **cmd)
 	free(cmd);
 }
 
-/// @brief Free the tree nodes Recursively
-/// @param ast tree param
-void free_tree(t_tree **ast)
+/**
+ * @brief Free the tree nodes Recursively
+ * @param ast tree param
+ */
+void	free_tree(t_tree **ast)
 {
-
 	if (!(*ast) || !ast)
-		return;
+		return ;
 	free_redirs(&(*ast)->redirs);
 	free_cmd((*ast)->cmd);
 	if ((*ast)->left)
@@ -72,7 +76,7 @@ void free_tree(t_tree **ast)
 	(*ast) = NULL;
 }
 
-void clear_memory(t_shell *shell)
+void	clear_memory(t_shell *shell)
 {
 	if (shell->ast)
 		free_tree(&shell->ast);
@@ -81,13 +85,14 @@ void clear_memory(t_shell *shell)
 	free(shell->line);
 	shell->line = NULL;
 }
-void free_tokens(t_token **head)
+
+void	free_tokens(t_token **head)
 {
-	t_token *current;
-	t_token *next;
+	t_token	*current;
+	t_token	*next;
 
 	if (!head || !*head)
-		return;
+		return ;
 	current = *head;
 	while (current)
 	{
