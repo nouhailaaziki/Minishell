@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:11:29 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 09:32:13 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:16:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 int	ft_isascii(int c)
 {

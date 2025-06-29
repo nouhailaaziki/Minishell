@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:43:41 by yrhandou          #+#    #+#             */
-/*   Updated: 2024/11/21 14:03:32 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:13:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../launchpad.h"
 
 char	*ft_strrchr(const char *s, int c)
 {

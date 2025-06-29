@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:19:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 09:31:55 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:16:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 int	ft_isalpha(int c)
 {

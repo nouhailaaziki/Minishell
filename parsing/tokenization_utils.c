@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:31:46 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:10:11 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,7 @@ int	token_lexer(char *str)
 		return (TOKEN_REDIR);
 	else if (ft_isparentheses(&str[0]))
 		return (TOKEN_PAREN);
-	return ((TOKEN_WORD));
-}
-
-int	ft_special_case(char *str, int type)
-{
-	int	new_type;
-
-	new_type = token_lexer(&str[skip_spaces(str)]);
-	if ((type != TOKEN_REDIR) && (new_type == TOKEN_REDIR))
-		return (1);
-	return (0);
+	return ((TOKEN_CMD));
 }
 
 void	link_token(t_token **head, t_token *node)

@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:38:15 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 09:30:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:16:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 void	ft_putchar_fd(char c, int fd)
 {

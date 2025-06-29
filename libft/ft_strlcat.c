@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:08:00 by yrhandou          #+#    #+#             */
-/*   Updated: 2024/11/21 19:45:41 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:13:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../launchpad.h"
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {

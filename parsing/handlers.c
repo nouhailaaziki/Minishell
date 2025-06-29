@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:38:08 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:04:38 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	check_successor(t_token *head)
 	while (current && current->type != TOKEN_AND && \
 		current->type != TOKEN_OR && current->type != TOKEN_PIPE)
 	{
-		if (current->type == TOKEN_ARG || current->type == TOKEN_WORD || \
+		if (current->type == TOKEN_ARG || current->type == TOKEN_CMD || \
 			current->type == TOKEN_PAREN_LEFT)
 			return (0);
 		current = current->next;
@@ -101,8 +101,8 @@ int	check_predecessor(t_token *head)
 	while (current && current->type != TOKEN_AND && \
 		current->type != TOKEN_OR && current->type != TOKEN_PIPE)
 	{
-		if (current->type == TOKEN_ARG || current->type == TOKEN_WORD || \
-			current->type == TOKEN_PAREN_RIGHT)
+		if (current->type == TOKEN_ARG || current->type == TOKEN_CMD || \
+			current->type == TOKEN_PAREN_RIGHT || current->type == R_FILE)
 			return (0);
 		current = current->prev;
 	}

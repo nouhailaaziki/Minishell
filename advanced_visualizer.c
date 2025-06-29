@@ -84,7 +84,7 @@ static const char *get_token_type_string(t_token_type type)
 {
 	switch (type)
 	{
-	case TOKEN_WORD:
+	case TOKEN_CMD:
 		return "WORD";
 	case TOKEN_ARG:
 		return "ARG";
@@ -122,7 +122,7 @@ static const char *get_token_color(t_token_type type)
 {
 	switch (type)
 	{
-	case TOKEN_WORD:
+	case TOKEN_CMD:
 	case TOKEN_ARG:
 		return COLOR_WHITE;
 	case TOKEN_AND:
@@ -320,7 +320,7 @@ void visualize_ast_tree(t_tree *root)
 
 	printf("  %sTokens:     %sWORD/ARG%s, %sOPERATOR%s, %sREDIR%s, %sFILENAME%s, %sPARENTHESES%s\n",
 		   COLOR_WHITE,
-		   get_token_color(TOKEN_WORD), COLOR_RESET,
+		   get_token_color(TOKEN_CMD), COLOR_RESET,
 		   get_token_color(TOKEN_AND), COLOR_RESET,
 		   get_token_color(TOKEN_REDIR), COLOR_RESET,
 		   get_token_color(R_FILE), COLOR_RESET,

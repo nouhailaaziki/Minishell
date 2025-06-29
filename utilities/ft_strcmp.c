@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:13:11 by noaziki           #+#    #+#             */
-/*   Updated: 2025/05/29 10:58:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/29 12:18:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../launchpad.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {

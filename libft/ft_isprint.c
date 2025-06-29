@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 10:52:09 by yrhandou          #+#    #+#             */
-/*   Updated: 2024/11/20 11:44:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:13:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../launchpad.h"
 
 int	ft_isprint(int c)
 {

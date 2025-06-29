@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 08:51:25 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 09:30:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:17:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 int	ft_str_isspace(char *str)
 {
@@ -20,8 +20,8 @@ int	ft_str_isspace(char *str)
 	while (str[i])
 	{
 		if (!ft_isspace(str[i]))
-			return (FAIL);
+			return (0);
 		i++;
 	}
-	return (SUCCESS);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:33:00 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:32:57 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:10:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,6 @@ int	operator_len(char *str) //
 	type = token_lexer(&str[i]);
 	i += len;
 	len = i;
-	// while (str[len])
-	// {
-	// 	if ((ft_special_case(&str[len], type)))
-	// 		break;
-	// 	else if (!ft_isspace(str[len]))
-	// 		break;
-	// 	len++;
-	// }
 	return (i);
 }
 

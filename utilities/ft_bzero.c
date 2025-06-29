@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 13:08:07 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 09:30:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:16:20 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 void	ft_bzero(void *s, size_t n)
 {

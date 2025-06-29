@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:25:19 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 16:58:25 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:56:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ int	simple_syntax_err(t_token *head)
 	while (current)
 	{
 		if (current->type == TOKEN_REDIR && (!current->next || \
-			current->next->type == TOKEN_PAREN))
+			current->next->type == TOKEN_PAREN || \
+			ft_is_operator(current->next->value)|| \
+			current->next->type == TOKEN_REDIR))
 			return (ft_syntax_err(current->value));
 		current = current->next;
 	}

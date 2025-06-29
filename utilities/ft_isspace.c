@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 08:33:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 09:30:54 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:16:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "launchpad.h"
+#include "../launchpad.h"
 
 int	ft_isspace(int c)
 {

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:39:28 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:08:35 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 09:52:26 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ t_tree	*create_block(t_token **head, int count, int type)
 		return (NULL);
 	tree->redirs = redir_list_maker(head);
 	current = *head;
-	if (current->type != TOKEN_WORD && current->type != TOKEN_ARG)
+	if (current->type != TOKEN_CMD && current->type != TOKEN_ARG)
 		count = 0;
 	while (current && i < count)
 	{
-		if (current->type == TOKEN_WORD || current->type == TOKEN_ARG)
+		if (current->type == TOKEN_CMD || current->type == TOKEN_ARG)
 		{
 			tree->cmd[i++] = ft_strdup(current->value);
 			current->position = -1;

@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 18:55:45 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/29 12:33:45 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LAUNCHPAD_H
 # define LAUNCHPAD_H
-
 /*---------------------Header inclusion directive---------------------*/
 # include <errno.h>
 # include <fcntl.h>
@@ -24,22 +23,36 @@
 # include <signal.h>
 # include <termios.h>
 # include <sys/stat.h>
-# include "libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
-
 /*-----------------------Format and Color Macros----------------------*/
 # define BOLD "\033[1m"
 # define ORANGE "\x1b[38;5;214m"
 # define PINK "\x1b[95m"
-
+# define BLK "\e[0;30m"
+# define RED "\e[0;31m"
+# define GRN "\e[0;32m"
+# define YEL "\e[0;33m"
+# define BLU "\e[0;34m"
+# define MAG "\e[0;35m"
+# define CYN "\e[0;36m"
+# define WHT "\e[0;37m"
+# define BHBLK "\e[1;90m"
+# define BHRED "\e[1;91m"
+# define BHGRN "\e[1;92m"
+# define BHYEL "\e[1;93m"
+# define BHBLU "\e[1;94m"
+# define BHMAG "\e[1;95m"
+# define BHCYN "\e[1;96m"
+# define BHWHT "\e[1;97m"
+# define RESET "\e[0m"
 /*----------------------------global flag-----------------------------*/
 volatile sig_atomic_t	g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
 {
-	TOKEN_WORD = 1,
+	TOKEN_CMD = 1,
 	TOKEN_ARG,
 	TOKEN_PAREN,
 	TOKEN_PAREN_LEFT,
@@ -245,15 +258,15 @@ void		create_one_tree(t_tree **ast, t_token **tokens);
 void		create_subtree(t_tree **ast, t_token **tokens);
 void		link_redir(t_redir **list, t_redir *new_redir);
 t_tree		*allocate_tree_node(int type, int cmd_count);
-void		refresh_tokens(t_token **head);
 t_redir		*redir_list_maker(t_token **head);
 t_tree		*create_p_block(t_token **head);
+int			block_identifier(t_token *head);
 t_token		*last_rp_token(t_token **head);
+void		refresh_tokens(t_token **head);
 t_token		*find_first_lp(t_token *head);
+int			count_cmd_args(t_token *head);
 t_redir		*redir_maker(t_token **data);
 t_token		*find_and_or(t_token *head);
-int			block_identifier(t_token *head);
-int			count_cmd_args(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
@@ -271,25 +284,26 @@ int			ft_is_redir(char *c);
 char		ft_isquote(char c);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
-void		free_cmd(char **cmd);
-void		free_tree(t_tree **ast);
 void		free_tokens(t_token **head);
+void		free_tree(t_tree **ast);
+void		free_cmd(char **cmd);
 /*-----------utilities-------------*/
 char		*ft_substr(char const *s, unsigned int start, size_t len);
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
 void		*ft_calloc(size_t count, size_t size);
 void		ft_putendl_fd(char *s, int fd);
-void		ft_putchar_fd(char c, int fd);
 void		ft_putstr_fd(char *s, int fd);
-void		ft_bzero(void *s, size_t n);
+void		ft_putchar_fd(char c, int fd);
 char		*ft_strdup(const char *s1);
-size_t		ft_strlen(const char *s);
-// ! REMOVE THS LATER
-void		print_tokens(t_token **head);
+int			ft_str_isspace(char *str);
+int			ft_isalpha(int c);
+int			ft_isdigit(int c);
+int			ft_isspace(int c);
+int			ft_isalnum(int c);
+int			ft_isascii(int c);
+	// ! REMOVE THS LATER
+void print_tokens(t_token **head);
 void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
-t_tree		*create_tree(t_token *tokens);
-
 /*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
 
 /**

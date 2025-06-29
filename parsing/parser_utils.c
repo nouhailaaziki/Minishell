@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:47:29 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 09:57:19 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void	advanced_token_lexer(t_token **head)
 	t_token	*current;
 	int		in_paren;
 
-	current = *head;
 	in_paren = 0;
+	current = *head;
 	while (current)
 	{
 		if (current->type == TOKEN_PAREN)
@@ -100,9 +100,9 @@ void	advanced_token_lexer(t_token **head)
 			current->type = redir_identifier(current->value);
 			current->next->type = R_FILE;
 		}
-		if ((current->type == TOKEN_WORD || current->type == TOKEN_ARG || \
+		if ((current->type == TOKEN_CMD || current->type == TOKEN_ARG || \
 			current->type == R_FILE) \
-		&& (current->next && current->next->type == TOKEN_WORD))
+		&& (current->next && current->next->type == TOKEN_CMD))
 			current->next->type = TOKEN_ARG;
 		current = current->next;
 	}
