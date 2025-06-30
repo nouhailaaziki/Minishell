@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:31:46 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:32:43 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,6 @@ int	token_lexer(char *str)
 	else if (ft_isparentheses(&str[0]))
 		return (TOKEN_PAREN);
 	return ((TOKEN_WORD));
-}
-
-int	ft_special_case(char *str, int type)
-{
-	int	new_type;
-
-	new_type = token_lexer(&str[skip_spaces(str)]);
-	if ((type != TOKEN_REDIR) && (new_type == TOKEN_REDIR))
-		return (1);
-	return (0);
 }
 
 void	link_token(t_token **head, t_token *node)
@@ -108,7 +98,7 @@ int	lexer(t_shell *shell)
 		position = i;
 		token_len = token_lookup(&shell->line[i]);
 		if (!token_len)
-			return (ft_syntax_err(&shell->line[i]));
+			return (ft_syntax_err(&shell->line[i], &shell->stash));
 		sub_str = ft_substr(shell->line, position, token_len);
 		link_token(&shell->tokens, new_token(sub_str, (token_lexer \
 			(&shell->line[position]))));
