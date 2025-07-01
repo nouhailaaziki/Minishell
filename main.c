@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 13:28:10 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:05:01 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,21 @@ int main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		create_one_tree(&shell.ast, &shell.tokens);
-		visualize_tokens(shell.tokens);
-		visualize_ast_tree(shell.ast);
+		// visualize_tokens(shell.tokens);
 		// print_tree(shell.ast);
 		check_heredoc_limit(&shell,shell.ast);
 		setup_signals_heredoc();
 		manage_heredocs(shell.ast, &shell.stash);
-		// if (!shell.stash.heredoc_interrupted)
-		// 	execute_ast(shell.ast, &shell.env_list, &shell.stash);
-		// else
-		// {
-		// 	dprintf(2, "EXIT STATUS %d\n", shell.stash.status);
-		// 	clear_memory(&shell);
-		// 	continue;
-		// }
-		// dprintf(2, "EXIT STATUS %d\n", shell.stash.status);
+		if (!shell.stash.heredoc_interrupted)
+		execute_ast(shell.ast, &shell.env_list, &shell.stash);
+		else
+		{
+			dprintf(2, "EXIT STATUS %d\n", shell.stash.status);
+			clear_memory(&shell);
+			continue;
+		}
+		dprintf(2, "EXIT STATUS %d\n", shell.stash.status);
+		// visualize_ast_tree(shell.ast);
 		clear_memory(&shell);
 
 	}

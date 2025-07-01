@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 15:45:52 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:09:28 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,9 @@ void		ft_putstr_fd(char *s, int fd);
 void		sort_env_list(t_env **env_list);
 void		run_exit(char **cmd, t_stash *stash);
 char		*get_valid_path(int counter, t_stash *stash);
-void		refresh_oldpwd(t_env **env_list, char *oldpwd);
+char *get_env_value(t_env **env_list, char *key);
+
+	void refresh_oldpwd(t_env **env_list, char *oldpwd);
 int			env(t_env *env_list, t_stash *stash, char **cmd);
 int			cd(char **cmd, t_env **env_list, t_stash *stash);
 void		add_value(t_env **env_list, char *argv, char *key);
@@ -278,7 +280,10 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-/*---------------------Checkers-------------------*/
+void		expand_cmd(char **cmd);
+	/*---------------------Checkers-------------------*/
+	int
+	ft_syntax_err(char *str, t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
 int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
@@ -286,7 +291,6 @@ int			ft_is_bonus_operator(char *str);
 int			check_successor(t_token *head);
 int			redir_identifier(char *str);
 int			ft_isparentheses(char *c);
-int			ft_syntax_err(char *str, t_shell *shell);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
