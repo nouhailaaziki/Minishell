@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 09:15:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/01 09:45:55 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ volatile sig_atomic_t	g_sigint_received;
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
 {
-	TOKEN_CMD = 1,
+	TOKEN_WORD = 1,
+	TOKEN_CMD,
 	TOKEN_ARG,
 	TOKEN_PAREN,
 	TOKEN_PAREN_LEFT,
@@ -139,13 +140,13 @@ typedef struct s_tree
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
-	int		status;
-	int		return_status;
-	int		path_flag;
-	char 	*pwd_backup;
-	char	*heredoc_store;
-	int		heredoc_interrupted;
-	struct termios orig_termios;
+	int				status;
+	int				return_status;
+	int				path_flag;
+	char			*pwd_backup;
+	char			*heredoc_store;
+	int				heredoc_interrupted;
+	struct termios	orig_termios;
 }	t_stash;
 
 /*-------------------essential components of a shell------------------*/
@@ -156,6 +157,7 @@ typedef struct s_shell
 	t_env	*env_list;
 	t_tree	*ast;
 	char	*line;
+	t_stash	stash;
 }	t_shell;
 
 /*-----------------------Environment fonctions------------------------*/
@@ -181,9 +183,9 @@ char		*get_valid_path(int counter, t_stash *stash);
 void		refresh_oldpwd(t_env **env_list, char *oldpwd);
 int			cd(char **cmd, t_env **env_list, t_stash *stash);
 void		add_value(t_env **env_list, char *argv, char *key);
-int			unset(t_env **env_list, char **cmd, t_stash *stash);
-int			check_validity(char	*argv, char *initial, char *cmd);
-int			export(char **cmd, t_env **env_list, t_stash *stash);
+int			run_builtins(char **cmd, t_env **env_list, int status, \
+t_stash *stash);
+void		update_env(t_env **env_list, char *argv, char *key, int start);
 t_env		*create_node(char *argv, size_t key_len, char *sign);
 void		handle_argument(t_env **env_list, char *cmd, t_stash *stash);
 void		update_env(t_env **env_list, char *argv, char *key, int start);
@@ -196,22 +198,35 @@ t_gcnode	**memory_tracker(void);
 
 /*-------------------Utilities from libft (Updated)-------------------*/
 char		*na_itoa(int n);
+int 		ft_isalpha(int c);
+int 		ft_isdigit(int c);
+int 		ft_isspace(int c);
+int 		ft_isalnum(int c);
+int 		ft_isascii(int c);
 int			ft_isdigit(int c);
 int			ft_arrlen(char **arr);
 int			ft_atoi(const char *str);
 size_t		ft_strlen(const char *s);
 char		*na_strdup(const char *s);
+int			ft_str_isspace(char *str);
+char		*ft_strdup(const char *s1);
 long		strict_atoi(const char *str);
+void		ft_putchar_fd(char c, int fd);
+void		ft_putstr_fd(char *s, int fd);
 int			ft_strcmp(char *s1, char *s2);
+void		ft_putendl_fd(char *s, int fd);
 char		*ft_strchr(const char *s, int c);
 char		**na_split(char const *s, char c);
 int			ft_isallchar(const char *str, char c);
 void		*na_calloc(size_t count, size_t size);
+void		*ft_calloc(size_t count, size_t size);
 void		*ft_memset(void *b, int c, size_t len);
 int			na_mkstemp(char *template, t_redir *redir);
 char		*na_strjoin(char const *s1, char const *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*na_substr(char const *s, unsigned int start, size_t len);
+char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
@@ -229,6 +244,11 @@ char		**get_path_list(char **env);
 void		handle_special_cases(char **path_list, char **cmd);
 int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
 int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
+int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, \
+t_redir *redir);
+int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
+			t_stash *stash);
+int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
 int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
@@ -242,19 +262,19 @@ void		disable_echoctl(t_stash *stash);
 void		restore_terminal(t_stash *stash);
 
 /*---------------------Parsing STUFF------------------------------------------*/
-void		init_shell(t_shell *shell);
-int			lexer(t_shell *shell);
-void		parentheses_lexer(t_token **head);
 void		link_token(t_token **head, t_token *node);
 int			handle_quotes(char *str, char quote_type);
-void		advanced_token_lexer(t_token **head);
-int			ft_syntax_analyzer(char *str);
 int			parentheses_counter_v2(t_token *head);
-int			handle_parentheses(t_token *head);
+void		advanced_token_lexer(t_token **head);
+int			handle_parentheses(t_shell *shell);
+void		parentheses_lexer(t_token **head);
+int			ft_syntax_analyzer(char *str);
+void		init_shell(t_shell *shell);
 int			operator_len(char *str);
 int			token_lexer(char *str);
-int			parser(t_shell shell);
 int			skip_spaces(char *str);
+int			lexer(t_shell *shell);
+int			parser(t_shell *shell);
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
 void		create_pseudotree(t_tree **ast, t_token **tokens);
@@ -275,14 +295,15 @@ t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
 /*---------------------Checkers-------------------*/
-int			advanced_syntax_err(t_token *head);
-int			simple_syntax_err(t_token *head);
+int			ft_syntax_err(char *str, t_stash *stash);
+int			advanced_syntax_err(t_shell *shell);
+t_tree		*tree_search(t_tree *tree, char *target);
+int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
 int			ft_is_bonus_operator(char *str);
 int			check_successor(t_token *head);
 int			redir_identifier(char *str);
 int			ft_isparentheses(char *c);
-int			ft_syntax_err(char *str);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
@@ -292,20 +313,10 @@ void		free_tokens(t_token **head);
 void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
 /*-----------utilities-------------*/
-char		*ft_substr(char const *s, unsigned int start, size_t len);
-void		*ft_calloc(size_t count, size_t size);
-void		ft_putendl_fd(char *s, int fd);
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putchar_fd(char c, int fd);
-char		*ft_strdup(const char *s1);
-int			ft_str_isspace(char *str);
-int			ft_isalpha(int c);
-int			ft_isdigit(int c);
-int			ft_isspace(int c);
-int			ft_isalnum(int c);
-int			ft_isascii(int c);
+
+
 	// ! REMOVE THS LATER
-void print_tokens(t_token **head);
+void		print_tokens(t_token **head);
 void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
 /*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/

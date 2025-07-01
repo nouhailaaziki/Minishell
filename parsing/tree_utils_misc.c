@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:37:17 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 18:21:03 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 09:42:41 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_redir	*redir_maker(t_token **data)
 		if (!redir->file)
 			return (printf("This is not supposed to happen.\n"), NULL);
 	}
-	redir->index = 0;
+	// redir->index = 0;
 	redir->type = (*data)->type;
 	redir->next = (NULL);
 	return (redir);
@@ -46,13 +46,13 @@ void	link_redir(t_redir **head, t_redir *new_redir)
 	{
 		*head = new_redir;
 		new_redir->next = NULL;
-		new_redir->index = 0;
+		// new_redir->index = 0;
 		return ;
 	}
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_redir;
-	new_redir->index = tmp->index + 1;
+	// new_redir->index = tmp->index + 1;
 	new_redir->next = NULL;
 }
 
