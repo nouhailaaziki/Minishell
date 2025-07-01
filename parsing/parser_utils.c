@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/01 09:46:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/06/29 09:57:19 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,44 +84,26 @@ void	parentheses_lexer(t_token **head)
 	}
 }
 
-void redir_lexer(t_token **head)
-{
-	t_token *current;
-
-	current = *head;
-	current->type = redir_identifier(current->value);
-	if(current->next)
-		current->next->type = R_FILE;
-}
-
-void cmd_lexer(t_token **head)
-{
-	t_token *current;
-	int cmd_found;
-
-	current = *head;
-	cmd_found = 0;
-	if ((current->type == TOKEN_WORD || current->type == TOKEN_ARG
-		|| current->type == R_FILE) && (current->next
-			&& current->next->type == TOKEN_CMD && cmd_found))
-		current->next->type = TOKEN_ARG;
-}
 void	advanced_token_lexer(t_token **head)
 {
 	t_token	*current;
+	int		in_paren;
 
+	in_paren = 0;
 	current = *head;
 	while (current)
 	{
-		if(current->type == TOKEN_WORD && !current->prev)
-		{
-			cmd_lexer(&current);
-		}
 		if (current->type == TOKEN_PAREN)
 			parentheses_lexer(&current);
-		if (current->type == TOKEN_REDIR)
-			redir_lexer(&current);
-
+		if (current->type == TOKEN_REDIR && current->next)
+		{
+			current->type = redir_identifier(current->value);
+			current->next->type = R_FILE;
+		}
+		if ((current->type == TOKEN_CMD || current->type == TOKEN_ARG || \
+			current->type == R_FILE) \
+		&& (current->next && current->next->type == TOKEN_CMD))
+			current->next->type = TOKEN_ARG;
 		current = current->next;
 	}
 }
@@ -130,26 +112,26 @@ void	advanced_token_lexer(t_token **head)
  * @brief Checks the tokens created with the tokenizer for syntax errors
  * @param shell shell data
  */
-int	parser(t_shell *shell)
+int	parser(t_shell shell)
 {
 	t_token	*current;
 
-	if (!shell->tokens)
+	if (!shell.tokens)
 		return (0);
-	current = shell->tokens;
-	if (!simple_syntax_err(shell))
+	current = shell.tokens;
+	if (!simple_syntax_err(shell.tokens))
 		return (0);
-	advanced_token_lexer(&shell->tokens);
-	if (!advanced_syntax_err(shell))
+	advanced_token_lexer(&shell.tokens);
+	if (!advanced_syntax_err(shell.tokens))
 		return (0);
 	while (current)
 	{
-		if (ft_is_operator(current->value)
-			&& (!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
-			return (ft_syntax_err(current->value, &shell->stash));
+		if (ft_is_operator(current->value) && \
+		(!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
+			return (ft_syntax_err(current->value));
 		current = current->next;
 	}
-	if (!handle_parentheses(shell))
+	if (!handle_parentheses(shell.tokens))
 		return (0);
 	return (1);
 }

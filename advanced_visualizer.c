@@ -85,8 +85,6 @@ static const char *get_token_type_string(t_token_type type)
 	switch (type)
 	{
 	case TOKEN_CMD:
-		return "CMD";
-	case TOKEN_WORD:
 		return "WORD";
 	case TOKEN_ARG:
 		return "ARG";

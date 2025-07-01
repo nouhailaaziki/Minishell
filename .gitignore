@@ -2,10 +2,7 @@
 */*.o
 *.o
 .DS_Store
-.excalidraw
-*.tldr
-<<<<<<< Updated upstream
-=======
+minishell
 libft.a
+libft/*.c
 */Contents/*
->>>>>>> Stashed changes
