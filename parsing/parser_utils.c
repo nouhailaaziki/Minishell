@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 09:57:19 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 10:05:27 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,32 @@ void	parentheses_lexer(t_token **head)
 	}
 }
 
+void redir_lexer(t_token **head)
+{
+	t_token *current;
+
+	current = *head;
+	current->type = redir_identifier(current->value);
+	if(current->next)
+		current->next->type = R_FILE;
+}
+
+void cmd_lexer(t_token **head)
+{
+	t_token *current;
+	int cmd_found;
+
+	current = *head;
+	cmd_found = 0;
+	while(current)
+	{
+
+		if ((current->type == TOKEN_WORD || current->type == TOKEN_ARG
+			|| current->type == R_FILE) && (current->next
+				&& current->next->type == TOKEN_CMD && cmd_found))
+		current->next->type = TOKEN_ARG;
+	}
+}
 void	advanced_token_lexer(t_token **head)
 {
 	t_token	*current;
@@ -93,17 +119,12 @@ void	advanced_token_lexer(t_token **head)
 	current = *head;
 	while (current)
 	{
+		if(current->type == TOKEN_WORD)
+			cmd_lexer(&current);
 		if (current->type == TOKEN_PAREN)
 			parentheses_lexer(&current);
-		if (current->type == TOKEN_REDIR && current->next)
-		{
-			current->type = redir_identifier(current->value);
-			current->next->type = R_FILE;
-		}
-		if ((current->type == TOKEN_CMD || current->type == TOKEN_ARG || \
-			current->type == R_FILE) \
-		&& (current->next && current->next->type == TOKEN_CMD))
-			current->next->type = TOKEN_ARG;
+		if (current->type == TOKEN_REDIR)
+			redir_lexer(&current);
 		current = current->next;
 	}
 }

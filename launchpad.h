@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 10:02:45 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 10:08:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ volatile sig_atomic_t	g_sigint_received;
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
 {
-	TOKEN_CMD = 1,
+	TOKEN_WORD = 1,
+	TOKEN_CMD,
 	TOKEN_ARG,
 	TOKEN_PAREN,
 	TOKEN_PAREN_LEFT,
@@ -62,11 +63,11 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_REDIR,
 	R_FILE,
-	REDIR_IN = 20,
+	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-}	t_token_type;
+} t_token_type;
 
 /*--------------------Linked list of parsed tokens--------------------*/
 typedef struct s_token
@@ -282,7 +283,7 @@ int			ft_is_bonus_operator(char *str);
 int			check_successor(t_token *head);
 int			redir_identifier(char *str);
 int			ft_isparentheses(char *c);
-int			ft_syntax_err(char *str);
+int			ft_syntax_err(char *str, t_shell *shell);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
