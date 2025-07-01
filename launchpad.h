@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 10:08:32 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:45:52 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef enum e_token_type
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-} t_token_type;
+}	t_token_type;
 
 /*--------------------Linked list of parsed tokens--------------------*/
 typedef struct s_token
@@ -140,13 +140,13 @@ typedef struct s_tree
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
-	int		status;
-	int		return_status;
-	int		path_flag;
-	char 	*pwd_backup;
-	char	*heredoc_store;
-	int		heredoc_interrupted;
-	struct termios orig_termios;
+	int				status;
+	int				return_status;
+	int				path_flag;
+	char			*pwd_backup;
+	char			*heredoc_store;
+	int				heredoc_interrupted;
+	struct termios	orig_termios;
 }	t_stash;
 
 /*-------------------essential components of a shell------------------*/
@@ -157,6 +157,7 @@ typedef struct s_shell
 	t_env	*env_list;
 	t_tree	*ast;
 	char	*line;
+	t_stash	stash;
 }	t_shell;
 
 /*-----------------------Environment fonctions------------------------*/
@@ -188,7 +189,8 @@ int			export(char **cmd, t_env **env_list, t_stash *stash);
 t_env		*create_node(char *argv, size_t key_len, char *sign);
 void		handle_argument(t_env **env_list, char *cmd, t_stash *stash);
 void		update_env(t_env **env_list, char *argv, char *key, int start);
-int			run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash);
+int			run_builtins(char **cmd, t_env **env_list, int status, \
+t_stash *stash);
 
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
@@ -230,9 +232,10 @@ char		**get_path_list(char **env);
 void		handle_special_cases(char **path_list, char **cmd);
 int			execute_ast(t_tree *ast, t_env **env, t_stash *stash);
 int			execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash);
-int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, t_redir *redir);
+int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, \
+t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
-	t_stash *stash);
+t_stash *stash);
 
 /*------------------------------signals-------------------------------*/
 void		restore_terminal(t_stash *stash);
@@ -248,13 +251,13 @@ void		link_token(t_token **head, t_token *node);
 int			handle_quotes(char *str, char quote_type);
 void		advanced_token_lexer(t_token **head);
 int			parentheses_counter_v2(t_token *head);
-int			handle_parentheses(t_token *head);
+int			handle_parentheses(t_shell *shell);
 int			ft_syntax_analyzer(char *str);
 void		init_shell(t_shell *shell);
 int			operator_len(char *str);
 int			token_lexer(char *str);
 int			skip_spaces(char *str);
-int			parser(t_shell shell);
+int			parser(t_shell *shell);
 int			lexer(t_shell *shell);
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
@@ -276,8 +279,8 @@ t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
 /*---------------------Checkers-------------------*/
-int			advanced_syntax_err(t_token *head);
-int			simple_syntax_err(t_token *head);
+int			advanced_syntax_err(t_shell *shell);
+int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
 int			ft_is_bonus_operator(char *str);
 int			check_successor(t_token *head);

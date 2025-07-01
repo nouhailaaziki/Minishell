@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execute_parentheses.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 18:54:13 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/01 15:48:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, t_redir *redir)
+int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, \
+t_redir *redir)
 {
 	pid_t	pid;
 	int		status;

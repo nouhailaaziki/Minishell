@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 10:10:11 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:48:08 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	token_lexer(char *str)
 		return (TOKEN_REDIR);
 	else if (ft_isparentheses(&str[0]))
 		return (TOKEN_PAREN);
-	return ((TOKEN_CMD));
+	return ((TOKEN_WORD));
 }
 
 void	link_token(t_token **head, t_token *node)
@@ -98,7 +98,7 @@ int	lexer(t_shell *shell)
 		position = i;
 		token_len = token_lookup(&shell->line[i]);
 		if (!token_len)
-			return (ft_syntax_err(&shell->line[i]));
+			return (ft_syntax_err(&shell->line[i], shell));
 		sub_str = ft_substr(shell->line, position, token_len);
 		link_token(&shell->tokens, new_token(sub_str, (token_lexer \
 			(&shell->line[position]))));
