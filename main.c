@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/29 12:01:19 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/01 08:55:32 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int main(int argc, char **argv, char **envp)
 
 	// atexit(f);
 	(void)argc, (void)argv;
-	// rl_catch_signals = 0;
 	stash.status = 0;
 	stash.heredoc_interrupted = 0;
 	init_shell(&shell);
@@ -55,8 +54,8 @@ int main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		create_one_tree(&shell.ast, &shell.tokens);
-		visualize_tokens(shell.tokens);
-		visualize_ast_tree(shell.ast);
+		// visualize_tokens(shell.tokens);
+		// visualize_ast_tree(shell.ast);
 		// print_tree(shell.ast);
 		check_heredoc_limit(&shell,shell.ast);
 		setup_signals_heredoc();

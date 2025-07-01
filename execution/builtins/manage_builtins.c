@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:27:23 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 13:04:47 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/01 06:51:48 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash)
 		if (!ft_strcmp("exit", cmd[0]))
 			run_exit(cmd, stash);
 		else if (!ft_strcmp("env", cmd[0]))
-			status = env(*env_list, stash);
+			status = env(*env_list, stash, cmd);
 		else if (!ft_strcmp("pwd", cmd[0]))
 			status = pwd(stash);
 		else if (!ft_strcmp("echo", cmd[0]))

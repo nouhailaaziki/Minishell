@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 13:33:45 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/01 08:36:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ t_env **env_list, t_stash *stash)
 		i = run_builtins(cmd, env_list, stash->status, stash);
 		dup2(restore[0], STDIN_FILENO);
 		dup2(restore[1], STDOUT_FILENO);
-		close(restore[0]);
-		close(restore[1]);
+		close(restore[0]), close(restore[1]);
 		return (i);
 	}
 	pid = fork();
@@ -95,8 +94,7 @@ t_env **env_list, t_stash *stash)
 		return (perror("fork failed"), 1);
 	if (pid == 0)
 		child_process_handler(cmd, redirs, env_list, stash);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
