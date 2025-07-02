@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 17:09:28 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/02 11:28:16 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,10 +280,9 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-void		expand_cmd(char **cmd);
+void		expand_cmd(char **cmd, t_env **env);
 	/*---------------------Checkers-------------------*/
-	int
-	ft_syntax_err(char *str, t_shell *shell);
+int			ft_syntax_err(char *str, t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
 int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
@@ -301,6 +300,7 @@ void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
 /*-----------utilities-------------*/
 char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_calloc(size_t count, size_t size);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putstr_fd(char *s, int fd);
