@@ -5,12 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 06:46:18 by noaziki          ###   ########.fr       */
+/*   Created: 2025/07/02 11:54:36 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/03 15:33:29 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+void	refresh_oldpwd(t_env **env_list, char *oldpwd)
+{
+	t_env	*tmp;
+
+	tmp = *env_list;
+	if (!oldpwd)
+		return ;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, "OLDPWD") == 0 && oldpwd)
+		{
+			tmp->value = na_strdup(oldpwd);
+			if (!tmp->value)
+				return (perror("malloc"));
+		}
+		tmp = tmp->next;
+	}
+}
 
 void	handle_failed_getcwd(t_env *pwd_node, t_stash *stash, char *cmd)
 {
@@ -70,75 +89,37 @@ void	refresh_pwd(t_env **env_list, t_stash *stash, char *cmd)
 	free(pwd);
 }
 
-char	*get_env_value(t_env **env_list, char *key)
+int	cd(char **cmd, t_env **env_list, t_stash *stash)
 {
-	t_env	*tmp;
-
-	tmp = *env_list;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->key, key))
-			return (tmp->value);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-// int	cd(char **cmd, t_env **env_list, t_stash *stash)
-// {
-// 	struct stat	sb;
-// 	char		*path;
-
-// 	if (!cmd[1])
-// 	{
-// 		path = get_env_value(env_list, "HOME");
-// 		if (!path)
-// 			return (puterror(0, "cd: ", NULL, "HOME not set"));
-// 		chdir(path);
-// 		refresh_pwd(env_list, stash, cmd[1]);
-// 	}
-// 	else
-// 	{
-// 		if (access(cmd[1], F_OK) != 0){
-// 			return (puterror(1, "cd: ", cmd[1], ": No such file or directory"));
-// 		}
-// 		if (stat(cmd[1], &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
-// 		{
-// 			if (chdir(cmd[1]) == -1)
-// 				return (puterror(1, "cd: ", cmd[1], ": Permission denied"));
-// 			refresh_pwd(env_list, stash, cmd[1]);
-// 		}
-// 		else
-// 		{
-// 			return (puterror(1, "cd: ", cmd[1], ": Not a directory"));
-// 		}
-// 	}
-// 	return (0);
-// }
-
-int cd(char **cmd, t_env **env_list, t_stash *stash)
-{
-    char		*path;
 	struct stat	sb;
+	char		*path;
 
-    if (!cmd[1])
-    {
-        path = get_env_value(env_list, "HOME");
-        if (!path)
-            return (puterror(0, "cd: ", NULL, "HOME not set"));
-    }
-    else
-        path = cmd[1];
-
-    if (chdir(path) == -1)
-    {
-        if (access(path, F_OK) != 0)
-            return (puterror(1, "cd: ", path, ": No such file or directory"));
-        stat(path, &sb);
-        if (!S_ISDIR(sb.st_mode))
-             return (puterror(1, "cd: ", path, ": Not a directory"));
-        return (puterror(1, "cd: ", path, ": Permission denied"));
-    }
-    refresh_pwd(env_list, stash, path);
-    return (0);
+	if (!cmd[1])
+	{
+		path = get_env_value(env_list, "HOME");
+		if (!path)
+			return (puterror(0, "cd: ", NULL, "HOME not set"));
+		chdir(path);
+		refresh_pwd(env_list, stash, cmd[1]);
+	}
+	else
+	{
+		path = na_strdup(cmd[1]);
+		if (access(path, F_OK) != 0)
+		{
+			if (process_cd_path(cmd[1], stash))
+				path = process_cd_path(cmd[1], stash);
+			if (access(path, F_OK) != 0)
+				return (puterror(1, "cd: ", cmd[1], ": No such file or directory"));
+		}
+		if (stat(path, &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
+		{
+			if (chdir(path) == -1)
+				return (puterror(1, "cd: ", cmd[1], ": Permission denied"));
+			refresh_pwd(env_list, stash, cmd[1]);
+		}
+		else
+			return (puterror(1, "cd: ", cmd[1], ": Not a directory"));
+	}
+	return (0);
 }

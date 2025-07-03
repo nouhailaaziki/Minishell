@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:07:56 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 12:11:06 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:20:28 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 char	*add_env_value(char *key, t_stash *stash)
 {
 	char	*pwd;
+	char	*curr_pwd;
 
 	if (!ft_strcmp(key, "PWD"))
 	{
 		pwd = getcwd(0, 0);
 		if (!pwd)
 			return (NULL);
-		return (pwd);
+		curr_pwd = na_strdup(pwd);
+		free(pwd);
+		return (curr_pwd);
 	}
 	else if (!ft_strcmp(key, "PATH"))
 	{

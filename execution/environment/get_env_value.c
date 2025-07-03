@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   terminal_control.c                                 :+:      :+:    :+:   */
+/*   get_env_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/23 11:30:50 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 19:55:42 by noaziki          ###   ########.fr       */
+/*   Created: 2025/07/02 15:07:16 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/02 15:07:29 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	disable_echoctl(t_stash *stash)
+char	*get_env_value(t_env **env_list, char *key)
 {
-	struct termios	new_termios;
+	t_env	*tmp;
 
-	tcgetattr(STDIN_FILENO, &stash->orig_termios);
-	new_termios = stash->orig_termios;
-	new_termios.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &new_termios);
-}
-
-
-void	restore_terminal(t_stash *stash)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &stash->orig_termios);
+	tmp = *env_list;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }

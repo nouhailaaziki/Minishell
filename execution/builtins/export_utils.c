@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 08:44:16 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:00:36 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	export_error(char *cmd)
 	return (1);
 }
 
-void	handle_argument(t_env **env_list, char *cmd, t_stash *stash)
+int	handle_argument(t_env **env_list, char *cmd)
 {
 	int		j;
 	int		n;
@@ -85,19 +85,31 @@ void	handle_argument(t_env **env_list, char *cmd, t_stash *stash)
 	while (cmd[j] && cmd[j] != '=')
 		j++;
 	if (j == 0)
-		stash->return_status = export_error(cmd);
+		return (export_error(cmd));
 	if (j > 0 && cmd[j - 1] == '+' && cmd[j] == '=')
 		j--;
 	if (j == 0 && cmd[j] == '+')
-		stash->return_status = export_error(cmd);
+		return (export_error(cmd));
 	str = na_substr(cmd, 0, j);
 	if (!str)
-		return ;
+		return (perror("malloc"), 1);
 	if (check_validity(str, cmd, "export"))
-		stash->return_status = 1;
+		return (1);
 	n = j + 1;
 	if (cmd[j] == '+' && j > 0 && cmd[j + 1] && cmd[j + 1] == '=')
 		add_value(env_list, cmd, str);
-	else if (cmd[j] == '=' || !cmd[j])
+	else if (cmd[j] == '=')
 		update_env(env_list, cmd, str, n);
+	else
+	{
+		t_env *tmp = *env_list;
+		while (tmp)
+		{
+			if (ft_strcmp(tmp->key, str) == 0)
+				return (0);
+			tmp = tmp->next;
+		}
+		add_node(env_list, cmd);
+	}
+	return (0);
 }

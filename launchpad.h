@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 09:15:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:23:34 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 # define BHCYN "\e[1;96m"
 # define BHWHT "\e[1;97m"
 # define RESET "\e[0m"
+
+// #define malloc(x) NULL
 /*----------------------------global flag-----------------------------*/
 volatile sig_atomic_t	g_sigint_received;
 
@@ -142,6 +144,7 @@ typedef struct s_stash
 	int		status;
 	int		return_status;
 	int		path_flag;
+	int		exit_flag;
 	char 	*pwd_backup;
 	char	*heredoc_store;
 	int		heredoc_interrupted;
@@ -169,25 +172,24 @@ void		check_existing_vars(t_env *env_list, char **keys, int *found);
 
 /*-------------------------Builtins fonctions-------------------------*/
 int			echo(char **cmd);
-int			pathchr(char *path);
 int			pwd(t_stash *stash);
-int			skip_points(char *path);
 int			is_parent_builtin(char *cmd);
 void		ft_putstr_fd(char *s, int fd);
 void		sort_env_list(t_env **env_list);
-int			env(t_env *env_list, t_stash *stash, char **cmd);
 void		run_exit(char **cmd, t_stash *stash);
-char		*get_valid_path(int counter, t_stash *stash);
 void		refresh_oldpwd(t_env **env_list, char *oldpwd);
+int			env(t_env *env_list, t_stash *stash, char **cmd);
 int			cd(char **cmd, t_env **env_list, t_stash *stash);
 void		add_value(t_env **env_list, char *argv, char *key);
 int			unset(t_env **env_list, char **cmd, t_stash *stash);
 int			check_validity(char	*argv, char *initial, char *cmd);
 int			export(char **cmd, t_env **env_list, t_stash *stash);
 t_env		*create_node(char *argv, size_t key_len, char *sign);
-void		handle_argument(t_env **env_list, char *cmd, t_stash *stash);
+int			handle_argument(t_env **env_list, char *cmd);
 void		update_env(t_env **env_list, char *argv, char *key, int start);
 int			run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash);
+char		*process_cd_path(const char *path, t_stash *stash);
+void		add_node(t_env **env_list, char *argv);
 
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
@@ -212,7 +214,12 @@ int			na_mkstemp(char *template, t_redir *redir);
 char		*na_strjoin(char const *s1, char const *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
-
+char		*ft_strrchr(const char *s, int c);
+char		*get_env_value(t_env **env_list, char *key);
+int	count_leading_dotdots(const char *path);
+char	*get_next_component(const char *path, int *start, int *end);
+char	*build_target_path(int dotdots, const char *component, t_stash *stash);
+char	*process_cd_path(const char *path, t_stash *stash);
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
 void		manage_heredocs(t_tree *ast, t_stash *stash);

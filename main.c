@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 08:55:32 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/03 20:01:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ int main(int argc, char **argv, char **envp)
 	(void)argc, (void)argv;
 	stash.status = 0;
 	stash.heredoc_interrupted = 0;
+	if (!isatty(0) || !isatty(1) || !getcwd(0, 0))
+		return (1);
 	init_shell(&shell);
 	build_env(&shell.env_list, envp, &stash);
+	tcgetattr(STDIN_FILENO, &stash.orig_termios);
 	while (1)
 	{
 		g_sigint_received = 0; // Reset flag at the start of each loop
@@ -67,10 +70,10 @@ int main(int argc, char **argv, char **envp)
 			dprintf(2, "EXIT STATUS %d\n", stash.status);
 			clear_memory(&shell);
 			continue;
-		}
+		}	
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &stash.orig_termios);
 		dprintf(2, "EXIT STATUS %d\n", stash.status);
 		clear_memory(&shell);
-
 	}
 	return (0);
 }
