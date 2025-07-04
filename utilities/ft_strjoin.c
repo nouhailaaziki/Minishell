@@ -6,11 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 10:51:02 by yrhandou          #+#    #+#             */
-/*   Updated: 2024/11/19 22:01:48 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/04 09:17:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../launchpad.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

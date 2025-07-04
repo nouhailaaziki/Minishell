@@ -36,9 +36,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 153.89877401327317,
-			"y": 1887.567764038738,
-			"lastActivityTimestamp": 1751463077839,
+			"x": -165.60147423456368,
+			"y": 2680.034734206758,
+			"lastActivityTimestamp": 1751622225721,
 			"meta": {}
 		},
 		{
@@ -205,9 +205,9 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 378.5666368927516,
-			"y": -1187.7268420936252,
-			"z": 0.992435356694492,
+			"x": 567.5655447457632,
+			"y": -1358.730778567827,
+			"z": 0.7142565463248305,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -534,6 +534,261 @@
 			"typeName": "shape"
 		},
 		{
+			"x": -281.4452672326756,
+			"y": 2065.113969531148,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:q7Dy8t00zdRliYYp8Ye34",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 1389.546875,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "What do i want to do ?"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\texpand variables."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "a variable is a string that starts with a $ and is ended when there is a space or an unvalid identifier(symbols)"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "the key can point to a value that xists in the env or dont exist "
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "a string can have multiple keys ,"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "a key wont be expanded if it  is inside single quotes"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "if the key exists then its value replaces its location in the string"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "if not the key is removed from the string"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "the original strings lenght would change , based on the key's status"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "--------------------------------"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "my plan is to loop for keys store them n a 2 d array or a inked list"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "then ealculate their expanded length and add it to the string's length"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "then allocate a new string that would store the fusion of the string with the expanded values"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "-----"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "first a function tthat would extract all keys and store them in a linked list."
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "aHBQl",
+			"typeName": "shape"
+		},
+		{
 			"x": -123.37113054741889,
 			"y": 846.1778872887535,
 			"rotation": 0,
@@ -809,12 +1064,12 @@
 			"typeName": "shape"
 		},
 		{
-			"editingShapeId": "shape:BD_2XKYgYOcIETZBsFPUg",
+			"editingShapeId": "shape:q7Dy8t00zdRliYYp8Ye34",
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:BD_2XKYgYOcIETZBsFPUg"
+				"shape:q7Dy8t00zdRliYYp8Ye34"
 			],
-			"hoveredShapeId": null,
+			"hoveredShapeId": "shape:q7Dy8t00zdRliYYp8Ye34",
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,

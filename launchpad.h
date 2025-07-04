@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/02 11:28:16 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:47:25 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,17 @@ typedef struct s_token
 	int				type;
 	struct s_token	*next;
 	struct s_token	*prev;
-
 }	t_token;
+
+typedef struct s_var
+{
+	char	*key;
+	int 	len;
+	int		expandable;
+	struct s_var *next;
+} t_var;
+
+
 
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
@@ -280,7 +289,7 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-void		expand_cmd(char **cmd, t_env **env);
+void		expand_cmd(char **cmd, t_env **env, int stash_status);
 	/*---------------------Checkers-------------------*/
 int			ft_syntax_err(char *str, t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
@@ -312,6 +321,7 @@ int			ft_isdigit(int c);
 int			ft_isspace(int c);
 int			ft_isalnum(int c);
 int			ft_isascii(int c);
+char		*ft_itoa(int n);
 	// ! REMOVE THS LATER
 void		print_tokens(t_token **head);
 void		print_redirs(t_redir *redir);
