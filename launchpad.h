@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 21:23:34 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 09:24:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,12 @@ void		update_env(t_env **env_list, char *argv, char *key, int start);
 int			run_builtins(char **cmd, t_env **env_list, int status, t_stash *stash);
 char		*process_cd_path(const char *path, t_stash *stash);
 void		add_node(t_env **env_list, char *argv);
-
+void		refresh_pwd(t_env **env_list, t_stash *stash, char *cmd);
+char		*handle_component_case(int dotdots, t_stash *stash);
+char		*handle_dotdots(char *new_path, int dotdots);
+char		*handle_component(char *new_path, const char *component);
+char		*process_components(const char *path, int dotdots, \
+t_stash *stash, char *component);
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
@@ -249,7 +254,7 @@ void		disable_echoctl(t_stash *stash);
 void		restore_terminal(t_stash *stash);
 
 /*---------------------Parsing STUFF------------------------------------------*/
-void		init_shell(t_shell *shell);
+int			init_shell(t_shell *shell);
 int			lexer(t_shell *shell);
 void		parentheses_lexer(t_token **head);
 void		link_token(t_token **head, t_token *node);

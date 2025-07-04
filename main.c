@@ -6,33 +6,35 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 20:01:56 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 08:06:18 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-void init_shell(t_shell *shell)
+int init_shell(t_shell *shell)
 {
+	if (!isatty(0) || !isatty(1) || !getcwd(0, 0))
+		return (1);
 	display_intro();
 	shell->env_list = NULL;
 	shell->line = NULL;
 	shell->tokens = NULL;
 	shell->current = NULL;
 	shell->ast = NULL;
+	return (0);
 }
+
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
 	t_stash stash;
 
-	// atexit(f);
 	(void)argc, (void)argv;
 	stash.status = 0;
 	stash.heredoc_interrupted = 0;
-	if (!isatty(0) || !isatty(1) || !getcwd(0, 0))
+	if (init_shell(&shell))
 		return (1);
-	init_shell(&shell);
 	build_env(&shell.env_list, envp, &stash);
 	tcgetattr(STDIN_FILENO, &stash.orig_termios);
 	while (1)

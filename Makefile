@@ -24,14 +24,14 @@ PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_util
 		  basic_visualiser.c advanced_visualizer.c misc_utils.c main.c utilities/ft_substr.c
 
 
-EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c \
+EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c execution/builtins/path_build.c \
 			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c \
 			execution/environment/get_env_arr.c execution/events/puterror.c execution/events/errno_manager.c execution/events/display_intro.c \
-			execution/builtins/manage_builtins.c  execution/executor/execute.c execution/redirection/heredocs_manager.c \
-			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/redirection/redirs.c \
+			execution/builtins/manage_builtins.c  execution/executor/execute.c execution/redirection/heredocs_manager.c execution/builtins/path_utils.c\
+			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/redirection/redirs.c execution/builtins/refresh_pwd.c\
 			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
 			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
-			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd_utils.c execution/builtins/cd.c 
+			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd.c execution/environment/env_update.c
 
 EXEC = ${EXECUTION:.c=.o}
 

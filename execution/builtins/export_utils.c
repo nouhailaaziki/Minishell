@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 21:00:36 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 09:51:55 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,6 @@ void	sort_env_list(t_env **env_list)
 	}
 }
 
-t_env	*create_node(char *argv, size_t key_len, char *sign)
-{
-	t_env	*node;
-
-	node = nalloc(sizeof(t_env));
-	if (!node)
-		return (NULL);
-	if (argv[key_len - 1] == '+')
-		key_len--;
-	node->key = na_substr(argv, 0, key_len);
-	if (sign)
-		node->value = na_strdup(sign + 1);
-	else
-		node->value = NULL;
-	node->next = NULL;
-	return (node);
-}
-
 int	export_error(char *cmd)
 {
 	ft_putstr_fd("L33tShell: export: `", 2);
@@ -75,41 +57,42 @@ int	export_error(char *cmd)
 	return (1);
 }
 
+int	handle_no_equal(t_env **env_list, char *cmd, char *str)
+{
+	t_env	*tmp;
+
+	tmp = *env_list;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, str) == 0)
+			return (0);
+		tmp = tmp->next;
+	}
+	add_node(env_list, cmd);
+	return (0);
+}
+
 int	handle_argument(t_env **env_list, char *cmd)
 {
 	int		j;
-	int		n;
 	char	*str;
 
 	j = 0;
 	while (cmd[j] && cmd[j] != '=')
 		j++;
-	if (j == 0)
-		return (export_error(cmd));
-	if (j > 0 && cmd[j - 1] == '+' && cmd[j] == '=')
-		j--;
-	if (j == 0 && cmd[j] == '+')
+	if (j == 0 || (j == 0 && cmd[j] == '+') || (j > 0 && cmd[j - 1] == '+'
+			&& cmd[j] == '=' && j--))
 		return (export_error(cmd));
 	str = na_substr(cmd, 0, j);
 	if (!str)
 		return (perror("malloc"), 1);
 	if (check_validity(str, cmd, "export"))
 		return (1);
-	n = j + 1;
 	if (cmd[j] == '+' && j > 0 && cmd[j + 1] && cmd[j + 1] == '=')
 		add_value(env_list, cmd, str);
 	else if (cmd[j] == '=')
-		update_env(env_list, cmd, str, n);
+		update_env(env_list, cmd, str, j + 1);
 	else
-	{
-		t_env *tmp = *env_list;
-		while (tmp)
-		{
-			if (ft_strcmp(tmp->key, str) == 0)
-				return (0);
-			tmp = tmp->next;
-		}
-		add_node(env_list, cmd);
-	}
+		return (handle_no_equal(env_list, cmd, str));
 	return (0);
 }

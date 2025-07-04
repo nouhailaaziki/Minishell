@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 11:54:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 21:27:13 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 08:25:11 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	run_exit(char **cmd, t_stash *stash)
 {
 	int	len;
 
-	len = ft_arrlen(cmd); // exit with pipes
+	len = ft_arrlen(cmd);
 	if (len == 1)
 	{
 		free_all_tracked();

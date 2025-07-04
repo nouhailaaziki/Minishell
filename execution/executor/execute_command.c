@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 21:12:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 09:29:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_env **env_list, t_stash *stash)
 	char	**envp;
 	char	**path_list;
 	int		stats;
+
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	envp = get_env_arr(*env_list);
@@ -76,14 +77,12 @@ t_env **env_list, t_stash *stash)
 	int		status;
 	int		restore[2];
 
-	restore[0] = dup(STDIN_FILENO);
-	restore[1] = dup(STDOUT_FILENO);
+	7889 && (restore[0] = dup(STDIN_FILENO), restore[1] = dup(STDOUT_FILENO));
 	if (cmd && is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
 		i = run_builtins(cmd, env_list, stash->status, stash);
-		dup2(restore[0], STDIN_FILENO);
-		dup2(restore[1], STDOUT_FILENO);
+		(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
 		(close(restore[0]), close(restore[1]));
 		return (i);
 	}

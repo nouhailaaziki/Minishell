@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 11:30:50 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 19:55:42 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 08:23:21 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	disable_echoctl(t_stash *stash)
 	new_termios.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &new_termios);
 }
-
 
 void	restore_terminal(t_stash *stash)
 {
