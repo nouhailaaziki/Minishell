@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 14:50:45 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:15:52 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,10 @@
 // // 3. Print the result.
 // printf("My PID (retrieved via ioctl) is: %d\n", my_pid);
 
-int in_s_quotes(char *origin, int start)
-{
-	int in_s_quote;
-
-	in_s_quote = 0;
-	while (origin[start] && origin[start] != '$')
-	{
-		if (origin[start] == '\'' && !in_s_quote)
-			in_s_quote += 1;
-		else if (origin[start] == '\'' && !in_s_quote)
-			in_s_quote -= 1;
-		start++;
-	}
-	if(in_s_quote)
-		return (1);
-	return (0);
-}
 
 int	is_valid_key(char *key)
 {
-	if((!ft_isalnum(key[0]) && key[0] != '_' && key[0] != '?'))
+	if(key && !ft_isalnum(key[1]) && key[1] != '_' && key[1] != '?')
 		return (0);
 	return (1);
 }
@@ -67,7 +50,7 @@ char * is_valid_expand(t_env **env,char *origin)
 		return (0);
 	i = 0;
 	dollar = ft_strchr(origin, '$');
-	if(!dollar || !++dollar || in_s_quotes(origin,0 ) || !is_valid_key(dollar) ) //leak warning idk
+	if(!dollar || !++dollar || !is_valid_key(dollar) ) //leak warning idk
 		return (origin);
 	while(origin[i] && origin[i] != '$')
 		i++;
@@ -100,38 +83,68 @@ char * is_valid_expand(t_env **env,char *origin)
 // 	// }
 // }
 
-t_var *find_a_key(char *origin , int stash_status)
+int in_s_quotes(char *origin, int start)
+{
+	int	in_s_quote;
+	int	i;
+
+	in_s_quote = 0;
+	i = 0;
+	while (origin[i] && i < start )
+	{
+		if (origin[i] == '\'')
+			in_s_quote = !in_s_quote;
+		i++;
+	}
+	if(in_s_quote)
+		return (1);
+	return (0);
+}
+void check_quote(char *str, char *end, int *quote)
+{
+	printf("[%s][%s]\n", str, end);
+	while (str != end)
+	{
+		if (*str == '\'' || *str == '\"')
+		{
+			if (*quote == 0)
+				*quote = *str;
+			else if (*quote == *str)
+				*quote = 0;//"'"
+		}
+		str++;
+	}
+}
+
+t_var *find_a_key(char *origin, int *quote)
 {
 	int		i;
 	char	*dollar;
 	t_var	*key;
 
-	dollar = ft_strchr(origin,'$');
-	if(!dollar || !is_valid_key(&dollar[1]) )
-		return (printf("no key here\n"), NULL);
-	if(in_s_quotes(origin, dollar - origin))
-	{
-		printf("hey %s\n", dollar - origin);
-		exit(1);
-	}
+	1 && (i = 0, dollar = ft_strchr(origin,'$'));
+	if(!dollar || !is_valid_key(dollar) )
+		return (printf("no more keys here\n"), NULL);
 	key = ft_calloc(1, sizeof(t_var));
 	if(!key)
 		return NULL;
-	i = 0;
-	if(++dollar && dollar[i] == '?')
+	check_quote(origin, dollar, quote);
+	printf("-----------%c\n", *quote);
+	if(dollar[i+1] == '?')
 	{
-		key->len = 1;
-		key->key = ft_itoa(stash_status);
-		printf("key is %s\n with len %d \n", key->key, key->len);
+		key->len = 2;
+		key->key = ft_strdup("$?");
+		key->expandable = *quote;
 		return (key);
 	}
+	i++;
 	while (dollar[i] && ft_isalnum(dollar[i]))
 		i++;
 	key->len = i;
 	key->key = ft_substr(dollar, 0,i);
+	key->expandable = *quote; //!in_s_quotes(origin, i);
 	if(!key)
 		return (NULL);
-	printf("key is %s with len %d \n", key->key, key->len);
 	return (key);
 }
 void	link_nodes(t_var **head, t_var *node)
@@ -146,45 +159,81 @@ void	link_nodes(t_var **head, t_var *node)
 	if (!head || !*head)
 	{
 		*head = node;
+		node->next = NULL;
 		return ;
 	}
 	tmp = *head;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = node;
-	tmp->next = node;
 	node->next = NULL;
 }
-void find_all_keys(char *str, int stash_status)
+void find_all_keys(char *str, t_var **keys,int stash_status)
 {
 	int i;
-	t_var **var;
+	int	key_len;
 	t_var *key;
+	int quote;
+
+	quote = 0;
 	i = 0;
+	key_len = 0;
 	while(str[i])
 	{
-		key = find_a_key(&str[i], stash_status);
-		if(!var)
-			return;
-		link_nodes(var, key); // you stopped here
+		// check_quote(str, str + i, &quote);
+		key = find_a_key(&str[i], &quote);
+		if(!key)
+			break;
+		link_nodes(keys, key);
 		i += key->len + 1;
 	}
 }
+
+int expand_keys(t_var **head, t_env **env, int stash_status)
+{
+	t_var * current;
+	char *value;
+	int len;
+
+	len = 0;
+	current = *head;
+	while(current)
+	{
+		if(current->expandable != '\'')
+		{
+			value = get_env_value(env, &(current->key[1]));
+			free(current->key);
+			current->key = value;
+			current->len = ft_strlen(current->key);
+			len += current->len;
+		}
+		else
+			len += current->len;
+		current = current->next;
+	}
+	print_tokens(head);
+	return len;
+}
+
 
 
 void expand_cmd(char** cmd, t_env **env, int stash_status)
 {
 	int i;
-	size_t len;
+	int len;
+	t_var *keys;
+	char *new_cmd;
 
+	if(!cmd || !*cmd)
+		return ;
 	i = 0;
-	len = 0;
-	while(cmd[i])
-	{
-		// find_key(cmd[i], stash_status );
-		find_all_keys(cmd[i], stash_status);
-		i++;
-	}
+	keys = NULL;
+	find_all_keys(cmd[i], &keys, stash_status);
+	len = expand_keys(&keys, env , stash_status);
+	new_cmd = ft_calloc(ft_strlen(cmd[0]) + len, sizeof(char));
+	if(!new_cmd)
+		return;
+
 }
 
 

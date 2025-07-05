@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 14:47:25 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/05 09:36:30 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,7 +323,7 @@ int			ft_isalnum(int c);
 int			ft_isascii(int c);
 char		*ft_itoa(int n);
 	// ! REMOVE THS LATER
-void		print_tokens(t_token **head);
+void		print_tokens(t_var **head);
 void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
 /*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
