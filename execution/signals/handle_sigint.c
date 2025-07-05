@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 11:17:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/23 11:25:26 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 19:11:21 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,5 @@ void	handle_sigint_prompt(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	g_sigint_received = 1;
 }

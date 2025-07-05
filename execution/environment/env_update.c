@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 09:51:24 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 09:53:20 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 12:51:54 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,28 @@ void	update_env(t_env **env_list, char *argv, char *key, int start)
 	}
 	if (i == 0)
 		add_node(env_list, argv);
+}
+
+void	sort_env_list(t_env **env_list)
+{
+	t_env	*tmp;
+	int		swapped;
+
+	if (!env_list || !*env_list)
+		return ;
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		tmp = *env_list;
+		while (tmp && tmp->next)
+		{
+			if (ft_strcmp(tmp->key, tmp->next->key) > 0)
+			{
+				swap_env(tmp, tmp->next);
+				swapped = 1;
+			}
+			tmp = tmp->next;
+		}
+	}
 }

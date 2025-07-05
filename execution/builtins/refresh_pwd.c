@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 09:01:30 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 09:01:52 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 14:36:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	handle_failed_getcwd(t_env *pwd_node, t_stash *stash, char *cmd)
 		return (perror("malloc"));
 	ft_putstr_fd("cd: error retrieving current directory: ", 2);
 	ft_putstr_fd("getcwd: cannot access parent directories:", 2);
-	ft_putstr_fd(" No such file or directory\n", 2);
+	ft_putendl_fd(" No such file or directory", 2);
 }
 
 char	*update_pwd_node(t_env *pwd_node, t_stash *stash, \

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:42:28 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:19:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
-void print_redirs(t_redir *redir)
+
+void	print_redirs(t_redir *redir)
 {
 	while (redir)
 	{
@@ -31,10 +32,10 @@ void print_redirs(t_redir *redir)
 	}
 }
 
-void print_tokens(t_token **head)
+void	print_tokens(t_token **head)
 {
-	t_token *tmp;
-	char *tiipe;
+	t_token	*tmp;
+	char	*tiipe;
 
 	tmp = *head;
 	while (tmp)
@@ -61,7 +62,6 @@ void print_tokens(t_token **head)
 			tiipe = "PARENTHESE_BLOCK";
 		else
 			tiipe = "WORD";
-
 		printf(GRN "value : {%s}, type? : {%s}->{%d} , position : <%d>\n" RESET, (tmp)->value, tiipe, (tmp)->type, tmp->position);
 		tmp = (tmp)->next;
 	}
@@ -174,4 +174,3 @@ void print_tokens(t_token **head)
 // 	node->right = create_tree(r);
 // 	return node;
 // }
-

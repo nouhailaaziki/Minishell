@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:07:56 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 21:20:28 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 12:51:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,23 @@ void	check_existing_vars(t_env *env_list, char **keys, int *found)
 		{
 			if (!ft_strcmp(tmp->key, keys[i]))
 				found[i] = 1;
+			if (!ft_strcmp(tmp->key, "PATH") && !ft_strcmp(tmp->value, ""))
+				tmp->value = na_strdup(".");
 			i++;
 		}
 		tmp = tmp->next;
 	}
+}
+
+void	swap_env(t_env *a, t_env *b)
+{
+	char	*tmp_key;
+	char	*tmp_value;
+
+	tmp_key = a->key;
+	tmp_value = a->value;
+	a->key = b->key;
+	a->value = b->value;
+	b->key = tmp_key;
+	b->value = tmp_value;
 }

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 09:29:00 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 14:39:59 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 	if (ft_strchr(cmd[0], '/') || !path_list
 		|| !path_list[0] || !ft_strcmp(path_list[0], ""))
 		errno_manager(cmd[0]);
-	ft_putstr_fd("L33tShell: ", 2);
-	ft_putstr_fd(cmd[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
+	(ft_putstr_fd("L33tShell: ", 2), ft_putstr_fd(cmd[0], 2));
+	ft_putendl_fd(": command not found", 2);
 	exit(127);
 }
 

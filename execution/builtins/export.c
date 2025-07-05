@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:00:55 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 09:54:58 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:00:51 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,20 @@ int	export(char **cmd, t_env **env_list, t_stash *stash)
 {
 	int	i;
 	int	len;
+	int	status;
 
 	i = 1;
-	len = ft_arrlen(cmd);
+	status = 0;
+	len = na_arrlen(cmd);
 	if (len == 1)
 		print_env_list(env_list, stash);
 	while (cmd[i])
 	{
 		stash->return_status = handle_argument(env_list, cmd[i]);
+		if (stash->return_status == 1)
+			status = 1;
 		i++;
 	}
+	stash->return_status = status;
 	return (stash->return_status);
 }
