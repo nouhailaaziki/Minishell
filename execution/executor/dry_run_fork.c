@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:06:29 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 16:58:22 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 20:54:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	count_required_forks(t_tree *ast)
 int	perform_dry_run_fork_test(int required_forks, t_stash *stash)
 {
 	pid_t	pid;
-	int		status;
 	int		i;
 
 	i = 0;
@@ -37,10 +36,7 @@ int	perform_dry_run_fork_test(int required_forks, t_stash *stash)
 	{
 		pid = fork();
 		if (pid == -1)
-		{
 			stash->fork_failed = 1;
-			return (1);
-		}
 		else if (pid == 0)
 			exit(0);
 		i++;
@@ -49,5 +45,6 @@ int	perform_dry_run_fork_test(int required_forks, t_stash *stash)
 		;
 	if (!stash->fork_failed)
 		return (0);
+	stash->fork_failed = 0;
 	return (1);
 }

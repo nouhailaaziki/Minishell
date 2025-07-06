@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 17:01:44 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 17:16:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	execute_cmds(t_shell *shell, t_stash *stash)
 	required_forks = count_required_forks(shell->ast);
     if (required_forks > 0 && perform_dry_run_fork_test(required_forks, stash))
 	{
-		perror("");
         ft_putendl_fd("L33tShell: fork failed: Resource temporarily unavailable", 2);
         stash->status = 1;
         return;
