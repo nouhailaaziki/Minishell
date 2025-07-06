@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/05 10:11:55 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/06 10:44:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void print_tokens(t_var **head)
 
 	if(!head || !*head)
 	{
-		puts("oops");
+		puts("No keys to print");
 		return;
 	}
 	tmp = *head;
@@ -68,7 +68,7 @@ void print_tokens(t_var **head)
 	// 		tiipe = "WORD";
 			// printf(GRN "value : {%s}, type? : {%s}->{%d} , position : <%d>\n" RESET, (tmp)->value, tiipe, (tmp)->type, tmp->position);
 
-		printf(GRN "key : {%s}, expandable? : {%d} , len : <%d>\n" RESET, (tmp)->key, (tmp)->expandable, tmp->len);
+		printf(GRN "key : {%s}, expandable? : {%s} , key_len : <%d> value_len : <%d>\n" RESET, (tmp)->key, (tmp)->expandable != 39 ? "YES" : "NO" , tmp->key_len , tmp->value_len);
 		tmp = (tmp)->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 15:15:52 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:24:42 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,38 +30,6 @@
 // // 3. Print the result.
 // printf("My PID (retrieved via ioctl) is: %d\n", my_pid);
 
-
-int	is_valid_key(char *key)
-{
-	if(key && !ft_isalnum(key[1]) && key[1] != '_' && key[1] != '?')
-		return (0);
-	return (1);
-}
-
-
-char * is_valid_expand(t_env **env,char *origin)
-{
-	char	*dollar;
-	int		i;
-	char	*value;
-	char	*buffer;
-	char 	*key;
-	if(!origin)
-		return (0);
-	i = 0;
-	dollar = ft_strchr(origin, '$');
-	if(!dollar || !++dollar || !is_valid_key(dollar) ) //leak warning idk
-		return (origin);
-	while(origin[i] && origin[i] != '$')
-		i++;
-	// key = extract_key(dollar);
-	value = get_env_value(env, key);
-	if(!value)
-		return (free(origin),ft_strdup(""));
-	buffer = ft_strjoin(buffer,value);
-	free(origin);
-	return (na_strdup(value));
-}
 // char *expand_word(t_env **env, char *origin)
 // {
 // 	// char	*dollar;
@@ -83,70 +51,120 @@ char * is_valid_expand(t_env **env,char *origin)
 // 	// }
 // }
 
-int in_s_quotes(char *origin, int start)
-{
-	int	in_s_quote;
-	int	i;
+// int in_s_quotes(char *origin, int start)
+// {
+// 	int	in_s_quote;
+// 	int	i;
 
-	in_s_quote = 0;
-	i = 0;
-	while (origin[i] && i < start )
-	{
-		if (origin[i] == '\'')
-			in_s_quote = !in_s_quote;
-		i++;
-	}
-	if(in_s_quote)
+// 	in_s_quote = 0;
+// 	i = 0;
+// 	while (origin[i] && i < start )
+// 	{
+// 		if (origin[i] == '\'')
+// 			in_s_quote = !in_s_quote;
+// 		i++;
+// 	}
+// 	if(in_s_quote)
+// 		return (1);
+// 	return (0);
+// }
+// void check_quote(char *str, char *end, int *quote)
+// {
+// 	printf("[%s][%s]\n", str, end);
+// 	while (str != end)
+// 	{
+// 		if (*str == '\'' || *str == '\"')
+// 		{
+// 			if (*quote == 0)
+// 				*quote = *str;
+// 			else if (*quote == *str)
+// 				*quote = 0;//"'"
+// 		}
+// 		str++;
+// 	}
+// }
+
+
+int	is_valid_key(char *key)
+{
+	if(key && ( key[1] == '?' || key[1] == '$' && key[1] == '_' || ft_isalnum(key[1])))
 		return (1);
 	return (0);
 }
-void check_quote(char *str, char *end, int *quote)
+
+void check_quote(char *start, char *end, int *quote)
 {
-	printf("[%s][%s]\n", str, end);
-	while (str != end)
+	int i;
+
+	i = 0;
+	while (start != end)
 	{
-		if (*str == '\'' || *str == '\"')
+		if(*start == '"' || *start =='\'')
 		{
-			if (*quote == 0)
-				*quote = *str;
-			else if (*quote == *str)
-				*quote = 0;//"'"
+			if(*quote == 0)
+				*quote = *start;
+			else if( *quote == *start)
+				*quote = 0;
 		}
-		str++;
+		start++;
 	}
+
 }
 
-t_var *find_a_key(char *origin, int *quote)
+
+char *find_a_key(char *origin, int *quote , int *key_len ,int *pos)
 {
 	int		i;
 	char	*dollar;
-	t_var	*key;
 
-	1 && (i = 0, dollar = ft_strchr(origin,'$'));
-	if(!dollar || !is_valid_key(dollar) )
-		return (printf("no more keys here\n"), NULL);
+	i = 0;
+	while(origin[i] && origin[i] != '$')
+		i++;
+	if(!origin[i] || !is_valid_key(&origin[i]) )
+		return (NULL);
+	check_quote(origin, &origin[i], quote);
+	dollar = &origin[i];
+	*pos += i;
+	i = 1;
+	while (dollar[i] && (ft_isalnum(dollar[i]) || dollar[i] == '_'))
+		i++;
+	if(dollar[i] =='?')
+		i++;
+	dollar = ft_substr(dollar, 0,i);
+	if(!dollar)
+		return (NULL);
+	*key_len = i;
+	*pos += i;
+	return (dollar);
+}
+
+
+
+t_var *create_key(char *origin, int *quote , int *pos)
+{
+	char	*dollar;
+	t_var	*key;
+	int key_len;
+
+	dollar = find_a_key(origin, quote ,&key_len , pos);
+	if(!dollar)
+		return (printf("no key found\n"), NULL);
 	key = ft_calloc(1, sizeof(t_var));
 	if(!key)
 		return NULL;
-	check_quote(origin, dollar, quote);
-	printf("-----------%c\n", *quote);
-	if(dollar[i+1] == '?')
+	if(dollar[1] == '?' || dollar[1] == '$') // * you should correct this
 	{
-		key->len = 2;
-		key->key = ft_strdup("$?");
+		key->key = ft_substr(dollar,0,2);
+		key->key_len = 2;
 		key->expandable = *quote;
 		return (key);
 	}
-	i++;
-	while (dollar[i] && ft_isalnum(dollar[i]))
-		i++;
-	key->len = i;
-	key->key = ft_substr(dollar, 0,i);
-	key->expandable = *quote; //!in_s_quotes(origin, i);
-	if(!key)
-		return (NULL);
+	key->key = dollar;
+	key->key_len = ft_strlen(dollar);
+	key->expandable = *quote;
 	return (key);
 }
+
 void	link_nodes(t_var **head, t_var *node)
 {
 	t_var	*tmp;
@@ -168,73 +186,120 @@ void	link_nodes(t_var **head, t_var *node)
 	tmp->next = node;
 	node->next = NULL;
 }
+
 void find_all_keys(char *str, t_var **keys,int stash_status)
 {
-	int i;
+	int pos;
 	int	key_len;
 	t_var *key;
 	int quote;
 
 	quote = 0;
-	i = 0;
-	key_len = 0;
-	while(str[i])
+	pos = 0;
+	while(str[pos])
 	{
-		// check_quote(str, str + i, &quote);
-		key = find_a_key(&str[i], &quote);
+		key = create_key(&str[pos], &quote, &pos);
 		if(!key)
 			break;
 		link_nodes(keys, key);
-		i += key->len + 1;
 	}
 }
 
-int expand_keys(t_var **head, t_env **env, int stash_status)
+int expand_keys(t_var **head, t_env **env, int stash_status , int *keys_len)
 {
-	t_var * current;
-	char *value;
-	int len;
+	t_var	*current;
+	char	*value;
+	int		value_len;
 
-	len = 0;
+	value_len = 0;
 	current = *head;
 	while(current)
 	{
+		*keys_len += current->key_len ;
 		if(current->expandable != '\'')
 		{
 			value = get_env_value(env, &(current->key[1]));
-			free(current->key);
-			current->key = value;
-			current->len = ft_strlen(current->key);
-			len += current->len;
+			if(!ft_strncmp(current->key, "$?", 2))
+				current->value = ft_itoa(stash_status);
+			else
+				current->value = value;
+			current->value_len = ft_strlen(current->value);
+			value_len += current->value_len;
 		}
-		else
-			len += current->len;
 		current = current->next;
 	}
 	print_tokens(head);
-	return len;
+	return value_len;
+}
+
+void update_cmd(char *origin ,t_var *keys, char **destination)
+{
+	t_var *current_key;
+	char *dest;
+
+	1 && (dest = *destination,	current_key = keys);
+	while(*origin)
+	{
+		if(*origin != '$')
+		{
+			*dest++ = *origin++;
+			continue ;
+		}
+		if(*origin && !ft_strncmp(origin, current_key->key, current_key->key_len))
+		{
+			if(current_key->expandable != '\'')
+			{
+				ft_memcpy(dest, current_key->value, current_key->value_len);
+				dest += current_key->value_len;
+			}
+			else
+			{
+				ft_memcpy(dest, current_key->key, current_key->key_len);
+				dest += current_key->key_len;
+			}
+			origin += current_key->key_len;
+			current_key = current_key->next;
+		}
+	}
+	*dest = '\0';
 }
 
 
-
-void expand_cmd(char** cmd, t_env **env, int stash_status)
+void expand_cmd(char **cmd, t_env **env, int stash_status)
 {
 	int i;
-	int len;
+	int value_len;
+	int keys_len;
 	t_var *keys;
 	char *new_cmd;
 
-	if(!cmd || !*cmd)
+	if(!cmd || !*cmd )
 		return ;
 	i = 0;
+	keys_len = 0;
 	keys = NULL;
-	find_all_keys(cmd[i], &keys, stash_status);
-	len = expand_keys(&keys, env , stash_status);
-	new_cmd = ft_calloc(ft_strlen(cmd[0]) + len, sizeof(char));
-	if(!new_cmd)
-		return;
-
+	while (cmd[i])
+	{
+		find_all_keys(cmd[i], &keys, stash_status);
+		if(!keys)
+			return;
+		value_len = expand_keys(&keys, env , stash_status , &keys_len);
+		new_cmd = ft_calloc(ft_strlen(cmd[i]) + value_len - keys_len, sizeof(char));
+		if(!new_cmd)
+			return;
+	printf("CMD length : %zu\n",ft_strlen(cmd[0]));
+	printf("Values length : %d\n",value_len);
+	printf("Keys length : %d\n",keys_len);
+		update_cmd(cmd[i], keys, &new_cmd); // UPDATE WITH ADDRESS
+		free(cmd[i]);
+		cmd[i] = new_cmd;
+		free_keys(&keys);
+		printf("new cmd : %s\n",	cmd[i]);
+		i++;
+	}
 }
+
+
 
 
 

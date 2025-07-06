@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 09:36:30 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:04:33 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,9 @@ typedef struct s_token
 typedef struct s_var
 {
 	char	*key;
-	int 	len;
+	char	*value;
+	int 	key_len;
+	int 	value_len;
 	int		expandable;
 	struct s_var *next;
 } t_var;
@@ -307,10 +309,12 @@ void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
 void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
+void	free_keys(t_var **head);
 /*-----------utilities-------------*/
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_calloc(size_t count, size_t size);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putstr_fd(char *s, int fd);
 void		ft_putchar_fd(char c, int fd);
