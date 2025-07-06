@@ -47,7 +47,7 @@
 # define BHWHT "\e[1;97m"
 # define RESET "\e[0m"
 /*----------------------------global flag-----------------------------*/
-volatile sig_atomic_t	g_sigint_received;
+extern int	g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type

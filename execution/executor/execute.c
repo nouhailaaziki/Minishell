@@ -87,7 +87,7 @@
 
 int	is_valid_key(char *key)
 {
-	if(key && ( key[1] == '?' || key[1] == '$' && key[1] == '_' || ft_isalnum(key[1])))
+	if(key && ( key[1] == '?' || key[1] == '$' || key[1] == '_' || ft_isalnum(key[1])))
 		return (1);
 	return (0);
 }
@@ -127,8 +127,6 @@ char *find_a_key(char *origin, int *quote , int *key_len ,int *pos)
 	*pos += i;
 	i = 1;
 	while (dollar[i] && (ft_isalnum(dollar[i]) || dollar[i] == '_'))
-		i++;
-	if(dollar[i] =='?')
 		i++;
 	dollar = ft_substr(dollar, 0,i);
 	if(!dollar)
@@ -222,7 +220,7 @@ int expand_keys(t_var **head, t_env **env, int stash_status , int *keys_len)
 			if(!ft_strncmp(current->key, "$?", 2))
 				current->value = ft_itoa(stash_status);
 			else
-				current->value = value;
+				current->value = ft_strdup(value);
 			current->value_len = ft_strlen(current->value);
 			value_len += current->value_len;
 		}
@@ -277,20 +275,20 @@ void expand_cmd(char **cmd, t_env **env, int stash_status)
 		return ;
 	i = 0;
 	keys_len = 0;
-	keys = NULL;
 	while (cmd[i])
 	{
+		keys = NULL;
 		find_all_keys(cmd[i], &keys, stash_status);
 		if(!keys)
-			return;
+		{
+			i++;
+			continue;
+		}
 		value_len = expand_keys(&keys, env , stash_status , &keys_len);
 		new_cmd = ft_calloc(ft_strlen(cmd[i]) + value_len - keys_len, sizeof(char));
 		if(!new_cmd)
 			return;
-	printf("CMD length : %zu\n",ft_strlen(cmd[0]));
-	printf("Values length : %d\n",value_len);
-	printf("Keys length : %d\n",keys_len);
-		update_cmd(cmd[i], keys, &new_cmd); // UPDATE WITH ADDRESS
+		update_cmd(cmd[i], keys, &new_cmd);
 		free(cmd[i]);
 		cmd[i] = new_cmd;
 		free_keys(&keys);
@@ -298,6 +296,9 @@ void expand_cmd(char **cmd, t_env **env, int stash_status)
 		i++;
 	}
 }
+		// printf("CMD length : %zu\n",ft_strlen(cmd[0]));
+		// printf("Values length : %d\n",value_len);
+		// printf("Keys length : %d\n",keys_len);
 
 
 

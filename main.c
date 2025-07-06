@@ -12,6 +12,8 @@
 
 #include "launchpad.h"
 
+int g_sigint_received;
+
 void init_shell(t_shell *shell)
 {
 	display_intro();
@@ -38,6 +40,7 @@ int main(int argc, char **argv, char **envp)
 		setup_signals_prompt(); // Setup signals for the main prompt
 		disable_echoctl(&shell.stash);
 		shell.line = readline("L33tShell-N.Y$ ");
+		// shell.line = ft_strdup("ls $PWD");
 		restore_terminal(&shell.stash);
 		add_history(shell.line);
 		if (!shell.line)

@@ -123,10 +123,9 @@ void	free_keys(t_var **head)
 	{
 		next = current->next;
 		if (current->key)
-		{
 			free(current->key);
-			current->key = NULL;
-		}
+		if(current->value)
+			free(current->value);
 		current->expandable = 0;
 		current->value_len = 0;
 		current->key_len = 0;
