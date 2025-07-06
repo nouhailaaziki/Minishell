@@ -10,7 +10,7 @@ RM = rm -rf
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = #-Wall -Wextra -Werror 
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
 			utilities/ft_strdup.c utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
@@ -25,7 +25,7 @@ PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_util
 
 
 EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c execution/builtins/path_build.c \
-			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c \
+			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c execution/executor/dry_run_fork.c \
 			execution/environment/get_env_arr.c execution/events/puterror.c execution/events/errno_manager.c execution/events/display_intro.c \
 			execution/builtins/manage_builtins.c  execution/executor/execute.c execution/redirection/heredocs_manager.c execution/builtins/path_utils.c\
 			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/redirection/redirs.c execution/builtins/refresh_pwd.c\

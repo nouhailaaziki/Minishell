@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:47:01 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 21:24:32 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 11:58:52 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	execute_pipe(t_tree *ast, t_env **env_list, t_stash *stash)
 		return (perror("fork"), 1);
 	if (right_pid == 0)
 		execute_right_child(ast, env_list, stash, pipes);
-	close(pipes[0]);
-	close(pipes[1]);
+	(close(pipes[0]), close(pipes[1]));
 	return (wait_for_children(left_pid, right_pid, stash));
 }

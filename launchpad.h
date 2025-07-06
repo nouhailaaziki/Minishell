@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 19:10:06 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 16:06:49 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,18 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
+typedef struct s_pids
+{
+	pid_t			pid;
+	struct s_pids	*next;
+} t_pids;
+
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
 	int				status;
 	int				return_status;
+	int				fork_failed;
 	int				path_flag;
 	int				exit_flag;
 	char			*pwd_backup;
@@ -255,7 +262,8 @@ int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, \
 t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
-
+int			count_required_forks(t_tree *ast);
+int perform_dry_run_fork_test(int required_forks, t_stash *stash);
 /*------------------------------signals-------------------------------*/
 void		handle_sigint_heredoc(int sig);
 void		handle_sigint_prompt(int sig);
