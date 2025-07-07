@@ -1,34 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/02 14:05:10 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 12:14:38 by yrhandou         ###   ########.fr       */
+/*   Created: 2024/11/03 10:51:02 by yrhandou          #+#    #+#             */
+/*   Updated: 2025/07/04 09:17:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-void	*ft_calloc(size_t count, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	unsigned char	*ptr;
-	size_t			i;
-	size_t			alloc_size;
+	char	*head;
+	char	*str;
+	size_t	total_size;
 
-	alloc_size = size * count;
-	if (count && size && alloc_size / count != size)
+	if (!s1 && !s2)
 		return (NULL);
-	i = 0;
-	ptr = malloc(alloc_size);
-	if (ptr == NULL)
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	total_size = ft_strlen(s1) + ft_strlen(s2);
+	str = malloc(total_size + 1);
+	if (str == NULL)
 		return (NULL);
-	while (i < count * size)
-	{
-		ptr[i] = 0;
-		i++;
-	}
-	return ((void *)ptr);
+	head = str;
+	while (*s1)
+		*str++ = *s1++;
+	while (*s2)
+		*str++ = *s2++;
+	*str = '\0';
+	return (head);
 }

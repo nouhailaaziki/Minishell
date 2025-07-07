@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/06 17:16:39 by noaziki          ###   ########.fr       */
@@ -25,6 +25,8 @@ int	init_shell(t_shell *shell)
 	free (tmp);
 	display_intro();
 	shell->env_list = NULL;
+	shell->stash.status = 0;
+	shell->stash.heredoc_interrupted = 0;
 	shell->line = NULL;
 	shell->tokens = NULL;
 	shell->current = NULL;

@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_parentheses.c                              :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 16:06:34 by noaziki          ###   ########.fr       */
+/*   Created: 2024/10/29 10:05:42 by yrhandou          #+#    #+#             */
+/*   Updated: 2025/07/06 11:44:44 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../launchpad.h"
+#include "../launchpad.h"
 
-int	execute_parentheses(t_tree *ast, t_env **env, \
-t_stash *stash, t_redir *redir)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	pid_t	pid;
-	int		status;
-	int		exit_status;
+	size_t				i;
+	unsigned char		*dest;
+	const unsigned char	*sorc;
 
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork failed"), 1);
-	if (pid == 0)
+	dest = (unsigned char *)dst;
+	sorc = (const unsigned char *)src;
+	i = 0;
+	while (i < n)
 	{
-		handle_redirs(redir);
-		exit_status = execute_ast(ast->left, env, stash);
-		exit(exit_status);
+		dest[i] = sorc[i];
+		i++;
 	}
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	return (dst);
 }

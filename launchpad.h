@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 16:06:49 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/07 15:59:06 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <termios.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -51,12 +52,13 @@
 
 // #define malloc(x) NULL
 /*----------------------------global flag-----------------------------*/
-volatile sig_atomic_t	g_sigint_received;
+extern int	g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
 {
-	TOKEN_CMD = 1,
+	TOKEN_WORD = 1,
+	TOKEN_CMD,
 	TOKEN_ARG,
 	TOKEN_PAREN,
 	TOKEN_PAREN_LEFT,
@@ -66,7 +68,7 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_REDIR,
 	R_FILE,
-	REDIR_IN = 20,
+	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
@@ -80,8 +82,19 @@ typedef struct s_token
 	int				type;
 	struct s_token	*next;
 	struct s_token	*prev;
-
 }	t_token;
+
+typedef struct s_var
+{
+	char	*key;
+	char	*value;
+	int 	key_len;
+	int 	value_len;
+	int		expandable;
+	struct s_var *next;
+} t_var;
+
+
 
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
@@ -168,6 +181,7 @@ typedef struct s_shell
 	t_env	*env_list;
 	t_tree	*ast;
 	char	*line;
+	t_stash	stash;
 }	t_shell;
 
 /*-----------------------Environment fonctions------------------------*/
@@ -244,8 +258,8 @@ char		*ft_substr(char const *s, unsigned int start, size_t len);
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
-void		check_heredoc_limit(t_shell *shell, t_tree *ast);
 int			open_heredocs(t_redir *redir, t_stash *stash);
+void		check_heredoc_limit(t_shell *shell, t_tree *ast);
 
 /*------------------------------Events--------------------------------*/
 void		display_intro(void);
@@ -265,12 +279,12 @@ t_stash *stash);
 int			count_required_forks(t_tree *ast);
 int perform_dry_run_fork_test(int required_forks, t_stash *stash);
 /*------------------------------signals-------------------------------*/
+void		restore_terminal(t_stash *stash);
+void		disable_echoctl(t_stash *stash);
 void		handle_sigint_heredoc(int sig);
 void		handle_sigint_prompt(int sig);
 void		setup_signals_heredoc(void);
 void		setup_signals_prompt(void);
-void		disable_echoctl(t_stash *stash);
-void		restore_terminal(t_stash *stash);
 
 /*---------------------Parsing STUFF------------------------------------------*/
 int			init_shell(t_shell *shell);
@@ -279,13 +293,13 @@ void		parentheses_lexer(t_token **head);
 void		link_token(t_token **head, t_token *node);
 int			handle_quotes(char *str, char quote_type);
 void		advanced_token_lexer(t_token **head);
-int			ft_syntax_analyzer(char *str);
 int			parentheses_counter_v2(t_token *head);
-int			handle_parentheses(t_token *head);
+int			handle_parentheses(t_shell *shell);
+int			ft_syntax_analyzer(char *str);
 int			operator_len(char *str);
 int			token_lexer(char *str);
-int			parser(t_shell shell);
 int			skip_spaces(char *str);
+int			parser(t_shell *shell);
 
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
@@ -306,28 +320,58 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-
-/*---------------------Checkers-------------------*/
-int			advanced_syntax_err(t_token *head);
-int			simple_syntax_err(t_token *head);
+void		expand_cmd(char **cmd, t_env **env, int stash_status);
+	/*---------------------Checkers-------------------*/
+int			ft_syntax_err(char *str, t_shell *shell);
+int			advanced_syntax_err(t_shell *shell);
+int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
 int			ft_is_bonus_operator(char *str);
 int			check_successor(t_token *head);
 int			redir_identifier(char *str);
 int			ft_isparentheses(char *c);
-int			ft_syntax_err(char *str);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
 
+/*-----------Expand-----------------*/
+char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
+t_var		*create_key(char *origin, int *quote , int *pos);
+void		find_all_keys(char *str, t_var **keys);
+int			expand_keys(t_var **head, t_env **env, int stash_status ,
+int *keys_len);
+void		ft_copy_keys(char *dest, int *j, t_var *current_key);
+void		link_nodes(t_var **head, t_var *node);
+int			is_special_param(char c);
+int			is_valid_key(char key);
+void		check_quote(char *start, char *end, int *quote);
+char		*expand_special_param(char c, int stash_status);
+void		update_cmd(char *origin ,t_var *keys, char **destination);
+void		expand_cmd(char **cmd, t_env **env, int stash_status);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
 void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
-
-// ! REMOVE THS LATER
-void		print_tokens(t_token **head);
+void	free_keys(t_var **head);
+/*-----------utilities-------------*/
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*ft_strjoin(char const *s1, char const *s2);
+void		*ft_calloc(size_t count, size_t size);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
+void		ft_putendl_fd(char *s, int fd);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putchar_fd(char c, int fd);
+char		*ft_strdup(const char *s1);
+int			ft_str_isspace(char *str);
+int			ft_isalpha(int c);
+int			ft_isdigit(int c);
+int			ft_isspace(int c);
+int			ft_isalnum(int c);
+int			ft_isascii(int c);
+char		*ft_itoa(int n);
+	// ! REMOVE THS LATER
+void		print_tokens(t_var **head);
 void		print_redirs(t_redir *redir);
 void		print_tree(t_tree *tree);
 /*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/

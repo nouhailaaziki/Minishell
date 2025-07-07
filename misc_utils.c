@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/05 15:19:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 10:44:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,37 +32,45 @@ void	print_redirs(t_redir *redir)
 	}
 }
 
-void	print_tokens(t_token **head)
-{
-	t_token	*tmp;
-	char	*tiipe;
 
+void print_tokens(t_var **head)
+{
+	t_var *tmp;
+	char *tiipe;
+
+	if(!head || !*head)
+	{
+		puts("No keys to print");
+		return;
+	}
 	tmp = *head;
 	while (tmp)
 	{
-		if (tmp->type == TOKEN_OR)
-			tiipe = "OR";
-		else if (tmp->type == TOKEN_AND)
-			tiipe = "AND";
-		else if (tmp->type == REDIR_HEREDOC)
-			tiipe = "REDIR_HEREDOC";
-		else if (tmp->type == REDIR_APPEND)
-			tiipe = "REDIR_APPEND";
-		else if (tmp->type == REDIR_IN)
-			tiipe = "REDIR_IN";
-		else if (tmp->type == REDIR_OUT)
-			tiipe = "REDIR_OUT";
-		else if (tmp->type == TOKEN_PIPE)
-			tiipe = "PIPE";
-		else if (tmp->type == R_FILE)
-			tiipe = "R_FILE";
-		else if (tmp->type == TOKEN_ARG)
-			tiipe = "ARGUMENT";
-		else if (tmp->type == TOKEN_PAREN)
-			tiipe = "PARENTHESE_BLOCK";
-		else
-			tiipe = "WORD";
-		printf(GRN "value : {%s}, type? : {%s}->{%d} , position : <%d>\n" RESET, (tmp)->value, tiipe, (tmp)->type, tmp->position);
+	// 	if (tmp->type == TOKEN_OR)
+	// 		tiipe = "OR";
+	// 	else if (tmp->type == TOKEN_AND)
+	// 		tiipe = "AND";
+	// 	else if (tmp->type == REDIR_HEREDOC)
+	// 		tiipe = "REDIR_HEREDOC";
+	// 	else if (tmp->type == REDIR_APPEND)
+	// 		tiipe = "REDIR_APPEND";
+	// 	else if (tmp->type == REDIR_IN)
+	// 		tiipe = "REDIR_IN";
+	// 	else if (tmp->type == REDIR_OUT)
+	// 		tiipe = "REDIR_OUT";
+	// 	else if (tmp->type == TOKEN_PIPE)
+	// 		tiipe = "PIPE";
+	// 	else if (tmp->type == R_FILE)
+	// 		tiipe = "R_FILE";
+	// 	else if (tmp->type == TOKEN_ARG)
+	// 		tiipe = "ARGUMENT";
+	// 	else if (tmp->type == TOKEN_PAREN)
+	// 		tiipe = "PARENTHESE_BLOCK";
+	// 	else
+	// 		tiipe = "WORD";
+			// printf(GRN "value : {%s}, type? : {%s}->{%d} , position : <%d>\n" RESET, (tmp)->value, tiipe, (tmp)->type, tmp->position);
+
+		printf(GRN "key : {%s}, expandable? : {%s} , key_len : <%d> value_len : <%d>\n" RESET, (tmp)->key, (tmp)->expandable != 39 ? "YES" : "NO" , tmp->key_len , tmp->value_len);
 		tmp = (tmp)->next;
 	}
 }
