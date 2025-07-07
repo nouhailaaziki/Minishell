@@ -1675,9 +1675,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": -14338.35448885388,
-			"y": 42971.99788841173,
-			"lastActivityTimestamp": 1751895179446,
+			"x": 455.86563984488794,
+			"y": 1048.0968109329988,
+			"lastActivityTimestamp": 1751901731513,
 			"meta": {}
 		},
 		{
@@ -9272,6 +9272,13 @@
 			"parentId": "page:VbLX0m_2g_UWMpRNU9xR4",
 			"index": "b205Tw",
 			"typeName": "shape"
+		},
+		{
+			"meta": {},
+			"id": "page:6Jfbb_7E7c7RiS7EYe9_y",
+			"name": "Qoutes",
+			"index": "a35Ss",
+			"typeName": "page"
 		},
 		{
 			"x": 1168.1388060875997,
@@ -32255,6 +32262,13 @@
 			"parentId": "page:VbLX0m_2g_UWMpRNU9xR4",
 			"index": "b3u4AD",
 			"typeName": "shape"
+		},
+		{
+			"meta": {},
+			"id": "page:bEdHUeGnEehra5TBEireq",
+			"name": "Page 2",
+			"index": "a43HR",
+			"typeName": "page"
 		},
 		{
 			"x": 3106.188555358138,
@@ -75535,7 +75549,7 @@
 		},
 		{
 			"x": -13583.890504780915,
-			"y": 37626.01376443015,
+			"y": 37627.01376443015,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -87175,6 +87189,45 @@
 			},
 			"parentId": "page:VbLX0m_2g_UWMpRNU9xR4",
 			"index": "b1t9cY",
+			"typeName": "shape"
+		},
+		{
+			"x": 395.83814212117136,
+			"y": 60.309679681512605,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:ygm4WdjnW0ouo8cOlFArK",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 464.9453125,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1.9618320349979688,
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\"hello 'world'\"welcome'home \"USER\"'"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:6Jfbb_7E7c7RiS7EYe9_y",
+			"index": "a1",
 			"typeName": "shape"
 		},
 		{
@@ -103303,6 +103356,21 @@
 			"typeName": "shape"
 		},
 		{
+			"editingShapeId": "shape:w4aINo1H8Rm8xmkdqhZNF",
+			"croppingShapeId": null,
+			"selectedShapeIds": [
+				"shape:w4aINo1H8Rm8xmkdqhZNF"
+			],
+			"hoveredShapeId": "shape:w4aINo1H8Rm8xmkdqhZNF",
+			"erasingShapeIds": [],
+			"hintingShapeIds": [],
+			"focusedGroupId": null,
+			"meta": {},
+			"id": "instance_page_state:page:6Jfbb_7E7c7RiS7EYe9_y",
+			"pageId": "page:6Jfbb_7E7c7RiS7EYe9_y",
+			"typeName": "instance_page_state"
+		},
+		{
 			"x": 1101.546429999069,
 			"y": 11641.080047540341,
 			"rotation": 0,
@@ -117938,6 +118006,435 @@
 			"typeName": "shape"
 		},
 		{
+			"x": 380.30306315374446,
+			"y": 353.88455887281555,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:w4aINo1H8Rm8xmkdqhZNF",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 1063.8759629996187,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": false,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "How can i expand the qoutes?"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "the base case :"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\"hello\" => hello"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "find the first quote until you reach it copy the content in a new string without quotes"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "{"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\tlen = count the number of chars inside the quotes;."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\tallocate str[len];"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\tskip the quote and copy anything else."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\treplace the original string"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "}"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "nested quotes"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\"hi 'there\" => hi 'there"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "{"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\tlen = count the number of chars inside the quotes;."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\tallocate str[len];"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\tskip the quote type that's leading and copy anything else."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\treplace the original string"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "}"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "multiple quotes"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\"hello\"hi'bonjour' => hellohibonjour'"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "{"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\twhile inside a leading quote ()"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\t{"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\t\tlen = count the number of chars inside the quotes;."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\t\tallocate str[len];"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\t\tskip the quote type that's leading and copy anything else."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\t\treplace the original string"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\t}"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "}"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "advanced case"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "\"hello_'User'_\"hi'bonjo\"ur' => hello_'User'_hibonjour"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							}
+						}
+					]
+				}
+			},
+			"parentId": "page:6Jfbb_7E7c7RiS7EYe9_y",
+			"index": "a42EZ",
+			"typeName": "shape"
+		},
+		{
 			"x": 2964.868388201277,
 			"y": 11862.616249446204,
 			"rotation": 0,
@@ -127919,6 +128416,19 @@
 			"parentId": "page:VbLX0m_2g_UWMpRNU9xR4",
 			"index": "b2M8RD",
 			"typeName": "shape"
+		},
+		{
+			"editingShapeId": null,
+			"croppingShapeId": null,
+			"selectedShapeIds": [],
+			"hoveredShapeId": null,
+			"erasingShapeIds": [],
+			"hintingShapeIds": [],
+			"focusedGroupId": null,
+			"meta": {},
+			"id": "instance_page_state:page:bEdHUeGnEehra5TBEireq",
+			"pageId": "page:bEdHUeGnEehra5TBEireq",
+			"typeName": "instance_page_state"
 		},
 		{
 			"x": 2913.0293553403612,
@@ -149701,6 +150211,45 @@
 			"typeName": "shape"
 		},
 		{
+			"x": 340.2381956219623,
+			"y": 212.7564890990596,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:SCE1YfutVlNpPpp62hxfY",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 428.828125,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 2.398663606501397,
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "hello 'world'welcomehome \"USER\""
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:6Jfbb_7E7c7RiS7EYe9_y",
+			"index": "a216P",
+			"typeName": "shape"
+		},
+		{
 			"x": 1746.9453125,
 			"y": 11583.617713647523,
 			"rotation": 0,
@@ -153664,6 +154213,14 @@
 			"parentId": "page:page",
 			"index": "b2SAHR",
 			"typeName": "shape"
+		},
+		{
+			"x": -49.72514800028762,
+			"y": -605.7463103584178,
+			"z": 1.0515911576810149,
+			"meta": {},
+			"id": "camera:page:6Jfbb_7E7c7RiS7EYe9_y",
+			"typeName": "camera"
 		},
 		{
 			"x": -14142.937128597452,
@@ -159880,6 +160437,43 @@
 			},
 			"parentId": "page:page",
 			"index": "bAbB6D",
+			"typeName": "shape"
+		},
+		{
+			"x": 802.6392503268959,
+			"y": 128.9872703471746,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:nPwqMa0moj-4sRRgpQssu",
+			"type": "geo",
+			"props": {
+				"w": 84.45163607674488,
+				"h": 72.72833000864702,
+				"geo": "arrow-down",
+				"dash": "draw",
+				"growY": 0,
+				"url": "",
+				"scale": 1,
+				"color": "black",
+				"labelColor": "black",
+				"fill": "none",
+				"size": "s",
+				"font": "draw",
+				"align": "middle",
+				"verticalAlign": "middle",
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph"
+						}
+					]
+				}
+			},
+			"parentId": "page:6Jfbb_7E7c7RiS7EYe9_y",
+			"index": "a3CBB",
 			"typeName": "shape"
 		},
 		{
@@ -167938,11 +168532,14 @@
 		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
-			"stylesForNextShape": {},
+			"stylesForNextShape": {
+				"tldraw:size": "s",
+				"tldraw:geo": "arrow-down"
+			},
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "cross",
+				"type": "default",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -167977,7 +168574,7 @@
 			"meta": {},
 			"duplicateProps": null,
 			"id": "instance:instance",
-			"currentPageId": "page:VbLX0m_2g_UWMpRNU9xR4",
+			"currentPageId": "page:6Jfbb_7E7c7RiS7EYe9_y",
 			"typeName": "instance"
 		},
 		{
@@ -168467,6 +169064,14 @@
 			"parentId": "page:VbLX0m_2g_UWMpRNU9xR4",
 			"index": "a84tg",
 			"typeName": "shape"
+		},
+		{
+			"x": 0,
+			"y": 0,
+			"z": 1,
+			"meta": {},
+			"id": "camera:page:bEdHUeGnEehra5TBEireq",
+			"typeName": "camera"
 		},
 		{
 			"x": -12711.304860299722,
@@ -202451,9 +203056,9 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 16029.661462584718,
-			"y": -41227.77835487185,
-			"z": 0.29478173625111775,
+			"x": 13574.442941119709,
+			"y": -34144.881652028394,
+			"z": 0.20536967421151034,
 			"meta": {},
 			"id": "camera:page:VbLX0m_2g_UWMpRNU9xR4",
 			"typeName": "camera"

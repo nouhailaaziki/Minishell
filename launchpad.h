@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/07 15:10:58 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:59:06 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ char		ft_isquote(char c);
 /*-----------Expand-----------------*/
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
-void		find_all_keys(char *str, t_var **keys,int stash_status);
+void		find_all_keys(char *str, t_var **keys);
 int			expand_keys(t_var **head, t_env **env, int stash_status ,
 int *keys_len);
 void		ft_copy_keys(char *dest, int *j, t_var *current_key);

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/07 15:29:42 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:52:56 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_var	*create_key(char *origin, int *quote, int *pos)
 	relative_pos = 0;
 	dollar = find_a_key(origin, quote, &key_len, pos);
 	if (!dollar)
-		return (printf("no key found\n"), NULL);
+		return (NULL);
 	key = ft_calloc(1, sizeof(t_var));
 	if (!key)
 	{
@@ -64,7 +64,7 @@ t_var	*create_key(char *origin, int *quote, int *pos)
 	return (key);
 }
 
-void	find_all_keys(char *str, t_var **keys, int stash_status)
+void	find_all_keys(char *str, t_var **keys)
 {
 	int		pos;
 	int		relative_pos;
@@ -83,37 +83,6 @@ void	find_all_keys(char *str, t_var **keys, int stash_status)
 		link_nodes(keys, key);
 		pos += relative_pos + key->key_len;
 	}
-}
-
-int	expand_keys(t_var **head, t_env **env, int stash_status, int *keys_len)
-{
-	t_var	*current;
-	char	*value;
-	int		value_len;
-
-	value_len = 0;
-	current = *head;
-	while (current)
-	{
-		if (current->expandable != '\'')
-		{
-			*keys_len += current->key_len;
-			if (current->key && is_special_param(current->key[1]))
-				current->value = expand_special_param(current->key[1], stash_status);
-			else
-			{
-				value = get_env_value(env, &(current->key[1]));
-				if (!value)
-					current->value = ft_strdup("");
-				else
-					current->value = ft_strdup(value);
-			}
-			current->value_len = ft_strlen(current->value);
-			value_len += current->value_len;
-		}
-		current = current->next;
-	}
-	return (value_len);
 }
 
 void	ft_copy_keys(char *dest, int *j, t_var *current_key)

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 17:35:09 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 18:32:33 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int main(int argc, char **argv, char **envp)
 		setup_signals_prompt(); // Setup signals for the main prompt
 		disable_echoctl(&shell.stash);
 		shell.line = readline("L33tShell-N.Y$ ");
-		// shell.line = ft_strdup("ls $PWD");
 		restore_terminal(&shell.stash);
 		add_history(shell.line);
 		if (!shell.line)

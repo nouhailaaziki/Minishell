@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/07 15:38:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:05:02 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,64 @@ void	update_cmd(char *origin, t_var *keys, char **destination)
 	dest[j] = '\0' ;
 }
 
+int	expand_keys(t_var **head, t_env **env, int stash_status, int *keys_len)
+{
+	t_var	*current;
+	char	*value;
+	int		value_len;
+
+	value_len = 0;
+	current = *head;
+	while (current)
+	{
+		if (current->expandable != '\'')
+		{
+			*keys_len += current->key_len;
+			if (current->key && is_special_param(current->key[1]))
+				current->value = expand_special_param(current->key[1], stash_status);
+			else
+			{
+				value = get_env_value(env, &(current->key[1]));
+				if (!value)
+					current->value = ft_strdup("");
+				else
+					current->value = ft_strdup(value);
+			}
+			current->value_len = ft_strlen(current->value);
+			value_len += current->value_len;
+		}
+		current = current->next;
+	}
+	return (value_len);
+}
+
+static char	*remove_quotes(char *str)
+{
+    char	*new_str;
+    int		j;
+    char	quote;
+
+    if (!str)
+        return (NULL);
+    new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+    if (!new_str)
+        return (NULL);
+    while (*str)
+    {
+        if (*str == '\'' || *str == '\"')
+        {
+            quote = *str++;
+            while (*str && *str != quote)
+                new_str[j++] = *str++;
+            if (*str == quote)
+                *str++;
+        }
+        else
+            new_str[j++] = *str++;
+    }
+    return (new_str);
+}
+
 void	expand_cmd(char **cmd, t_env **env, int stash_status)
 {
 	int		i;
@@ -65,9 +123,15 @@ void	expand_cmd(char **cmd, t_env **env, int stash_status)
 	i = 0;
 	while (cmd[i])
 	{
-		find_all_keys(cmd[i], &keys, stash_status);
+		find_all_keys(cmd[i], &keys);
 		if (!keys)
 		{
+		new_cmd = remove_quotes(cmd[i]);
+		if (new_cmd)
+		{
+			free(cmd[i]);
+			cmd[i] = new_cmd;
+		}
 			i++;
 			continue ;
 		}
@@ -84,6 +148,12 @@ void	expand_cmd(char **cmd, t_env **env, int stash_status)
 		free(cmd[i]);
 		cmd[i] = new_cmd;
 		free_keys(&keys);
+		new_cmd = remove_quotes(cmd[i]);
+        if (new_cmd)
+        {
+            free(cmd[i]);
+            cmd[i] = new_cmd;
+        }
 		i++;
 	}
 }
@@ -131,4 +201,9 @@ void	quote_expander(t_token **head)
 		}
 		current = current->next;
 	}
+}
+
+void expand_quotes(char **cmd)
+{
+
 }
