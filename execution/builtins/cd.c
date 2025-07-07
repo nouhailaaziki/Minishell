@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 11:54:36 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/04 09:24:15 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 21:45:38 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ int	handle_no_arg(t_env **env_list, t_stash *stash)
 	path = get_env_value(env_list, "HOME");
 	if (!path)
 		return (puterror(0, "cd: ", NULL, "HOME not set"));
-	chdir(path);
+	if (path && chdir(path) && *path)
+	{
+		perror("L33tShell: cd");
+		return (1);
+	}
 	refresh_pwd(env_list, stash, NULL);
 	return (0);
 }

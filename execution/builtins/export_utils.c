@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 14:35:58 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/07 09:43:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	handle_argument(t_env **env_list, char *cmd)
 	char	*str;
 
 	j = 0;
-	if (cmd[0] == '=' || cmd[0] == '\0')
+	if (cmd[0] == '=' || cmd[0] == '+' || cmd[0] == '\0')
 		return (export_error(cmd));
 	while (cmd[j] && cmd[j] != '=' && cmd[j] != '+')
 		j++;
