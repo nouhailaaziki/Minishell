@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   na_arrlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/27 18:13:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 12:13:03 by yrhandou         ###   ########.fr       */
+/*   Created: 2025/05/29 09:06:48 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/05 13:17:11 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
-#include <stdio.h>
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+int	na_arrlen(char **arr)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	if (dstsize == 0)
-		return (ft_strlen(src));
-	while (src[i] != '\0' && dstsize - 1 > i)
-	{
-		dst[i] = src[i];
+	while (*arr && arr[i])
 		i++;
-	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
+	return (i);
 }

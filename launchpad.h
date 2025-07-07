@@ -12,6 +12,7 @@
 
 #ifndef LAUNCHPAD_H
 # define LAUNCHPAD_H
+
 /*---------------------Header inclusion directive---------------------*/
 # include <errno.h>
 # include <fcntl.h>
@@ -26,6 +27,7 @@
 # include <sys/ioctl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+
 /*-----------------------Format and Color Macros----------------------*/
 # define BOLD "\033[1m"
 # define ORANGE "\x1b[38;5;214m"
@@ -47,6 +49,8 @@
 # define BHCYN "\e[1;96m"
 # define BHWHT "\e[1;97m"
 # define RESET "\e[0m"
+
+// #define malloc(x) NULL
 /*----------------------------global flag-----------------------------*/
 extern int	g_sigint_received;
 
@@ -149,12 +153,20 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
+typedef struct s_pids
+{
+	pid_t			pid;
+	struct s_pids	*next;
+} t_pids;
+
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
 	int				status;
 	int				return_status;
+	int				fork_failed;
 	int				path_flag;
+	int				exit_flag;
 	char			*pwd_backup;
 	char			*heredoc_store;
 	int				heredoc_interrupted;
@@ -173,62 +185,75 @@ typedef struct s_shell
 }	t_shell;
 
 /*-----------------------Environment fonctions------------------------*/
-t_env		*env_node(char *envp);
+void		swap_env(t_env *a, t_env *b);
 char		**get_env_arr(t_env *env_list);
-void		upp_shlvl(t_env *node, int nbr);
+void		sort_env_list(t_env **env_list);
+void		add_node(t_env **env_list, char *argv);
 char		*add_env_value(char *key, t_stash *stash);
+char		*get_env_value(t_env **env_list, char *key);
+void		add_value(t_env **env_list, char *argv, char *key);
 void		build_env(t_env **env_list, char **envp, t_stash *stash);
 void		add_env_var(t_env **env_list, char *key, t_stash *stash);
 void		check_existing_vars(t_env *env_list, char **keys, int *found);
+void		update_env(t_env **env_list, char *argv, char *key, int start);
 
 /*-------------------------Builtins fonctions-------------------------*/
 int			echo(char **cmd);
-int			pathchr(char *path);
 int			pwd(t_stash *stash);
-int			skip_points(char *path);
 int			is_parent_builtin(char *cmd);
-void		ft_putstr_fd(char *s, int fd);
-void		sort_env_list(t_env **env_list);
 void		run_exit(char **cmd, t_stash *stash);
-char		*get_valid_path(int counter, t_stash *stash);
-char *get_env_value(t_env **env_list, char *key);
-
-	void refresh_oldpwd(t_env **env_list, char *oldpwd);
+int			count_leading_dotdots(const char *path);
+char		*handle_dotdots(char *new_path, int dotdots);
+int			handle_argument(t_env **env_list, char *cmd);
 int			env(t_env *env_list, t_stash *stash, char **cmd);
 int			cd(char **cmd, t_env **env_list, t_stash *stash);
-void		add_value(t_env **env_list, char *argv, char *key);
+char		*handle_component_case(int dotdots, t_stash *stash);
 int			unset(t_env **env_list, char **cmd, t_stash *stash);
-int			check_validity(char	*argv, char *initial, char *cmd);
 int			export(char **cmd, t_env **env_list, t_stash *stash);
-t_env		*create_node(char *argv, size_t key_len, char *sign);
-void		handle_argument(t_env **env_list, char *cmd, t_stash *stash);
-void		update_env(t_env **env_list, char *argv, char *key, int start);
+int			check_validity(char	*argv, char *initial, char *cmd);
+void		refresh_pwd(t_env **env_list, t_stash *stash, char *cmd);
+char		*handle_component(char *new_path, const char *component);
+char		*get_next_component(const char *path, int *start, int *end);
 int			run_builtins(char **cmd, t_env **env_list, int status, \
 t_stash *stash);
+char		*process_components(const char *path, int dotdots, \
+t_stash *stash, char *component);
 
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
 t_gcnode	**memory_tracker(void);
 
-/*-------------------Utilities from libft (Updated)-------------------*/
+/*------------------------------Utilities-----------------------------*/
 char		*na_itoa(int n);
+int			ft_isalpha(int c);
 int			ft_isdigit(int c);
-int			ft_arrlen(char **arr);
+int			ft_isspace(int c);
+int			ft_isalnum(int c);
+int			ft_isascii(int c);
+int			na_arrlen(char **arr);
 int			ft_atoi(const char *str);
 size_t		ft_strlen(const char *s);
+long		na_atoi(const char *str);
 char		*na_strdup(const char *s);
-long		strict_atoi(const char *str);
+int			ft_str_isspace(char *str);
+char		*ft_strdup(const char *s1);
 int			ft_strcmp(char *s1, char *s2);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putchar_fd(char c, int fd);
+void		ft_putendl_fd(char *s, int fd);
 char		*ft_strchr(const char *s, int c);
 char		**na_split(char const *s, char c);
+char		*ft_strrchr(const char *s, int c);
 int			ft_isallchar(const char *str, char c);
 void		*na_calloc(size_t count, size_t size);
+void		*ft_calloc(size_t count, size_t size);
 void		*ft_memset(void *b, int c, size_t len);
 int			na_mkstemp(char *template, t_redir *redir);
 char		*na_strjoin(char const *s1, char const *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir);
@@ -241,6 +266,7 @@ void		display_intro(void);
 void		is_it_dir(char *cmd);
 void		errno_manager(char *cmd);
 int			puterror(int program, char *cmd, char *arg, char *error);
+
 /*-------------------------execute fonctions--------------------------*/
 char		**get_path_list(char **env);
 void		handle_special_cases(char **path_list, char **cmd);
@@ -250,7 +276,8 @@ int			execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, \
 t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
-
+int			count_required_forks(t_tree *ast);
+int perform_dry_run_fork_test(int required_forks, t_stash *stash);
 /*------------------------------signals-------------------------------*/
 void		restore_terminal(t_stash *stash);
 void		disable_echoctl(t_stash *stash);
@@ -260,6 +287,8 @@ void		setup_signals_heredoc(void);
 void		setup_signals_prompt(void);
 
 /*---------------------Parsing STUFF------------------------------------------*/
+int			init_shell(t_shell *shell);
+int			lexer(t_shell *shell);
 void		parentheses_lexer(t_token **head);
 void		link_token(t_token **head, t_token *node);
 int			handle_quotes(char *str, char quote_type);
@@ -267,12 +296,11 @@ void		advanced_token_lexer(t_token **head);
 int			parentheses_counter_v2(t_token *head);
 int			handle_parentheses(t_shell *shell);
 int			ft_syntax_analyzer(char *str);
-void		init_shell(t_shell *shell);
 int			operator_len(char *str);
 int			token_lexer(char *str);
 int			skip_spaces(char *str);
 int			parser(t_shell *shell);
-int			lexer(t_shell *shell);
+
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
 void		create_pseudotree(t_tree **ast, t_token **tokens);
@@ -305,6 +333,7 @@ int			ft_isparentheses(char *c);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
+
 /*-----------Expand-----------------*/
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);

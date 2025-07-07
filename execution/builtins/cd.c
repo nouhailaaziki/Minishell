@@ -5,140 +5,90 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 13:42:46 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 06:46:18 by noaziki          ###   ########.fr       */
+/*   Created: 2025/07/02 11:54:36 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/06 21:45:38 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	handle_failed_getcwd(t_env *pwd_node, t_stash *stash, char *cmd)
+char	*process_cd_path(const char *path, t_stash *stash)
 {
-	pwd_node->value = na_strjoin(stash->pwd_backup, "/");
-	if (!pwd_node->value)
-		return (perror("malloc"));
-	pwd_node->value = na_strjoin(pwd_node->value, cmd);
-	if (!pwd_node->value)
-		return (perror("malloc"));
-	stash->pwd_backup = na_strdup(pwd_node->value);
-	if (!pwd_node->value)
-		return (perror("malloc"));
-	ft_putstr_fd("cd: error retrieving current directory: ", 2);
-	ft_putstr_fd("getcwd: cannot access parent directories:", 2);
-	ft_putstr_fd(" No such file or directory\n", 2);
+	int		dotdots;
+	int		i;
+	int		start;
+	char	*component;
+
+	i = 0;
+	if (!path || !stash || !stash->pwd_backup)
+		return (NULL);
+	dotdots = count_leading_dotdots(path);
+	while (path[i] && (path[i] == '.' || path[i] == '/'))
+		i++;
+	start = i;
+	if (path[start] == '/')
+		start++;
+	component = get_next_component(path, &start, &i);
+	if (!component && dotdots > 0)
+		return (handle_component_case(dotdots, stash));
+	return (process_components(path, dotdots, stash, component));
 }
 
-char	*update_pwd_node(t_env *pwd_node, t_stash *stash, \
-char *new_pwd, char *cmd)
+int	handle_no_arg(t_env **env_list, t_stash *stash)
 {
-	char	*oldpwd_val;
+	char	*path;
 
-	oldpwd_val = na_strdup(pwd_node->value);
-	if (new_pwd)
+	path = get_env_value(env_list, "HOME");
+	if (!path)
+		return (puterror(0, "cd: ", NULL, "HOME not set"));
+	if (path && chdir(path) && *path)
 	{
-		pwd_node->value = na_strdup(new_pwd);
-		if (!pwd_node->value)
-			perror("malloc");
+		perror("L33tShell: cd");
+		return (1);
 	}
-	else
-		handle_failed_getcwd(pwd_node, stash, cmd);
-	return (oldpwd_val);
+	refresh_pwd(env_list, stash, NULL);
+	return (0);
 }
 
-void	refresh_pwd(t_env **env_list, t_stash *stash, char *cmd)
+int	handle_path_access(char **path, char *arg, t_stash *stash)
 {
-	char	*pwd;
-	char	*oldpwd;
-	t_env	*tmp;
-
-	tmp = *env_list;
-	oldpwd = NULL;
-	pwd = getcwd(0, 0);
-	if (pwd)
-		stash->pwd_backup = na_strdup(pwd);
-	while (tmp)
+	if (access(*path, F_OK) != 0)
 	{
-		if (ft_strcmp(tmp->key, "PWD") == 0)
-		{
-			oldpwd = update_pwd_node(tmp, stash, pwd, cmd);
-			if (!oldpwd)
-				perror("malloc");
-		}
-		tmp = tmp->next;
+		if (process_cd_path(arg, stash))
+			*path = process_cd_path(arg, stash);
+		if (access(*path, F_OK) != 0)
+			return (puterror(1, "cd: ", arg, \
+			": No such file or directory"));
 	}
-	refresh_oldpwd(env_list, oldpwd);
-	free(pwd);
+	return (0);
 }
 
-char	*get_env_value(t_env **env_list, char *key)
+int	handle_directory_check(char *path, char *arg, \
+t_env **env_list, t_stash *stash)
 {
-	t_env	*tmp;
-
-	tmp = *env_list;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->key, key))
-			return (tmp->value);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-// int	cd(char **cmd, t_env **env_list, t_stash *stash)
-// {
-// 	struct stat	sb;
-// 	char		*path;
-
-// 	if (!cmd[1])
-// 	{
-// 		path = get_env_value(env_list, "HOME");
-// 		if (!path)
-// 			return (puterror(0, "cd: ", NULL, "HOME not set"));
-// 		chdir(path);
-// 		refresh_pwd(env_list, stash, cmd[1]);
-// 	}
-// 	else
-// 	{
-// 		if (access(cmd[1], F_OK) != 0){
-// 			return (puterror(1, "cd: ", cmd[1], ": No such file or directory"));
-// 		}
-// 		if (stat(cmd[1], &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
-// 		{
-// 			if (chdir(cmd[1]) == -1)
-// 				return (puterror(1, "cd: ", cmd[1], ": Permission denied"));
-// 			refresh_pwd(env_list, stash, cmd[1]);
-// 		}
-// 		else
-// 		{
-// 			return (puterror(1, "cd: ", cmd[1], ": Not a directory"));
-// 		}
-// 	}
-// 	return (0);
-// }
-
-int cd(char **cmd, t_env **env_list, t_stash *stash)
-{
-    char		*path;
 	struct stat	sb;
 
-    if (!cmd[1])
-    {
-        path = get_env_value(env_list, "HOME");
-        if (!path)
-            return (puterror(0, "cd: ", NULL, "HOME not set"));
-    }
-    else
-        path = cmd[1];
+	if (stat(path, &sb) == 0 && (sb.st_mode & 0170000) == 0040000)
+	{
+		if (chdir(path) == -1)
+			return (puterror(1, "cd: ", arg, ": Permission denied"));
+		refresh_pwd(env_list, stash, arg);
+	}
+	else
+		return (puterror(1, "cd: ", arg, ": Not a directory"));
+	return (0);
+}
 
-    if (chdir(path) == -1)
-    {
-        if (access(path, F_OK) != 0)
-            return (puterror(1, "cd: ", path, ": No such file or directory"));
-        stat(path, &sb);
-        if (!S_ISDIR(sb.st_mode))
-             return (puterror(1, "cd: ", path, ": Not a directory"));
-        return (puterror(1, "cd: ", path, ": Permission denied"));
-    }
-    refresh_pwd(env_list, stash, path);
-    return (0);
+int	cd(char **cmd, t_env **env_list, t_stash *stash)
+{
+	char		*path;
+	int			ret;
+
+	if (!cmd[1])
+		return (handle_no_arg(env_list, stash));
+	path = na_strdup(cmd[1]);
+	ret = handle_path_access(&path, cmd[1], stash);
+	if (ret != 0)
+		return (ret);
+	return (handle_directory_check(path, cmd[1], env_list, stash));
 }

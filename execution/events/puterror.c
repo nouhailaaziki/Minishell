@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:19:41 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 12:14:39 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 14:38:20 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	puterror(int program, char *cmd, char *arg, char *error)
 		message = na_strjoin(cmd, arg);
 		message = na_strjoin(message, error);
 	}
-	ft_putstr_fd(message, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putendl_fd(message, 2);
 	return (1);
 }

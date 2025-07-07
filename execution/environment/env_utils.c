@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:07:56 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 12:11:06 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 12:51:45 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 char	*add_env_value(char *key, t_stash *stash)
 {
 	char	*pwd;
+	char	*curr_pwd;
 
 	if (!ft_strcmp(key, "PWD"))
 	{
 		pwd = getcwd(0, 0);
 		if (!pwd)
 			return (NULL);
-		return (pwd);
+		curr_pwd = na_strdup(pwd);
+		free(pwd);
+		return (curr_pwd);
 	}
 	else if (!ft_strcmp(key, "PATH"))
 	{
@@ -71,8 +74,23 @@ void	check_existing_vars(t_env *env_list, char **keys, int *found)
 		{
 			if (!ft_strcmp(tmp->key, keys[i]))
 				found[i] = 1;
+			if (!ft_strcmp(tmp->key, "PATH") && !ft_strcmp(tmp->value, ""))
+				tmp->value = na_strdup(".");
 			i++;
 		}
 		tmp = tmp->next;
 	}
+}
+
+void	swap_env(t_env *a, t_env *b)
+{
+	char	*tmp_key;
+	char	*tmp_value;
+
+	tmp_key = a->key;
+	tmp_value = a->value;
+	a->key = b->key;
+	a->value = b->value;
+	b->key = tmp_key;
+	b->value = tmp_value;
 }

@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   get_env_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/18 08:48:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 12:13:03 by yrhandou         ###   ########.fr       */
+/*   Created: 2025/07/02 15:07:16 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/02 15:07:29 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../../launchpad.h"
 
-t_list	*ft_lstlast(t_list *lst)
+char	*get_env_value(t_env **env_list, char *key)
 {
-	t_list	*tmp;
+	t_env	*tmp;
 
-	tmp = lst;
+	tmp = *env_list;
 	while (tmp)
 	{
-		if (tmp->next == NULL)
-			break ;
+		if (!ft_strcmp(tmp->key, key))
+			return (tmp->value);
 		tmp = tmp->next;
 	}
-	return (tmp);
+	return (NULL);
 }

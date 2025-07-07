@@ -2,7 +2,9 @@
 */*.o
 *.o
 .DS_Store
-minishell
+.excalidraw
+*.tldr
 libft.a
 libft/*.c
 */Contents/*
+minishell

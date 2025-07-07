@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/27 12:08:59 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/03 15:40:41 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@ t_env	*env_node(char *envp)
 	key_len = sign - envp;
 	node = nalloc(sizeof(t_env));
 	node->key = na_substr(envp, 0, key_len);
-	if (!strcmp(node->key, "SHLVL"))
+	if (!ft_strcmp(node->key, "SHLVL"))
 		upp_shlvl(node, ft_atoi(sign + 1));
+	else if (!ft_strcmp(node->key, "OLDPWD"))
+		node->value = NULL;
 	else
 		node->value = na_strdup(sign + 1);
 	node->next = NULL;

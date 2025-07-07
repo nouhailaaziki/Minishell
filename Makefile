@@ -10,28 +10,28 @@ RM = rm -rf
 
 CC = cc
 
-CFLAGS = -g -O0 #-fsanitize=address # -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
-			utilities/ft_strdup.c utilities/ft_substr.c utilities/ft_str_isspace.c utilities/ft_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
-			utilities/ft_memset.c utilities/ft_strchr.c utilities/ft_strcmp.c utilities/ft_strncmp.c utilities/ft_strlen.c utilities/ft_strjoin.c \
-			utilities/na_calloc.c utilities/na_itoa.c utilities/na_split.c utilities/na_strdup.c utilities/na_strjoin.c utilities/na_substr.c utilities/ft_memcpy.c \
-			utilities/strict_atoi.c utilities/na_mkstemp.c utilities/ft_putchar_fd.c utilities/ft_putstr_fd.c utilities/ft_putendl_fd.c utilities/ft_itoa.c
+			utilities/ft_strdup.c  utilities/ft_substr.c  utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
+			utilities/ft_memset.c utilities/ft_strchr.c utilities/ft_strcmp.c utilities/ft_strncmp.c utilities/ft_strlen.c utilities/ft_strjoin.c\
+			utilities/na_calloc.c utilities/na_itoa.c utilities/na_split.c utilities/na_strdup.c utilities/na_strjoin.c utilities/na_substr.c utilities/ft_memcpy.c\
+			utilities/na_atoi.c utilities/na_mkstemp.c utilities/ft_putchar_fd.c utilities/ft_putstr_fd.c utilities/ft_putendl_fd.c utilities/ft_itoa.c
 
 PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_utils.c \
 		  parsing/str_lexer_utils.c parsing/tree_utils.c parsing/tree_utils_misc.c parsing/parser_utils.c\
 		  parsing/ft_free.c parsing/advanced_tree_utils.c parsing/errors.c parsing/token_utils.c\
 		  parsing/expand/expand_cmd.c parsing/expand/expand_utils.c parsing/expand/key_utils.c basic_visualiser.c advanced_visualizer.c misc_utils.c main.c
 
-
-EXECUTION =	execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c \
-			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c \
+EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c execution/builtins/path_build.c \
+			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c execution/executor/dry_run_fork.c \
 			execution/environment/get_env_arr.c execution/events/puterror.c execution/events/errno_manager.c execution/events/display_intro.c \
-			execution/builtins/manage_builtins.c  execution/executor/execute.c execution/redirection/heredocs_manager.c \
-			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/redirection/redirs.c \
+			execution/builtins/manage_builtins.c  execution/executor/execute.c execution/redirection/heredocs_manager.c execution/builtins/path_utils.c\
+			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/redirection/redirs.c execution/builtins/refresh_pwd.c\
 			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
 			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
-			execution/executor/execute_command_utils.c execution/builtins/cd_utils.c
+			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd.c execution/environment/env_update.c
+
 EXEC = ${EXECUTION:.c=.o}
 
 PARSE = $(PARSING:.c=.o)

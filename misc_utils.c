@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
 /*   Updated: 2025/07/06 10:44:53 by yrhandou         ###   ########.fr       */
@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "launchpad.h"
-void print_redirs(t_redir *redir)
+
+void	print_redirs(t_redir *redir)
 {
 	while (redir)
 	{
@@ -30,6 +31,7 @@ void print_redirs(t_redir *redir)
 		redir = redir->next;
 	}
 }
+
 
 void print_tokens(t_var **head)
 {
@@ -180,4 +182,3 @@ void print_tokens(t_var **head)
 // 	node->right = create_tree(r);
 // 	return node;
 // }
-

@@ -68,7 +68,8 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 {
 	if (!ast)
 		return (stash->status);
-	if (ast->type == NODE_COMMAND){
+	if (ast->type == NODE_COMMAND)
+  {
 		expand_cmd(ast->cmd, env, stash->status);
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	}

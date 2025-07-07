@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 17:02:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/06 16:05:21 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 			perror("execve failed");
 			exit(1);
 		}
-		free(path);
 		i++;
 	}
 }
@@ -46,9 +45,8 @@ void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 	if (ft_strchr(cmd[0], '/') || !path_list
 		|| !path_list[0] || !ft_strcmp(path_list[0], ""))
 		errno_manager(cmd[0]);
-	ft_putstr_fd("L33tShell: ", 2);
-	ft_putstr_fd(cmd[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
+	(ft_putstr_fd("L33tShell: ", 2), ft_putstr_fd(cmd[0], 2));
+	ft_putendl_fd(": command not found", 2);
 	exit(127);
 }
 
@@ -78,15 +76,13 @@ t_env **env_list, t_stash *stash)
 	int		status;
 	int		restore[2];
 
-	restore[0] = dup(STDIN_FILENO);
-	restore[1] = dup(STDOUT_FILENO);
+	7889 && (restore[0] = dup(STDIN_FILENO), restore[1] = dup(STDOUT_FILENO));
 	if (cmd && is_parent_builtin(cmd[0]))
 	{
 		handle_redirs(redirs);
 		i = run_builtins(cmd, env_list, stash->status, stash);
-		dup2(restore[0], STDIN_FILENO);
-		dup2(restore[1], STDOUT_FILENO);
-		close(restore[0]), close(restore[1]);
+		(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
+		(close(restore[0]), close(restore[1]));
 		return (i);
 	}
 	pid = fork();
@@ -94,7 +90,7 @@ t_env **env_list, t_stash *stash)
 		return (perror("fork failed"), 1);
 	if (pid == 0)
 		child_process_handler(cmd, redirs, env_list, stash);
-	signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN);
+	(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
