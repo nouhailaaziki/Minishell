@@ -6,56 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/01 15:47:35 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:33:18 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
-
-void	quote_expander(t_token **head)
-{
-	t_token	*current;
-	int		position;
-	int		i;
-	char	quote;
-	char	*expanded_token;
-
-	i = 0;
-	position = 0;
-	current = *head;
-	while (current)
-	{
-		if (ft_strchr(current->value, '\"') == NULL && \
-		ft_strchr(current->value, '\'') == NULL)
-		{
-			current = current->next;
-			continue ;
-		}
-		expanded_token = ft_calloc(ft_strlen(current->value) + 1, sizeof(char));
-		if (!expanded_token)
-			return (free_tokens(head), ft_putendl_fd("MALLOC FAILURE", 2));
-		while (current->value[i])
-		{
-			quote = ft_isquote(current->value[i]);
-			if (quote != '\0')
-			{
-				i++;
-				while (current->value[i] && current->value[i] != quote)
-					expanded_token[position++] = current->value[i++];
-				if (current->value[i] == quote)
-					i++;
-			}
-			else
-				expanded_token[position++] = current->value[i++];
-		}
-		if (expanded_token)
-		{
-			free(current->value);
-			current->value = expanded_token;
-		}
-		current = current->next;
-	}
-}
 
 int	skip_spaces(char *str)
 {

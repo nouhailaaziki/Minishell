@@ -1,0 +1,134 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
+/*   Updated: 2025/07/07 15:29:42 by yrhandou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../launchpad.h"
+
+char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
+{
+	int		i;
+	char	*dollar;
+
+	i = 0;
+	while (origin[i] && origin[i] != '$')
+		i++;
+	if (!origin[i] || !origin[i + 1] || !is_valid_key(origin[i + 1]))
+		return (NULL);
+	check_quote(origin, &origin[i], quote);
+	dollar = &origin[i];
+	*pos = i;
+	i = 1;
+	if (is_special_param(dollar[i]))
+		i++;
+	else
+	{
+		while (dollar[i] && (ft_isalnum(dollar[i]) || dollar[i] == '_'))
+			i++;
+	}
+	dollar = ft_substr(dollar, 0, i);
+	if (!dollar)
+		return (NULL);
+	*key_len = i;
+	return (dollar);
+}
+
+t_var	*create_key(char *origin, int *quote, int *pos)
+{
+	char	*dollar;
+	t_var	*key;
+	int		key_len;
+	int		relative_pos;
+
+	key_len = 0;
+	relative_pos = 0;
+	dollar = find_a_key(origin, quote, &key_len, pos);
+	if (!dollar)
+		return (printf("no key found\n"), NULL);
+	key = ft_calloc(1, sizeof(t_var));
+	if (!key)
+	{
+		free(dollar);
+		return (NULL);
+	}
+	key->key = dollar;
+	key->key_len = key_len;
+	key->expandable = *quote;
+	return (key);
+}
+
+void	find_all_keys(char *str, t_var **keys, int stash_status)
+{
+	int		pos;
+	int		relative_pos;
+	t_var	*key;
+	int		quote;
+
+	quote = 0;
+	pos = 0;
+	*keys = NULL;
+	while (str[pos])
+	{
+		relative_pos = 0;
+		key = create_key(&str[pos], &quote, &relative_pos);
+		if (!key)
+			break ;
+		link_nodes(keys, key);
+		pos += relative_pos + key->key_len;
+	}
+}
+
+int	expand_keys(t_var **head, t_env **env, int stash_status, int *keys_len)
+{
+	t_var	*current;
+	char	*value;
+	int		value_len;
+
+	value_len = 0;
+	current = *head;
+	while (current)
+	{
+		if (current->expandable != '\'')
+		{
+			*keys_len += current->key_len;
+			if (current->key && is_special_param(current->key[1]))
+				current->value = expand_special_param(current->key[1], stash_status);
+			else
+			{
+				value = get_env_value(env, &(current->key[1]));
+				if (!value)
+					current->value = ft_strdup("");
+				else
+					current->value = ft_strdup(value);
+			}
+			current->value_len = ft_strlen(current->value);
+			value_len += current->value_len;
+		}
+		current = current->next;
+	}
+	return (value_len);
+}
+
+void	ft_copy_keys(char *dest, int *j, t_var *current_key)
+{
+	if (current_key->expandable != '\'')
+	{
+		if (current_key->value)
+		{
+			memcpy(dest, current_key->value, current_key->value_len);
+			*j += current_key->value_len;
+		}
+	}
+	else
+	{
+		memcpy(dest, current_key->key, current_key->key_len);
+		*j += current_key->key_len;
+	}
+}

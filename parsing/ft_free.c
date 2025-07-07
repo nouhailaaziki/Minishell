@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/06 16:57:09 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:35:44 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	free_tokens(t_token **head)
 	}
 	*head = NULL;
 }
+
 void	free_keys(t_var **head)
 {
 	t_var	*current;
@@ -124,7 +125,7 @@ void	free_keys(t_var **head)
 		next = current->next;
 		if (current->key)
 			free(current->key);
-		if(current->value)
+		if (current->value)
 			free(current->value);
 		current->expandable = 0;
 		current->value_len = 0;

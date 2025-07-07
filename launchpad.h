@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 17:04:33 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:10:58 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <signal.h>
 # include <termios.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 /*-----------------------Format and Color Macros----------------------*/
@@ -304,6 +305,20 @@ int			ft_isparentheses(char *c);
 int			ft_is_operator(char *c);
 int			ft_is_redir(char *c);
 char		ft_isquote(char c);
+/*-----------Expand-----------------*/
+char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
+t_var		*create_key(char *origin, int *quote , int *pos);
+void		find_all_keys(char *str, t_var **keys,int stash_status);
+int			expand_keys(t_var **head, t_env **env, int stash_status ,
+int *keys_len);
+void		ft_copy_keys(char *dest, int *j, t_var *current_key);
+void		link_nodes(t_var **head, t_var *node);
+int			is_special_param(char c);
+int			is_valid_key(char key);
+void		check_quote(char *start, char *end, int *quote);
+char		*expand_special_param(char c, int stash_status);
+void		update_cmd(char *origin ,t_var *keys, char **destination);
+void		expand_cmd(char **cmd, t_env **env, int stash_status);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
