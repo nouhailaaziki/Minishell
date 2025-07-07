@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:00:49 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 11:48:35 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/05 14:37:08 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@ int	check_validity(char	*argv, char *initial, char *cmd)
 				|| (i > 0 && argv[i] >= '0' && argv[i] <= '9')
 				|| argv[i] == '_' || (argv[i] >= 'A' && argv[i] <= 'Z')))
 		{
-			ft_putstr_fd("L33tShell: ", 2);
-			ft_putstr_fd(cmd, 2);
-			ft_putstr_fd(": `", 2);
-			ft_putstr_fd(initial, 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
+			(ft_putstr_fd("L33tShell: ", 2), ft_putstr_fd(cmd, 2));
+			(ft_putstr_fd(": `", 2), ft_putstr_fd(initial, 2));
+			ft_putendl_fd("': not a valid identifier", 2);
 			return (1);
 		}
 		i++;

@@ -6,71 +6,105 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/01 08:55:32 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 17:16:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
-void init_shell(t_shell *shell)
+int	init_shell(t_shell *shell)
 {
+	char	*tmp;
+
+	tmp = getcwd(0, 0);
+	if (!isatty(0) || !isatty(1) || !tmp)
+	{
+		ft_putendl_fd("L33tShell: input is not a terminal", 2);
+		return (1);
+	}
+	free (tmp);
 	display_intro();
 	shell->env_list = NULL;
 	shell->line = NULL;
 	shell->tokens = NULL;
 	shell->current = NULL;
 	shell->ast = NULL;
+	return (0);
 }
-int main(int argc, char **argv, char **envp)
-{
-	t_shell shell;
-	t_stash stash;
 
-	// atexit(f);
+void	init_loop_data(t_stash *stash)
+{
+	g_sigint_received = 0;
+	stash->heredoc_interrupted = 0;
+	stash->exit_flag = 0;
+	stash->fork_failed = 0;
+	setup_signals_prompt();
+	disable_echoctl(stash);
+}
+
+int	process_input(t_shell *shell)
+{
+	if (ft_str_isspace(shell->line) || !lexer(shell) || !parser(*shell))
+	{
+		free_tokens(&shell->tokens);
+		return (0);
+	}
+	create_one_tree(&shell->ast, &shell->tokens);
+	check_heredoc_limit(shell, shell->ast);
+	return (1);
+}
+
+void	execute_cmds(t_shell *shell, t_stash *stash)
+{
+	int required_forks;
+	
+	setup_signals_heredoc();
+	manage_heredocs(shell->ast, stash);
+	required_forks = count_required_forks(shell->ast);
+    if (required_forks > 0 && perform_dry_run_fork_test(required_forks, stash))
+	{
+        ft_putendl_fd("L33tShell: fork failed: Resource temporarily unavailable", 2);
+        stash->status = 1;
+        return;
+    }
+	if (!stash->heredoc_interrupted && !stash->fork_failed)
+		execute_ast(shell->ast, &shell->env_list, stash);
+	else
+	{
+		dprintf(2, "EXIT STATUS %d\n", stash->status);
+		return ;
+	}
+	restore_terminal(stash);
+	dprintf(2, "EXIT STATUS %d\n", stash->status);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_shell	shell;
+	t_stash	stash;
+
 	(void)argc, (void)argv;
-	stash.status = 0;
-	stash.heredoc_interrupted = 0;
-	init_shell(&shell);
+	7889 && (stash.status = 0, stash.heredoc_interrupted = 0);
+	if (init_shell(&shell))
+		return (1);
 	build_env(&shell.env_list, envp, &stash);
 	while (1)
 	{
-		g_sigint_received = 0; // Reset flag at the start of each loop
-		stash.heredoc_interrupted = 0;
-		setup_signals_prompt(); // Setup signals for the main prompt
-		disable_echoctl(&stash);
+		init_loop_data(&stash);
 		shell.line = readline("L33tShell-N.Y$ ");
-		restore_terminal(&stash);
+		if (g_sigint_received)
+			stash.status = 1;
 		add_history(shell.line);
 		if (!shell.line)
 		{
-			free_tokens(&shell.tokens);
-			free_all_tracked();
+			(free_tokens(&shell.tokens), free_all_tracked());
 			exit(stash.status);
 		}
-		if (ft_str_isspace(shell.line) || !lexer(&shell) || !parser(shell))
+		if (process_input(&shell))
 		{
-			free(shell.line);
-			free_tokens(&shell.tokens);
-			continue ;
+			execute_cmds(&shell, &stash);
 		}
-		create_one_tree(&shell.ast, &shell.tokens);
-		// visualize_tokens(shell.tokens);
-		// visualize_ast_tree(shell.ast);
-		// print_tree(shell.ast);
-		check_heredoc_limit(&shell,shell.ast);
-		setup_signals_heredoc();
-		manage_heredocs(shell.ast, &stash);
-		if (!stash.heredoc_interrupted)
-			execute_ast(shell.ast, &shell.env_list, &stash);
-		else
-		{
-			dprintf(2, "EXIT STATUS %d\n", stash.status);
-			clear_memory(&shell);
-			continue;
-		}
-		dprintf(2, "EXIT STATUS %d\n", stash.status);
 		clear_memory(&shell);
-
 	}
 	return (0);
 }

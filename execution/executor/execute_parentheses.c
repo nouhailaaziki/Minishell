@@ -6,13 +6,14 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/28 18:54:13 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 16:06:34 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	execute_parentheses(t_tree *ast, t_env **env, t_stash *stash, t_redir *redir)
+int	execute_parentheses(t_tree *ast, t_env **env, \
+t_stash *stash, t_redir *redir)
 {
 	pid_t	pid;
 	int		status;

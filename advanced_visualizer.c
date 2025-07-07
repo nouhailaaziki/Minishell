@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   advanced_visualizer.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/05 15:20:35 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/05 15:29:12 by noaziki          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "launchpad.h"
 #include <stdio.h>
 #include <string.h>
@@ -22,134 +34,134 @@
 #define TREE_SPACE "   "
 
 /*-----------------------Node Type String----------------------*/
-static const char *get_node_type_string(t_node_type type)
+static const char	*get_node_type_string(t_node_type type)
 {
 	switch (type)
 	{
-	case NODE_COMMAND:
-		return "COMMAND";
-	case NODE_PIPE:
-		return "PIPE";
-	case NODE_AND:
-		return "AND";
-	case NODE_OR:
-		return "OR";
-	case NODE_PARENTHESES:
-		return "PARENTHS";
-	default:
-		return "UNKNOWN";
+		case NODE_COMMAND:
+			return ("COMMAND");
+		case NODE_PIPE:
+			return ("PIPE");
+		case NODE_AND:
+			return ("AND");
+		case NODE_OR:
+			return ("OR");
+		case NODE_PARENTHESES:
+			return ("PARENTHS");
+		default :
+			return ("UNKNOWN");
 	}
 }
 
 /*-----------------------Node Type Color----------------------*/
-static const char *get_node_color(t_node_type type)
+static const char	*get_node_color(t_node_type type)
 {
 	switch (type)
 	{
-	case NODE_COMMAND:
-		return COLOR_GREEN;
-	case NODE_PIPE:
-		return COLOR_BLUE;
-	case NODE_AND:
-		return COLOR_YELLOW;
-	case NODE_OR:
-		return ORANGE;
-	case NODE_PARENTHESES:
-		return PINK;
-	default:
-		return COLOR_WHITE;
+		case NODE_COMMAND:
+			return (COLOR_GREEN);
+		case NODE_PIPE:
+			return (COLOR_BLUE);
+		case NODE_AND:
+			return (COLOR_YELLOW);
+		case NODE_OR:
+			return (ORANGE);
+		case NODE_PARENTHESES:
+			return (PINK);
+		default:
+			return (COLOR_WHITE);
 	}
 }
 
 /*-----------------------Redir Type String----------------------*/
-static const char *get_redir_type_string(t_token_type type)
+static const char	*get_redir_type_string(t_token_type type)
 {
 	switch (type)
 	{
-	case REDIR_IN:
-		return "<";
-	case REDIR_OUT:
-		return ">";
-	case REDIR_APPEND:
-		return ">>";
-	case REDIR_HEREDOC:
-		return "<<";
-	default:
-		return "?";
+		case REDIR_IN:
+			return ("<");
+		case REDIR_OUT:
+			return (">");
+		case REDIR_APPEND:
+			return (">>");
+		case REDIR_HEREDOC:
+			return ("<<");
+		default:
+			return ("?");
 	}
 }
 
 /*-----------------------Token Type String----------------------*/
-static const char *get_token_type_string(t_token_type type)
+static const char	*get_token_type_string(t_token_type type)
 {
 	switch (type)
 	{
-	case TOKEN_CMD:
-		return "WORD";
-	case TOKEN_ARG:
-		return "ARG";
-	case TOKEN_PAREN:
-		return "PAREN";
-	case TOKEN_PAREN_LEFT:
-		return "PAREN_LEFT";
-	case TOKEN_PAREN_RIGHT:
-		return "PAREN_RIGHT";
-	case TOKEN_AND:
-		return "AND";
-	case TOKEN_OR:
-		return "OR";
-	case TOKEN_PIPE:
-		return "PIPE";
-	case TOKEN_REDIR:
-		return "REDIR";
-	case R_FILE:
-		return "R_FILE";
-	case REDIR_IN:
-		return "REDIR_IN";
-	case REDIR_OUT:
-		return "REDIR_OUT";
-	case REDIR_APPEND:
-		return "REDIR_APPEND";
-	case REDIR_HEREDOC:
-		return "REDIR_HEREDOC";
-	default:
-		return "UNKNOWN";
+		case TOKEN_CMD:
+			return ("WORD");
+		case TOKEN_ARG:
+			return ("ARG");
+		case TOKEN_PAREN:
+			return ("PAREN");
+		case TOKEN_PAREN_LEFT:
+			return ("PAREN_LEFT");
+		case TOKEN_PAREN_RIGHT:
+			return ("PAREN_RIGHT");
+		case TOKEN_AND:
+			return ("AND");
+		case TOKEN_OR:
+			return ("OR");
+		case TOKEN_PIPE:
+			return ("PIPE");
+		case TOKEN_REDIR:
+			return ("REDIR");
+		case R_FILE:
+			return ("R_FILE");
+		case REDIR_IN:
+			return ("REDIR_IN");
+		case REDIR_OUT:
+			return ("REDIR_OUT");
+		case REDIR_APPEND:
+			return ("REDIR_APPEND");
+		case REDIR_HEREDOC:
+			return ("REDIR_HEREDOC");
+		default:
+			return ("UNKNOWN");
 	}
 }
 
 /*-----------------------Token Type Color----------------------*/
-static const char *get_token_color(t_token_type type)
+static const char	*get_token_color(t_token_type type)
 {
 	switch (type)
 	{
-	case TOKEN_CMD:
-	case TOKEN_ARG:
-		return COLOR_WHITE;
-	case TOKEN_AND:
-	case TOKEN_OR:
-		return COLOR_YELLOW;
-	case TOKEN_PIPE:
-		return COLOR_BLUE;
-	case TOKEN_REDIR:
-	case REDIR_IN:
-	case REDIR_OUT:
-	case REDIR_APPEND:
-	case REDIR_HEREDOC:
-		return COLOR_CYAN;
-	case R_FILE:
-		return COLOR_MAGENTA;
-	case TOKEN_PAREN:
-		return COLOR_GREEN;
-	case TOKEN_PAREN_LEFT:
-	case TOKEN_PAREN_RIGHT:
-		return PINK;
-	default:
-		return COLOR_WHITE;
+		case TOKEN_CMD:
+		case TOKEN_ARG:
+			return (COLOR_WHITE);
+		case TOKEN_AND:
+		case TOKEN_OR:
+			return (COLOR_YELLOW);
+		case TOKEN_PIPE:
+			return (COLOR_BLUE);
+		case TOKEN_REDIR:
+		case REDIR_IN:
+		case REDIR_OUT:
+		case REDIR_APPEND:
+		case REDIR_HEREDOC:
+			return (COLOR_CYAN);
+		case R_FILE:
+			return (COLOR_MAGENTA);
+		case TOKEN_PAREN:
+			return (COLOR_GREEN);
+		case TOKEN_PAREN_LEFT:
+		case TOKEN_PAREN_RIGHT:
+			return (PINK);
+		default:
+			return (COLOR_WHITE);
 	}
 }
 
 /*-----------------------Tree Utilities----------------------*/
-static int calculate_tree_depth(t_tree *node)
+static int	calculate_tree_depth(t_tree *node)
 {
 	if (!node)
 		return 0;
@@ -158,7 +170,7 @@ static int calculate_tree_depth(t_tree *node)
 	return 1 + (ld > rd ? ld : rd);
 }
 
-static int count_tree_nodes(t_tree *node)
+static int	count_tree_nodes(t_tree *node)
 {
 	if (!node)
 		return 0;
@@ -166,7 +178,7 @@ static int count_tree_nodes(t_tree *node)
 }
 
 /*-----------------------Redirection Print----------------------*/
-static void print_redirections(t_redir *r, const char *prefix)
+static void	print_redirections(t_redir *r, const char *prefix)
 {
 	int i = 0;
 	for (; r; r = r->next, ++i)
@@ -197,7 +209,7 @@ static void print_redirections(t_redir *r, const char *prefix)
 }
 
 /*-----------------------Command Args Print----------------------*/
-static void print_command_args(char **cmd, const char *prefix, int is_last)
+static void	print_command_args(char **cmd, const char *prefix, int is_last)
 {
 	const char *mark = is_last ? TREE_LAST : TREE_BRANCH;
 	if (!cmd || !cmd[0])
@@ -214,7 +226,7 @@ static void print_command_args(char **cmd, const char *prefix, int is_last)
 }
 
 /*-----------------------Parentheses Print----------------------*/
-static void print_parentheses_info(const char *prefix, int is_last)
+static void	print_parentheses_info(const char *prefix, int is_last)
 {
 	const char *mark = is_last ? TREE_LAST : TREE_BRANCH;
 	printf("%s%s %sParentheses Group%s\n",
@@ -222,7 +234,7 @@ static void print_parentheses_info(const char *prefix, int is_last)
 }
 
 /*-----------------------Recursive Tree Printer----------------------*/
-static void visualize_tree_recursive(t_tree *node,
+static void	visualize_tree_recursive(t_tree *node,
 									 const char *prefix,
 									 int is_last)
 {
@@ -288,7 +300,7 @@ static void visualize_tree_recursive(t_tree *node,
 }
 
 /*-----------------------AST Visualizer Entry Point----------------------*/
-void visualize_ast_tree(t_tree *root)
+void	visualize_ast_tree(t_tree *root)
 {
 	if (!root)
 	{
@@ -334,7 +346,7 @@ void visualize_ast_tree(t_tree *root)
 }
 
 /*-----------------------Token List Visualizer----------------------*/
-void visualize_tokens(t_token *head)
+void	visualize_tokens(t_token *head)
 {
 	if (!head)
 	{

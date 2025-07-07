@@ -1,54 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   na_atoi.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/26 19:33:26 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 12:13:03 by yrhandou         ###   ########.fr       */
+/*   Created: 2025/05/11 11:46:47 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-static char	sign_check(const char *str, int *sign)
+long	do_skip(const char *str, long *s)
 {
-	int	i;
+	long	i;
 
 	i = 0;
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
-	if (str[i] == '+' || str[i] == '-')
+	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			*sign *= -1;
+			*s *= -1;
 		i++;
 	}
 	return (i);
 }
 
-int	ft_atoi(const char *str)
+long	na_atoi(const char *str)
 {
-	int				i;
-	int				sign;
-	long			temp;
-	long			result;
+	long	i;
+	long	s;
+	long	r;
 
-	sign = 1;
-	result = 0;
-	i = sign_check(str, &sign);
-	while (ft_isdigit(str[i]))
+	s = 1;
+	r = 0;
+	i = do_skip(str, &s);
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		temp = result;
-		result = result * 10 + (str[i] - '0');
-		if (result / 10 != temp)
+		if ((r == 922337203685477580 && ((i >= 18 && s == 1 && str[i] > '7')
+					|| (i >= 19 && s == -1 && str[i] > '8')))
+			|| r > 922337203685477580)
 		{
-			if (sign == 1)
-				return (-1);
-			return (0);
+			puterror(0, "exit", NULL, ": numeric argument required\n");
+			exit(255);
 		}
+		else
+			r = r * 10 + str[i] - 48;
 		i++;
 	}
-	return ((int)(result * sign));
+	return (r * s);
 }
