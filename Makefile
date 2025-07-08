@@ -21,7 +21,8 @@ UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c ut
 PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_utils.c \
 		  parsing/str_lexer_utils.c parsing/tree_utils.c parsing/tree_utils_misc.c parsing/parser_utils.c\
 		  parsing/ft_free.c parsing/advanced_tree_utils.c parsing/errors.c parsing/token_utils.c\
-		  parsing/expand/expand_cmd.c parsing/expand/expand_utils.c parsing/expand/key_utils.c basic_visualiser.c advanced_visualizer.c misc_utils.c main.c
+		  parsing/expand/expand_cmd.c parsing/expand/expand_utils.c parsing/expand/key_utils.c \
+		   parsing/expand/expand_quotes.c basic_visualiser.c advanced_visualizer.c misc_utils.c main.c
 
 EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c execution/builtins/path_build.c \
 			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c execution/executor/dry_run_fork.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/08 11:42:13 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:25:26 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,37 +54,6 @@ void	expand_keys(t_var **head, t_env **env, int stash_status, int *keys_len, int
 	}
 }
 
-static void count_removed_quotes(char *old_cmd, char **new_cmd)
-{
-    int		count;
-    int		j;
-    char	quote;
-
-	j = 0;
-	count = 0;
-    if (!old_cmd)
-        return ;
-    while (old_cmd[j])
-    {
-        if (ft_isquote(old_cmd[j]))
-        {
-            quote = old_cmd[j++];
-            while (old_cmd[j] && old_cmd[j] != quote)
-			{
-                count++;
-				j++;
-			}
-            if (old_cmd[j] == quote)
-                quote = 0;
-        }
-        else
-		{
-            count++;
-			j++;
-		}
-    }
-}
-
 char *expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status)
 {
 	int		values_len;
@@ -97,7 +66,10 @@ char *expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status)
 	*keys = NULL;
 	find_all_keys(old_cmd[0], keys);
 	if (!keys || !*keys)
-		return NULL;
+	{
+		expand_quotes(old_cmd, &new_cmd);
+		return (new_cmd);
+	}
 	expand_keys(keys, env, stash_status, &keys_len, &values_len);
 	alloc_len = ft_strlen(old_cmd[0]) - keys_len + values_len;
 	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
@@ -108,6 +80,7 @@ char *expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status)
 	}
 	return new_cmd;
 }
+
 void	update_cmd(char **origin, t_var **keys, char **destination)
 {
 	t_var	*current;
@@ -147,7 +120,10 @@ void	expand_cmd(char **cmd, t_env **env, int stash_status)
 	{
 		new_cmd = expand_vars(&keys, &cmd[i], env, stash_status);
 		if (!keys)
-			puts("NO_KEYS");// count_removed_quotes(cmd[i], &new_cmd);
+		{
+			free(cmd[i]);
+			cmd[i] = new_cmd;
+		}
 		else
 			update_cmd(&cmd[i], &keys, &new_cmd);
 		i++;

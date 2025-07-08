@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/08 11:41:07 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:19:23 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ typedef struct s_tree
 // typedef struct	s_dirent
 // {
 // 	char			*name;
-// 	struct s_dirent	*next;    
+// 	struct s_dirent	*next;
 // }	t_dirent;
 
 
@@ -327,7 +327,6 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-void		expand_cmd(char **cmd, t_env **env, int stash_status);
 	/*---------------------Checkers-------------------*/
 int			ft_syntax_err(char *str, t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
@@ -342,10 +341,10 @@ int			ft_is_redir(char *c);
 char		ft_isquote(char c);
 
 /*-----------Expand-----------------*/
+void		expand_cmd(char **cmd, t_env **env, int stash_status);
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
-// void 		expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status);
 void		update_cmd(char **origin, t_var **keys, char **destination);
 void		expand_cmd(char **cmd, t_env **env, int stash_status);
 void		ft_copy_keys(char **dest, int *j, t_var *current);
@@ -354,6 +353,7 @@ int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
 char		*expand_special_param(char c, int stash_status);
+void		expand_quotes(char **old_cmd, char **new_cmd);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
