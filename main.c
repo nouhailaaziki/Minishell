@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 17:16:39 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/08 09:26:13 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	init_loop_data(t_stash *stash)
 
 int	process_input(t_shell *shell)
 {
-	if (ft_str_isspace(shell->line) || !lexer(shell) || !parser(*shell))
+	if (ft_str_isspace(shell->line) || !lexer(shell) || !parser(shell))
 	{
 		free_tokens(&shell->tokens);
 		return (0);
@@ -59,7 +59,7 @@ int	process_input(t_shell *shell)
 void	execute_cmds(t_shell *shell, t_stash *stash)
 {
 	int required_forks;
-	
+
 	setup_signals_heredoc();
 	manage_heredocs(shell->ast, stash);
 	required_forks = count_required_forks(shell->ast);
@@ -72,12 +72,8 @@ void	execute_cmds(t_shell *shell, t_stash *stash)
 	if (!stash->heredoc_interrupted && !stash->fork_failed)
 		execute_ast(shell->ast, &shell->env_list, stash);
 	else
-	{
-		dprintf(2, "EXIT STATUS %d\n", stash->status);
 		return ;
-	}
 	restore_terminal(stash);
-	dprintf(2, "EXIT STATUS %d\n", stash->status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -103,9 +99,7 @@ int	main(int argc, char **argv, char **envp)
 			exit(stash.status);
 		}
 		if (process_input(&shell))
-		{
 			execute_cmds(&shell, &stash);
-		}
 		clear_memory(&shell);
 	}
 	return (0);

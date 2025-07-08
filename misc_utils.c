@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/06 10:44:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 09:19:50 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_redirs(t_redir *redir)
 void print_tokens(t_var **head)
 {
 	t_var *tmp;
-	char *tiipe;
+	// char *tiipe;
 
 	if(!head || !*head)
 	{

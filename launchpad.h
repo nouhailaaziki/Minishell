@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/07 15:59:06 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:41:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 
 // #define malloc(x) NULL
 /*----------------------------global flag-----------------------------*/
-extern int	g_sigint_received;
+int	g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
@@ -338,16 +338,15 @@ char		ft_isquote(char c);
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
-int			expand_keys(t_var **head, t_env **env, int stash_status ,
-int *keys_len);
-void		ft_copy_keys(char *dest, int *j, t_var *current_key);
+// void 		expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status);
+void		update_cmd(char **origin, t_var **keys, char **destination);
+void		expand_cmd(char **cmd, t_env **env, int stash_status);
+void		ft_copy_keys(char **dest, int *j, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
 int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
 char		*expand_special_param(char c, int stash_status);
-void		update_cmd(char *origin ,t_var *keys, char **destination);
-void		expand_cmd(char **cmd, t_env **env, int stash_status);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
