@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/07 22:31:39 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/08 09:26:13 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	process_input(t_shell *shell)
 
 void	execute_cmds(t_shell *shell, t_stash *stash)
 {
-	int	required_forks;
+	int required_forks;
 
 	setup_signals_heredoc();
 	manage_heredocs(shell->ast, stash);
@@ -73,12 +73,8 @@ Resource temporarily unavailable", 2);
 	if (!stash->heredoc_interrupted && !stash->fork_failed)
 		execute_ast(shell->ast, &shell->env_list, stash);
 	else
-	{
-		dprintf(2, "EXIT STATUS %d\n", stash->status);
 		return ;
-	}
 	restore_terminal(stash);
-	dprintf(2, "EXIT STATUS %d\n", stash->status);
 }
 
 int	main(int argc, char **argv, char **envp)

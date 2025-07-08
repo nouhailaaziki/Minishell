@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "make",
             "type": "shell",
-            "command": "make",
+            "label": "make",
+            "command": "/usr/bin/make",
             "args": [
                 "all"
             ],
@@ -19,6 +19,6 @@
             "problemMatcher": [
                 "$gcc"
             ]
-        },
+        }
     ]
 }
