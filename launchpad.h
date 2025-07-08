@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/07 15:59:06 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 09:51:31 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <string.h>
 # include <limits.h>
 # include <signal.h>
+# include <dirent.h>
+# include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -52,7 +54,7 @@
 
 // #define malloc(x) NULL
 /*----------------------------global flag-----------------------------*/
-extern int	g_sigint_received;
+int	g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
@@ -153,11 +155,13 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
-typedef struct s_pids
-{
-	pid_t			pid;
-	struct s_pids	*next;
-} t_pids;
+/*--------------------------wildcards struct--------------------------*/
+// typedef struct	s_dirent
+// {
+// 	char			*name;
+// 	struct s_dirent	*next;    
+// }	t_dirent;
+
 
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
@@ -170,6 +174,7 @@ typedef struct s_stash
 	char			*pwd_backup;
 	char			*heredoc_store;
 	int				heredoc_interrupted;
+	// t_dirent		*dirent;
 	struct termios	orig_termios;
 }	t_stash;
 
@@ -183,6 +188,8 @@ typedef struct s_shell
 	char	*line;
 	t_stash	stash;
 }	t_shell;
+
+void    check_for_wildcards(t_tree *cmd_node, t_stash *stash);
 
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);

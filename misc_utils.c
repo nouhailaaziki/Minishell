@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:50:58 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/06 10:44:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:00:31 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_redirs(t_redir *redir)
 void print_tokens(t_var **head)
 {
 	t_var *tmp;
-	char *tiipe;
+	// char *tiipe;
 
 	if(!head || !*head)
 	{

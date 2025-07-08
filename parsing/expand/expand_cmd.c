@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/07 17:05:02 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:41:06 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static char	*remove_quotes(char *str)
     int		j;
     char	quote;
 
+	j =0;
     if (!str)
         return (NULL);
     new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
@@ -102,7 +103,7 @@ static char	*remove_quotes(char *str)
             while (*str && *str != quote)
                 new_str[j++] = *str++;
             if (*str == quote)
-                *str++;
+                (*str)++;
         }
         else
             new_str[j++] = *str++;
@@ -203,7 +204,7 @@ void	quote_expander(t_token **head)
 	}
 }
 
-void expand_quotes(char **cmd)
-{
+// void expand_quotes(char **cmd)
+// {
 
-}
+// }
