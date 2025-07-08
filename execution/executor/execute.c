@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/08 11:45:02 by yrhandou         ###   ########.fr       */
@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
 
 // char *expand_word(t_env **env, char *origin)
 // {
@@ -69,8 +68,9 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 	if (!ast)
 		return (stash->status);
 	if (ast->type == NODE_COMMAND)
-  {
+	{
 		expand_cmd(ast->cmd, env, stash->status);
+		check_for_wildcards(ast, stash);
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	}
 	else if (ast->type == NODE_PIPE)

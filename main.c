@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/08 09:26:13 by yrhandou         ###   ########.fr       */
@@ -63,12 +63,13 @@ void	execute_cmds(t_shell *shell, t_stash *stash)
 	setup_signals_heredoc();
 	manage_heredocs(shell->ast, stash);
 	required_forks = count_required_forks(shell->ast);
-    if (required_forks > 0 && perform_dry_run_fork_test(required_forks, stash))
+	if (required_forks > 0 && perform_dry_run_fork_test(required_forks, stash))
 	{
-        ft_putendl_fd("L33tShell: fork failed: Resource temporarily unavailable", 2);
-        stash->status = 1;
-        return;
-    }
+		ft_putendl_fd("L33tShell: fork failed: \
+Resource temporarily unavailable", 2);
+		stash->status = 1;
+		return ;
+	}
 	if (!stash->heredoc_interrupted && !stash->fork_failed)
 		execute_ast(shell->ast, &shell->env_list, stash);
 	else

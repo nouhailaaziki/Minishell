@@ -30,7 +30,8 @@ EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtin
 			execution/garbage_collector/free_all_tracked.c execution/garbage_collector/nalloc.c execution/redirection/redirs.c execution/builtins/refresh_pwd.c\
 			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
 			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
-			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd.c execution/environment/env_update.c
+			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd.c execution/environment/env_update.c \
+			execution/wildcards/handle_wildcards.c
 
 EXEC = ${EXECUTION:.c=.o}
 

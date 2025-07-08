@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   expand_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
 /*   Updated: 2025/07/08 11:42:13 by yrhandou         ###   ########.fr       */
@@ -153,5 +153,3 @@ void	expand_cmd(char **cmd, t_env **env, int stash_status)
 		i++;
 	}
 }
-
-
