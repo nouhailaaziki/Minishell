@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/08 16:25:26 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 20:27:45 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,43 +70,48 @@ char *expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status)
 		expand_quotes(old_cmd, &new_cmd);
 		return (new_cmd);
 	}
+	expand_quotes(old_cmd, &new_cmd);
 	expand_keys(keys, env, stash_status, &keys_len, &values_len);
-	alloc_len = ft_strlen(old_cmd[0]) - keys_len + values_len;
-	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
-	if (!new_cmd)
-	{
-		free_keys(keys);
-		return NULL;
-	}
+	alloc_len = ft_strlen(new_cmd) - keys_len + values_len;
+	// new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
+	// if (!new_cmd)
+	// {
+	// 	free_keys(keys);
+	// 	return NULL;
+	// }
 	return new_cmd;
 }
 
-void	update_cmd(char **origin, t_var **keys, char **destination)
+void	update_cmd(char *origin, t_var **keys, char **destination)
 {
 	t_var	*current;
 	char	*dest;
+	char	*tmp;
 	int		i;
 
 	i = 0;
 	current = *keys;
 	dest = *destination;
-	while ((*origin)[i])
+	tmp = *destination;
+	while (origin[i])
 	{
-		if ((*origin)[i] == '$' && current && current->key
-			&& !ft_strncmp(&(*origin)[i], current->key, current->key_len))
+		if (origin[i] == '$' && current && current->key
+			&& !ft_strncmp(&origin[i], current->key, current->key_len))
 		{
 			ft_copy_keys(&dest, 0, current);
 			i += current->key_len;
 			current = current->next;
 		}
 		else
-			*dest++ = (*origin)[i++];
+			*dest++ = origin[i++];
 	}
-	*dest = '\0' ;
-	free(*origin);
-	*origin = *destination;
+	*dest = '\0';
+	*destination = tmp;
+	free(origin);
+	// origin = *destination;
 	free_keys(keys);
 }
+
 void	expand_cmd(char **cmd, t_env **env, int stash_status)
 {
 	int		i;
@@ -125,7 +130,12 @@ void	expand_cmd(char **cmd, t_env **env, int stash_status)
 			cmd[i] = new_cmd;
 		}
 		else
-			update_cmd(&cmd[i], &keys, &new_cmd);
+		{
+			// free(cmd[i]);
+			// cmd[i] = ft_strdup(new_cmd); // ! shit that amine changed are from here look it up
+			update_cmd(ft_strdup(new_cmd), &keys, &new_cmd);
+			cmd[i] = new_cmd;
+		}
 		i++;
 	}
 }

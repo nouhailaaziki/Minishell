@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/08 16:19:23 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:48:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,7 +345,7 @@ void		expand_cmd(char **cmd, t_env **env, int stash_status);
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
-void		update_cmd(char **origin, t_var **keys, char **destination);
+void		update_cmd(char *origin, t_var **keys, char **destination);
 void		expand_cmd(char **cmd, t_env **env, int stash_status);
 void		ft_copy_keys(char **dest, int *j, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
