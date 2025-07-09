@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/08 11:45:02 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:06:31 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 	if (ast->type == NODE_COMMAND)
 	{
 		expand_cmd(ast->cmd, env, stash->status);
-		check_for_wildcards(ast, stash);
+		// check_for_wildcards(ast, stash);
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	}
 	else if (ast->type == NODE_PIPE)

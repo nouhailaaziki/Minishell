@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/07 15:35:44 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:17:09 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	free_cmd(char **cmd)
 		cmd[count] = NULL;
 		count++;
 	}
-	free(cmd[count]);
-	cmd[count] = NULL;
+	// free(cmd[count]);
+	// cmd[count] = NULL;
 	free(cmd);
 }
 

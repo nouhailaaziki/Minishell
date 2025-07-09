@@ -16,4 +16,8 @@ bash-3.2$ $"$HOME$"
 bash: /mnt/homes/yrhandou$: No such file or directory
 bash-3.2$ $"HOME$"
 bash: HOME$: command not found
-bash-3.2$ 
+bash-3.2$
+-------
+from what i understood quotes expansion should be indeppendant , expand of vars shuld be independant ,
+
+i need to also create a reallocating function for export $a=$a..., th heredoc expand should also be handled 

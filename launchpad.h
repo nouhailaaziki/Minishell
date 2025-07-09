@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/09 12:44:21 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:13:22 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,12 +341,12 @@ int			ft_is_redir(char *c);
 char		ft_isquote(char c);
 
 /*-----------Expand-----------------*/
-void		expand_cmd(char **cmd, t_env **env, int stash_status);
+void	expand_cmd(char **cmd, t_env **env, int stash_status);
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
 void		update_cmd(char *origin, t_var **keys, char **destination);
-void		expand_cmd(char **cmd, t_env **env, int stash_status);
+// void		expand_cmd(char **cmd, t_env **env, int stash_status);
 void		ft_copy_keys(char **dest, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
 int			is_special_param(char c);

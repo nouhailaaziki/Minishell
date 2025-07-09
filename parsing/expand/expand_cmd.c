@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/09 16:50:55 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/09 20:46:50 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,12 @@ char *expand_vars(t_var **keys, char **old_cmd, t_env **env ,int stash_status)
 	find_all_keys(old_cmd[0], keys);
 	expand_keys(keys, env, stash_status, &keys_len, &values_len);
 	alloc_len = values_len - keys_len;
-	expand_quotes(old_cmd, alloc_len, &new_cmd);
+	new_cmd = ft_calloc(alloc_len +1, sizeof(char));
+	if(!new_cmd)
+	{
+		free(*keys);
+		return *old_cmd;
+	}
 	return new_cmd;
 }
 
@@ -105,8 +110,6 @@ void	update_cmd(char *origin, t_var **keys, char **destination)
 	}
 	*dest = '\0';
 	*destination = tmp;
-	free(origin);
-	free_keys(keys);
 }
 
 int is_empty_values(t_var * keys)
@@ -121,26 +124,105 @@ int is_empty_values(t_var * keys)
 }
 
 
+int	get_size(char **arr){
+	int	s = 0;
+	if (!arr)
+		return 0;
+	while (arr[s])
+		s++;
+	return (s);
+}
+
+void	add_to_array(char ***arr, char *add)
+{
+	int	size = 0;
+	char	**new;
+	size = get_size(*arr);
+	new = malloc(sizeof(char *) * (size + 2));
+	if (!new)
+		return ;
+	int	i = 0;
+	while (*arr && *arr[i])
+	{
+		new[i] = *arr[i];
+		i++;
+	}
+	new[i++] = ft_strdup(add);
+	new[i] = NULL;
+	free_cmd(*arr);
+	*arr = new;
+}
+
+void	skip_quote(char *str, int *i, char quote)
+{
+	while (str[*i] && str[*i] == quote)
+		*i += 1;
+	if (str[*i] &&  str[*i] == quote)
+		*i += 1;
+}
+
+char	*get_next_str(char *original, int *i)
+{
+	int	start = *i;
+
+	if (!original[*i])
+		return (NULL);
+	while (original[*i])
+	{
+		if (original[*i] == '\'' || original[*i] == '\"')
+		{
+			skip_quote(original, i, original[*i]);
+			continue ;
+		}
+		*i += 1;
+		if (ft_isspace(original[*i]))
+			break ;
+	}
+	return (ft_substr(original, start, *i - start));
+}
+
+void	split_and_add(char *to_split, char ***to_add)
+{
+	int	i;
+	char	*str;
+	i = 0;
+	str = get_next_str(to_split, &i);
+	while (str)
+	{
+		add_to_array(to_add, str);
+		free(str);
+		str = get_next_str(to_split, &i);
+	}
+}
 
 void	expand_cmd(char **cmd, t_env **env, int stash_status)
 {
 	int		i;
 	t_var	*keys;
 	char	*new_cmd;
+	char	**new = NULL;
 
 	if (!cmd || !*cmd)
 		return ;
 	i = 0;
-	while (cmd[i])
+	while (cmd[i]) // *Necessary first , the possible next
 	{
-			new_cmd = expand_vars(&keys, &cmd[i], env,stash_status);
+			new_cmd = expand_vars(&keys, &cmd[i], env,stash_status);// ? all the problems start from here
 			// free(cmd[i]);
 			// cmd[i] = new_cmd;
-			// free(cmd[i]);// cmd[i] = ft_strdup(new_cmd); // * shit that amine changed are from here look it up
-			if(keys && !is_empty_values(keys))
-				update_cmd(ft_strdup(new_cmd), &keys, &new_cmd); // ! double free becuase keys
-			free(cmd[i]);
-			cmd[i] = new_cmd;
+			// free(cmd[i]);// cmd[i] = ft_strdup(new_cmd); //  shit that amine changed are from here look it up
+			if(keys && !is_empty_values(keys)) // Ayoub changed a lot of stuff
+			{
+				update_cmd(cmd[i], &keys, &new_cmd); // ! double free becuase keys
+				// free(cmd[i]);
+				// cmd[i] = new_cmd;
+				// free_keys(&keys);
+			}
+			split_and_add(new_cmd, &new);
+			// free(cmd[i]);
+			// expand_quotes(old_cmd, alloc_len, &new_cmd);
 		i++;
 	}
+	// free_cmd(*cmd);
+	// *cmd = new;
 }
