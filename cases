@@ -1,0 +1,19 @@
+export a="       " (spaces or tabs)
+$a
+NOothing happen (NULL)
+ls$a-l$a-a => ls -l -a (form multi withespaces to one space)
+$a"" and $""a => like $a
+"$a" => keep its content
+
+L33tShell-N.Y$ $USER"$USER"'$USER'
+L33tShell: yrhandouyrhandou: command not found
+
+bash-3.2$ $HOME
+bash: /mnt/homes/yrhandou: is a directory
+bash-3.2$ $"$HOME"
+bash: /mnt/homes/yrhandou: is a directory
+bash-3.2$ $"$HOME$"
+bash: /mnt/homes/yrhandou$: No such file or directory
+bash-3.2$ $"HOME$"
+bash: HOME$: command not found
+bash-3.2$ 

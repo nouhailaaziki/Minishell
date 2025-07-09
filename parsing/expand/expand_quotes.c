@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:13:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/08 16:16:45 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:22:41 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void count_inquote(char *old_cmd , int *count)
 		}
     }
 }
-static void	fill_inquote(char *old_cmd, char **new_cmd)
+static void	fill_quote_content(char *old_cmd, char **new_cmd)
 {
     int		j;
     char	quote;
@@ -72,8 +72,6 @@ static void	fill_inquote(char *old_cmd, char **new_cmd)
 
 	j = 0;
 	cmd_pos = *new_cmd;
-    if (!old_cmd || !*old_cmd)
-        return ;
     while (old_cmd[j])
     {
         if (ft_isquote(old_cmd[j]))
@@ -92,14 +90,16 @@ static void	fill_inquote(char *old_cmd, char **new_cmd)
 	*cmd_pos = '\0';
 }
 
-void expand_quotes(char **old_cmd, char **new_cmd)
+void expand_quotes(char **old_cmd, int alloc_len, char **new_cmd)
 {
 	int count;
 
-	count =0;
+	count = 0;
+	if(!old_cmd || !*old_cmd)
+		return;
 	count_inquote(*old_cmd, &count);
-	*new_cmd = ft_calloc(count,sizeof(char));
+	*new_cmd = ft_calloc(count + alloc_len +1 ,sizeof(char));
 	if(!new_cmd)
 		return;
-	fill_inquote(*old_cmd, new_cmd);
+	fill_quote_content(*old_cmd, new_cmd);
 }

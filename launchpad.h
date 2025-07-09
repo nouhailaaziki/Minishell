@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/08 18:48:48 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:44:21 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,13 +347,13 @@ t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
 void		update_cmd(char *origin, t_var **keys, char **destination);
 void		expand_cmd(char **cmd, t_env **env, int stash_status);
-void		ft_copy_keys(char **dest, int *j, t_var *current);
+void		ft_copy_keys(char **dest, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
 int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
 char		*expand_special_param(char c, int stash_status);
-void		expand_quotes(char **old_cmd, char **new_cmd);
+void		expand_quotes(char **old_cmd, int alloc_len, char **new_cmd);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
