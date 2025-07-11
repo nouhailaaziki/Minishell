@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/11 10:54:16 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:50:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int skip_quoted_str(char *str, char quote)
 
 	i = 0;
  	while (str[i] && str[i] != quote)
+		i++;
+	if(str[i] == quote)
 		i++;
 	return (i);
 }
@@ -309,7 +311,7 @@ void store_args(t_token **list, char **origin)
 			// i = 0;
 		}
 		else
-			node = new_token(ft_strdup(origin[i]), TOKEN_WORD);
+			node = new_token(ft_strdup(origin[i]), TOKEN_WORD); // ? what this do exactly
 			// link_token(list,node);
 		i++;
 	}
