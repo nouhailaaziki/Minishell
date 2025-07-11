@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/09 18:13:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/11 09:46:37 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
-# include <sys/ioctl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -307,6 +306,7 @@ int			operator_len(char *str);
 int			token_lexer(char *str);
 int			skip_spaces(char *str);
 int			parser(t_shell *shell);
+t_token		*new_token(char *value, int type);
 
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
@@ -341,7 +341,7 @@ int			ft_is_redir(char *c);
 char		ft_isquote(char c);
 
 /*-----------Expand-----------------*/
-void	expand_cmd(char **cmd, t_env **env, int stash_status);
+void		expand_cmd(t_tree *ast, t_env **env, int stash_status);
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
@@ -353,7 +353,8 @@ int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
 char		*expand_special_param(char c, int stash_status);
-void		expand_quotes(char **old_cmd, int alloc_len, char **new_cmd);
+int			in_quote_len(char *str, char quote);
+void		expand_quotes(char **old_cmd);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
@@ -362,6 +363,7 @@ void		free_cmd(char **cmd);
 void	free_keys(t_var **head);
 /*-----------utilities-------------*/
 char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		**ft_split(char const *s,char c);
 char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_calloc(size_t count, size_t size);
 void		*ft_memcpy(void *dst, const void *src, size_t n);

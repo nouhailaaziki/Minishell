@@ -20,4 +20,13 @@ bash-3.2$
 -------
 from what i understood quotes expansion should be indeppendant , expand of vars shuld be independant ,
 
-i need to also create a reallocating function for export $a=$a..., th heredoc expand should also be handled 
+i need to also create a reallocating function for export $a=$a..., th heredoc expand should also be handled
+
+the value that should be exported should be checked and splitted only when it has space inside of it
+
+----
+function that checks if there is a space outside the quotes inside a command {"alpha"$a} ={"alpha"ls la} =>{{"alpha"ls} {la}}
+---
+i think i store all the args ina linked list ,
+ then i filter the empty ones then i re allocate a new 2d array where i put only the valid ones,
+ then i rest the main expand index to restart the check for the newly created array, something is wrong when looping , sometimes it works raely , others it returns empty string 

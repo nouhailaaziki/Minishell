@@ -6,6 +6,8 @@
 		"bitset": "c",
 		"chrono": "c",
 		"unordered_map": "c",
-		"launchpad.h": "c"
+		"launchpad.h": "c",
+		"__node_handle": "c",
+		"iterator": "c"
 	}
 }

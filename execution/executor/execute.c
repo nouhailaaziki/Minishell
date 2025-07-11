@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/09 17:06:31 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/10 19:16:37 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,9 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 		return (stash->status);
 	if (ast->type == NODE_COMMAND)
 	{
-		expand_cmd(ast->cmd, env, stash->status);
-		// check_for_wildcards(ast, stash);
+		expand_cmd(ast, env, stash->status);
+		check_for_wildcards(ast, stash);
+		visualize_ast_tree(ast);
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	}
 	else if (ast->type == NODE_PIPE)

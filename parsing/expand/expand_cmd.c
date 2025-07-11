@@ -6,32 +6,18 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/09 20:46:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/11 10:54:16 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-char	*expand_special_param(char c, int stash_status)
-{
-	pid_t	my_pid;
-
-	if (c == '?')
-		return (ft_itoa(stash_status));
-	if (ioctl(STDIN_FILENO, TIOCGPGRP, &my_pid) == -1)
-	{
-		perror("ioctl");
-		exit(1);
-	}
-	return (ft_itoa(my_pid));
-}
-
 void expand_a_key(t_var *current, t_env **env, int stash_status)
 {
 	char	*value;
 
-	if (current->key && is_special_param(current->key[1]))
-		current->value = expand_special_param(current->key[1], stash_status);
+	if (current->key && !ft_strcmp(current->key,"$?"))
+		current->value = ft_itoa(stash_status);
 	else
 	{
 		value = get_env_value(env, &(current->key[1]));
@@ -63,26 +49,82 @@ void	expand_keys(t_var **keys, t_env **env, int stash_status, int *keys_len, int
 	}
 }
 
-char *expand_vars(t_var **keys, char **old_cmd, t_env **env ,int stash_status)
+int is_empty_values(t_var *keys)
+{
+	while(keys)
+	{
+		if(keys->value != NULL)
+			return 0;
+		keys = keys->next;
+	}
+	return 1;
+}
+
+int skip_quoted_str(char *str, char quote)
+{
+	int i;
+
+	i = 0;
+ 	while (str[i] && str[i] != quote)
+		i++;
+	return (i);
+}
+int multi_str_included(char *new_cmd)
+{
+	int i;
+	char quote;
+
+	i = 0;
+	quote = 0;
+	while(new_cmd[i])
+	{
+		 if (ft_isquote(new_cmd[i]))
+        {
+            quote = new_cmd[i++];
+			i += skip_quoted_str(&new_cmd[i], quote);
+            if (ft_isspace(new_cmd[i]))
+				return 1;
+        }
+		else
+		{
+			while(new_cmd[i] && !ft_isquote(new_cmd[i]))
+			{
+				if(ft_isspace(new_cmd[i]))
+					return 1;
+				i++;
+			}
+		}
+	}
+	return 0;
+}
+
+
+
+char	*expand_vars(char **old_cmd, t_env **env ,int stash_status)
 {
 	int		values_len;
 	int		keys_len;
 	int 	alloc_len;
 	char	*new_cmd;
+	t_var	*keys;
 
 	keys_len = 0;
 	values_len = 0;
-	*keys = NULL;
-	find_all_keys(old_cmd[0], keys);
-	expand_keys(keys, env, stash_status, &keys_len, &values_len);
-	alloc_len = values_len - keys_len;
-	new_cmd = ft_calloc(alloc_len +1, sizeof(char));
-	if(!new_cmd)
+	keys = NULL;
+	find_all_keys(*old_cmd, &keys);
+	expand_keys(&keys, env, stash_status, &keys_len, &values_len);
+	alloc_len = ft_strlen(*old_cmd) +  values_len - keys_len;
+	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
+	if (!new_cmd)
+		return (free(keys), *old_cmd);
+	if (keys && !is_empty_values(keys))
 	{
-		free(*keys);
-		return *old_cmd;
+		update_cmd(*old_cmd, &keys, &new_cmd);
+		free_keys(&keys);
 	}
-	return new_cmd;
+	else
+		return free(new_cmd), *old_cmd;
+	return (new_cmd);
 }
 
 void	update_cmd(char *origin, t_var **keys, char **destination)
@@ -110,47 +152,7 @@ void	update_cmd(char *origin, t_var **keys, char **destination)
 	}
 	*dest = '\0';
 	*destination = tmp;
-}
-
-int is_empty_values(t_var * keys)
-{
-	while(keys)
-	{
-		if(keys->value != NULL)
-			return 0;
-		keys = keys->next;
-	}
-	return 1;
-}
-
-
-int	get_size(char **arr){
-	int	s = 0;
-	if (!arr)
-		return 0;
-	while (arr[s])
-		s++;
-	return (s);
-}
-
-void	add_to_array(char ***arr, char *add)
-{
-	int	size = 0;
-	char	**new;
-	size = get_size(*arr);
-	new = malloc(sizeof(char *) * (size + 2));
-	if (!new)
-		return ;
-	int	i = 0;
-	while (*arr && *arr[i])
-	{
-		new[i] = *arr[i];
-		i++;
-	}
-	new[i++] = ft_strdup(add);
-	new[i] = NULL;
-	free_cmd(*arr);
-	*arr = new;
+	free(origin);
 }
 
 void	skip_quote(char *str, int *i, char quote)
@@ -161,66 +163,205 @@ void	skip_quote(char *str, int *i, char quote)
 		*i += 1;
 }
 
-char	*get_next_str(char *original, int *i)
+int	get_size(char **arr)
+{
+	int	s = 0;
+	if (!arr)
+		return 0;
+	while (arr[s])
+		s++;
+	return (s);
+}
+
+char	**rebuild_cmd(t_token **list, size_t argc)
+{
+	char	**new_array;
+	t_token	*current;
+	int		i;
+
+	if(!argc)
+		return NULL;
+	current = *list;
+	new_array = ft_calloc(argc + 1, sizeof(char *));
+	if (!new_array)
+		return NULL;
+	i = 0;
+	while (current)
+	{
+		new_array[i++] = ft_strdup(current->value);
+		current = current->next;
+	}
+	new_array[i] = NULL;
+	return (new_array);
+}
+
+t_token	*get_next_str(char *original, int *i)
 {
 	int	start = *i;
+	char quote;
+	t_token *node;
 
+	quote = 0;
 	if (!original[*i])
 		return (NULL);
 	while (original[*i])
 	{
-		if (original[*i] == '\'' || original[*i] == '\"')
+		if (ft_isquote(original[*i]))
 		{
-			skip_quote(original, i, original[*i]);
+			quote = original[(*i)++];
+			*i += skip_quoted_str(original,quote);
 			continue ;
 		}
 		*i += 1;
 		if (ft_isspace(original[*i]))
 			break ;
 	}
-	return (ft_substr(original, start, *i - start));
+	node = new_token(ft_substr(original, start, *i - start), TOKEN_WORD);
+	return (node);
 }
 
-void	split_and_add(char *to_split, char ***to_add)
+size_t filter_empty_nodes(t_token **head)
 {
-	int	i;
-	char	*str;
-	i = 0;
-	str = get_next_str(to_split, &i);
-	while (str)
+	t_token *current;
+	size_t argc;
+
+	if(!head)
+		return 0;
+	argc = 0;
+	current = *head;
+	while(current)
 	{
-		add_to_array(to_add, str);
-		free(str);
-		str = get_next_str(to_split, &i);
+		if(current->value && current->value[0] == '\0')
+		{
+			if(current->prev)
+				current->prev->next = current->next;
+			else
+				*head = current->next;
+			current = current->next;
+		}
+		else
+		{
+			argc++;
+			current = current->next;
+		}
+	}
+	return argc;
+}
+
+	// word_count = 0;
+	// while(str[i])
+	// 	word_count += word_counter(str[i++]);
+	// new_cmd = ft_calloc(sizeof(char ),word_count);
+void clean_tabs(char *str)
+{
+	int i;
+
+	i=0;
+	while(str[i])
+	{
+		if(!ft_isspace(str[i]))
+			i++;
+		else
+			str[i++] = ' ';
+	}
+}
+void	rebuild_list(char **str ,t_token **list)
+{
+	int i;
+	int j;
+	char **tmp;
+	t_token *node;
+
+	i = 0;
+	j = 1;
+	tmp = ft_split(*str, ' ');
+	if(!tmp)
+		return ;
+	while (tmp)
+	{
+		i = 0;
+		while (tmp[i])
+		{
+			clean_tabs(tmp[i]);
+			node = new_token(ft_strdup(tmp[i]), TOKEN_WORD);
+			link_token(list, node);
+			i++;
+		}
+		free_cmd(tmp);
+		tmp = ft_split(str[j++], ' ');
 	}
 }
 
-void	expand_cmd(char **cmd, t_env **env, int stash_status)
+void store_args(t_token **list, char **origin)
+{
+	int i;
+	t_token *node;
+	// char	**tmp;
+
+	i = 0;
+	while(origin[i])
+	{
+		if(multi_str_included(origin[i])) // ! make up your mind about this , replace the entire string or the entire 2d array
+		{
+			rebuild_list(origin, list);
+			// if (tmp != origin)
+			// 	free_cmd(tmp);
+			// i = 0;
+		}
+		else
+			node = new_token(ft_strdup(origin[i]), TOKEN_WORD);
+			// link_token(list,node);
+		i++;
+	}
+}
+
+
+void	handle_expand(char ***to_split)
+{
+	int	i;
+	// t_token *str;
+	t_token *list;
+	size_t argc;
+
+	if (!to_split || !**to_split )
+		return ;
+	list = NULL;
+	i = 0;
+	store_args(&list, *to_split);
+	argc = filter_empty_nodes(&list);
+	// str = get_next_str(**to_split, &i);
+	*to_split = rebuild_cmd(&list, argc);
+	free_tokens(&list);
+	// while (str)
+	// {
+
+	// 	list = list->next;
+	// 	str = get_next_str(**to_split, &i);
+	// }
+
+	// free_tokens(&list);
+	// free_cmd(*to_split);
+}
+
+void	 expand_cmd(t_tree *ast, t_env **env, int stash_status)
 {
 	int		i;
-	t_var	*keys;
-	char	*new_cmd;
-	char	**new = NULL;
+	char	**current;
 
-	if (!cmd || !*cmd)
+	current = (ast->cmd);
+	if (!current || !*current || !**current)
 		return ;
 	i = 0;
-	while (cmd[i]) // *Necessary first , the possible next
+	while (current && current[i]) // *Necessary first , the possible next
 	{
-			new_cmd = expand_vars(&keys, &cmd[i], env,stash_status);// ? all the problems start from here
-			// free(cmd[i]);
-			// cmd[i] = new_cmd;
-			// free(cmd[i]);// cmd[i] = ft_strdup(new_cmd); //  shit that amine changed are from here look it up
-			if(keys && !is_empty_values(keys)) // Ayoub changed a lot of stuff
+			current[i] = expand_vars(&current[i], env, stash_status);
+			if(!ft_strcmp(current[i], "") || multi_str_included(current[i])) // ? quotes are now removed at the wildcrads function
 			{
-				update_cmd(cmd[i], &keys, &new_cmd); // ! double free becuase keys
-				// free(cmd[i]);
-				// cmd[i] = new_cmd;
-				// free_keys(&keys);
+				handle_expand(&current);
+				ast->cmd = current;
+				i = 0;
+				continue;
 			}
-			split_and_add(new_cmd, &new);
-			// free(cmd[i]);
-			// expand_quotes(old_cmd, alloc_len, &new_cmd);
 		i++;
 	}
 	// free_cmd(*cmd);

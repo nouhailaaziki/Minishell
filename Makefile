@@ -10,11 +10,11 @@ RM = rm -rf
 
 CC = cc
 
-CFLAGS = -g #-fsanitize=address #-Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra# -Werror #-fsanitize=address
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
 			utilities/ft_strdup.c  utilities/ft_substr.c  utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
-			utilities/ft_memset.c utilities/ft_strchr.c utilities/ft_strcmp.c utilities/ft_strncmp.c utilities/ft_strlen.c utilities/ft_strjoin.c\
+			utilities/ft_memset.c utilities/ft_strchr.c utilities/ft_strcmp.c utilities/ft_strncmp.c utilities/ft_strlen.c utilities/ft_strjoin.c utilities/ft_split.c\
 			utilities/na_calloc.c utilities/na_itoa.c utilities/na_split.c utilities/na_strdup.c utilities/na_strjoin.c utilities/na_substr.c utilities/ft_memcpy.c\
 			utilities/na_atoi.c utilities/na_mkstemp.c utilities/ft_putchar_fd.c utilities/ft_putstr_fd.c utilities/ft_putendl_fd.c utilities/ft_itoa.c
 

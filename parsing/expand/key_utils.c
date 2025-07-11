@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/09 15:49:44 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:42:26 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ void	find_all_keys(char *str, t_var **keys)
 
 	quote = 0;
 	pos = 0;
-	*keys = NULL;
-	while (str[pos])
+	if(!str )
+		return ;
+	while (str && str[pos])
 	{
 		relative_pos = 0;
 		key = create_key(&str[pos], &quote, &relative_pos);
