@@ -29,4 +29,6 @@ function that checks if there is a space outside the quotes inside a command {"a
 ---
 i think i store all the args ina linked list ,
  then i filter the empty ones then i re allocate a new 2d array where i put only the valid ones,
- then i rest the main expand index to restart the check for the newly created array, something is wrong when looping , sometimes it works raely , others it returns empty string 
+ then i rest the main expand index to restart the check for the newly created array, something is wrong when looping , sometimes it works raely , others it returns empty string
+----
+single quote failure , probably in rebuild list ,things that expand and shouldnt split does , probably in store arg as well . thats what i c an remember
