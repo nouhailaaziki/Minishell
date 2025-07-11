@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/11 13:00:34 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/11 20:28:25 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,18 +267,18 @@ void clean_tabs(char *str)
 			str[i++] = ' ';
 	}
 }
-void	rebuild_list(char **str ,t_token **list)
+
+t_token	*rebuild_list(char **str ,t_token **list)
 {
 	int i;
 	int j;
 	char **tmp;
 	t_token *node;
 
-	i = 0;
-	j = 1;
-	tmp = ft_split(*str, ' ');
-	if(!tmp)
-		return ;
+	j = 0;
+	tmp = ft_split_args(*str);
+	if (!tmp)
+		return *list ;
 	while (tmp)
 	{
 		i = 0;
@@ -290,29 +290,36 @@ void	rebuild_list(char **str ,t_token **list)
 			i++;
 		}
 		free_cmd(tmp);
-		tmp = ft_split(str[j++], ' ');
+		j++;
+		tmp = ft_split_args(str[j]);
 	}
+	return *list;
 }
 
 void store_args(t_token **list, char **origin)
 {
 	int i;
-	t_token *node;
-	// char	**tmp;
+	int j;
+	char	**tmp;
 
 	i = 0;
-	while(origin[i])
+	while (origin && origin[i])
 	{
-		if(multi_str_included(origin[i])) // ! make up your mind about this , replace the entire string or the entire 2d array
+		if (multi_str_included(origin[i])) // ! make up your mind about this , replace the  string or the entire 2d array
 		{
-			rebuild_list(origin, list);
-			// if (tmp != origin)
-			// 	free_cmd(tmp);
-			// i = 0;
+			tmp = ft_split_args(origin[i]);
+			if (!tmp)
+				return ;
+			j = 0;
+			while (tmp && tmp[j])
+			{
+				link_token(list, new_token(ft_strdup(tmp[j]), TOKEN_WORD));
+				j++;
+			}
+			free_cmd(tmp);
 		}
 		else
-			node = new_token(ft_strdup(origin[i]), TOKEN_WORD); // ? what this do exactly
-			// link_token(list,node);
+			link_token(list, new_token(ft_strdup(origin[i]), TOKEN_WORD));
 		i++;
 	}
 }
@@ -320,29 +327,19 @@ void store_args(t_token **list, char **origin)
 
 void	handle_expand(char ***to_split)
 {
-	int	i;
-	// t_token *str;
 	t_token *list;
 	size_t argc;
+	char **new_cmd;
 
 	if (!to_split || !**to_split )
 		return ;
 	list = NULL;
-	i = 0;
 	store_args(&list, *to_split);
 	argc = filter_empty_nodes(&list);
-	// str = get_next_str(**to_split, &i);
-	*to_split = rebuild_cmd(&list, argc);
+	new_cmd = rebuild_cmd(&list, argc);
+	free_cmd(*to_split);
+	*to_split = new_cmd;
 	free_tokens(&list);
-	// while (str)
-	// {
-
-	// 	list = list->next;
-	// 	str = get_next_str(**to_split, &i);
-	// }
-
-	// free_tokens(&list);
-	// free_cmd(*to_split);
 }
 
 void	 expand_cmd(t_tree *ast, t_env **env, int stash_status)

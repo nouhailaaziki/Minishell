@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/11 09:46:37 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/11 15:02:14 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,6 +362,7 @@ void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
 void	free_keys(t_var **head);
 /*-----------utilities-------------*/
+char		**ft_split_args(char const *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		**ft_split(char const *s,char c);
 char		*ft_strjoin(char const *s1, char const *s2);
