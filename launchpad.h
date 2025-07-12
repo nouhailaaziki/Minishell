@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/12 17:07:34 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:40:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,7 +354,7 @@ void		check_quote(char *start, char *end, int *quote);
 int			in_quote_len(char *str, char quote);
 void		expand_quotes(char **old_cmd);
 void		expand_keys(t_var **keys, t_env **env, int stash_status,\
-int *keys_len, int *values_len);
+int *total_len);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
 void		store_args(t_token **list, char **origin);
 void		filter_empty_nodes(t_token **head, size_t *argc);

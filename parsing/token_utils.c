@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:33:00 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 16:55:51 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:44:12 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,12 @@ int	count_chars(char *str)
 
 int	skip_quoted_str(char *str, char quote)
 {
-	int i;
+	int	i;
 
 	i = 0;
- 	while (str[i] && str[i] != quote)
+	while (str[i] && str[i] != quote)
 		i++;
-	if(str[i] == quote)
+	if (str[i] == quote)
 		i++;
 	return (i);
 }

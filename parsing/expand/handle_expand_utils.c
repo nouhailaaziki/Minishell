@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:47:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 16:55:18 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:26:42 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,17 @@
 
 void	clean_tabs(char *str)
 {
-	int i;
+	int	i;
 
-	i=0;
-	while(str[i])
+	i = 0;
+	while (str[i])
 	{
-		if(!ft_isspace(str[i]))
+		if (!ft_isspace(str[i]))
 			i++;
 		else
 			str[i++] = ' ';
 	}
 }
-
-
 
 void	store_args(t_token **list, char **origin)
 {
@@ -54,7 +52,6 @@ void	store_args(t_token **list, char **origin)
 	}
 }
 
-
 void	filter_empty_nodes(t_token **head, size_t *argc)
 {
 	t_token	*current;
@@ -63,12 +60,12 @@ void	filter_empty_nodes(t_token **head, size_t *argc)
 	if (!head || !*head)
 		return ;
 	current = *head;
-	while(current)
+	while (current)
 	{
-		if(current->value && current->value[0] == '\0')
+		if (current->value && current->value[0] == '\0')
 		{
 			next = current;
-			if(current->prev)
+			if (current->prev)
 				current->prev->next = current->next;
 			else
 				*head = current->next;
@@ -81,25 +78,24 @@ void	filter_empty_nodes(t_token **head, size_t *argc)
 	}
 }
 
-
 char	**rebuild_cmd(t_token **list, size_t argc)
 {
 	char	**new_array;
 	t_token	*current;
 	int		i;
 
-	if(!argc)
-		return NULL;
+	if (!argc)
+		return (NULL);
 	current = *list;
 	new_array = ft_calloc(argc + 1, sizeof(char *));
 	if (!new_array)
-		return NULL;
+		return (NULL);
 	i = 0;
 	while (current)
 	{
 		new_array[i++] = ft_strdup(current->value);
 		current = current->next;
 	}
-	new_array[i] = NULL;
+	new_array[i] = (NULL);
 	return (new_array);
 }

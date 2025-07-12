@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:37:17 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 16:58:21 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:40:16 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,22 +80,27 @@ t_redir	*redir_list_maker(t_token **head)
 	return (redir_list);
 }
 
-void	expand_keys(t_var **keys, t_env **env, int stash_status, int *keys_len, int *values_len)
+void	expand_keys(t_var **keys, t_env **env, int stash_status, int *total_len)
 {
 	t_var	*current;
+	int		keys_len;
+	int		values_len;
 
-	if(!keys || !*keys)
+	if (!keys || !*keys)
 		return ;
+	keys_len = 0;
+	values_len = 0;
 	current = *keys;
 	while (current)
 	{
 		if (current->expandable != '\'')
 		{
-			*keys_len += current->key_len;
-			expand_a_key(current, env,stash_status);
+			keys_len += current->key_len;
+			expand_a_key(current, env, stash_status);
 			current->value_len = ft_strlen(current->value);
-			*values_len += current->value_len;
+			values_len += current->value_len;
 		}
 		current = current->next;
 	}
+	*total_len = values_len - keys_len;
 }

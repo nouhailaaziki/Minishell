@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:25:19 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 17:04:44 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:45:26 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ int	simple_syntax_err(t_shell *shell)
 
 int	is_empty_values(t_var *keys)
 {
-	if(!keys)
-		return 0;
-	while(keys)
+	if (!keys)
+		return (0);
+	while (keys)
 	{
-		if(keys->value != NULL)
+		if (keys->value != NULL)
 			return (0);
 		keys = keys->next;
 	}

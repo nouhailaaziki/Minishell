@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 16:58:19 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:40:29 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ void	update_cmd(char *origin, t_var **keys, char **destination)
 
 void	handle_expand(char ***to_split)
 {
-	t_token *list;
-	size_t argc;
-	char **new_cmd;
+	t_token	*list;
+	size_t	argc;
+	char	**new_cmd;
 
-	if (!to_split || !**to_split )
+	if (!to_split || !**to_split)
 		return ;
 	list = NULL;
 	argc = 0;
@@ -60,47 +60,45 @@ void	handle_expand(char ***to_split)
 
 int	multi_str_included(char *new_cmd)
 {
-	int i;
-	char quote;
+	int		i;
+	char	quote;
 
 	i = 0;
 	quote = 0;
-	while(new_cmd[i])
+	while (new_cmd[i])
 	{
-		 if (ft_isquote(new_cmd[i]))
-        {
-            quote = new_cmd[i++];
+		if (ft_isquote(new_cmd[i]))
+		{
+			quote = new_cmd[i++];
 			i += skip_quoted_str(&new_cmd[i], quote);
-            if (ft_isspace(new_cmd[i]))
-				return 1;
-        }
+			if (ft_isspace(new_cmd[i]))
+				return (1);
+		}
 		else
 		{
-			while(new_cmd[i] && !ft_isquote(new_cmd[i]))
+			while (new_cmd[i] && !ft_isquote(new_cmd[i]))
 			{
-				if(ft_isspace(new_cmd[i]))
-					return 1;
+				if (ft_isspace(new_cmd[i]))
+					return (1);
 				i++;
 			}
 		}
 	}
-	return 0;
+	return (0);
 }
 
-char	*expand_vars(char **old_cmd, t_env **env ,int stash_status)
+char	*expand_vars(char **old_cmd, t_env **env, int stash_status)
 {
-	int		values_len;
-	int		keys_len;
-	int 	alloc_len;
+	int		total_len;
+	int		alloc_len;
 	char	*new_cmd;
 	t_var	*keys;
 
-	keys_len = 0;
-	values_len = 0;
+	total_len = 0;
 	keys = NULL;
 	find_all_keys(*old_cmd, &keys);
-	expand_keys(&keys, env, stash_status, &keys_len, &values_len);
-	alloc_len = ft_strlen(*old_cmd) +  values_len - keys_len;
+	expand_keys(&keys, env, stash_status, total_len);
+	alloc_len = ft_strlen(*old_cmd) + total_len;
 	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
 	if (!new_cmd)
 		return (free(keys), *old_cmd);
@@ -110,29 +108,29 @@ char	*expand_vars(char **old_cmd, t_env **env ,int stash_status)
 		free_keys(&keys);
 	}
 	else
-		return free(new_cmd),free_keys(&keys), *old_cmd;
+		return (free(new_cmd), free_keys(&keys), *old_cmd);
 	return (new_cmd);
 }
 
-void	 expand_cmd(t_tree *ast, t_env **env, int stash_status)
+void	expand_cmd(t_tree *ast, t_env **env, int stash_status)
 {
 	int		i;
 	char	**current;
 
-	current = (ast->cmd);
+	current = ast->cmd;
 	if (!current || !*current || !**current)
 		return ;
 	i = 0;
-	while (current && current[i]) // *Necessary first , the possible next
+	while (current && current[i])
 	{
-			current[i] = expand_vars(&current[i], env, stash_status);
-			if(!ft_strcmp(current[i], "") || multi_str_included(current[i])) // ? quotes are now removed at the wildcrads function
-			{
-				handle_expand(&current);
-				ast->cmd = current;
-				i = 0;
-				continue;
-			}
+		current[i] = expand_vars(&current[i], env, stash_status);
+		if (!ft_strcmp(current[i], "") || multi_str_included(current[i]))
+		{
+			handle_expand(&current);
+			ast->cmd = current;
+			i = 0;
+			continue ;
+		}
 		i++;
 	}
 }

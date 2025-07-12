@@ -6,11 +6,22 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/12 16:37:24 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:43:15 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
+
+
+void	clear_memory(t_shell *shell)
+{
+	if (shell->ast)
+		free_tree(&shell->ast);
+	if (shell->tokens)
+		free_tokens(&shell->tokens);
+	free(shell->line);
+	shell->line = NULL;
+}
 
 int	init_shell(t_shell *shell)
 {

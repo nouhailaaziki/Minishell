@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:41:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 17:03:30 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:41:58 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	parser(t_shell *shell)
 	{
 		if (ft_is_operator(current->value) && \
 		(!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
-			return (ft_syntax_err( shell));
+			return (ft_syntax_err(shell));
 		current = current->next;
 	}
 	if (!handle_parentheses(shell))

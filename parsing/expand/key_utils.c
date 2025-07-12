@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 16:52:11 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:00:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	find_all_keys(char *str, t_var **keys)
 
 	quote = 0;
 	pos = 0;
-	if(!str )
+	if (!str)
 		return ;
 	while (str && str[pos])
 	{
@@ -90,7 +90,7 @@ void	ft_copy_keys(char **dest, t_var *current)
 {
 	if (current->expandable != '\'' && current->value)
 	{
-		ft_memcpy(*dest, current->value, current->value_len); // ? you changed here last
+		ft_memcpy(*dest, current->value, current->value_len);
 		*dest += current->value_len;
 	}
 	else
@@ -104,7 +104,7 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 {
 	char	*value;
 
-	if (current->key && !ft_strcmp(current->key,"$?"))
+	if (current->key && !ft_strcmp(current->key, "$?"))
 		current->value = ft_itoa(stash_status);
 	else
 	{
