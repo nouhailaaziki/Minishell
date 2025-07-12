@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:13:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/10 10:37:11 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 10:53:41 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,6 @@ void expand_quotes(char **old_cmd)
 	if(!new_cmd)
 		return;
 	fill_quote_content(*old_cmd, &new_cmd);
-	// free(*old_cmd);
+	free(*old_cmd);
 	*old_cmd = new_cmd;
 }

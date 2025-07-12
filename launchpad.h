@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/11 15:02:14 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 17:07:34 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,7 @@ t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
 	/*---------------------Checkers-------------------*/
-int			ft_syntax_err(char *str, t_shell *shell);
+int			ft_syntax_err(t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
 int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
@@ -346,23 +346,30 @@ char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
 void		update_cmd(char *origin, t_var **keys, char **destination);
-// void		expand_cmd(char **cmd, t_env **env, int stash_status);
 void		ft_copy_keys(char **dest, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
 int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
-char		*expand_special_param(char c, int stash_status);
 int			in_quote_len(char *str, char quote);
 void		expand_quotes(char **old_cmd);
+void		expand_keys(t_var **keys, t_env **env, int stash_status,\
+int *keys_len, int *values_len);
+void		expand_a_key(t_var *current, t_env **env, int stash_status);
+void		store_args(t_token **list, char **origin);
+void		filter_empty_nodes(t_token **head, size_t *argc);
+char		**rebuild_cmd(t_token **list, size_t argc);
+int			skip_quoted_str(char *str, char quote);
+int			is_empty_values(t_var *keys);
+int			multi_str_included(char *new_cmd);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
 void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
-void	free_keys(t_var **head);
+void		free_keys(t_var **head);
 /*-----------utilities-------------*/
-char		**ft_split_args(char const *s);
+char		**ft_split_args(char *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		**ft_split(char const *s,char c);
 char		*ft_strjoin(char const *s1, char const *s2);

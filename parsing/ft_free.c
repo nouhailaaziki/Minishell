@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/09 18:17:09 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 10:59:57 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,18 @@ void	free_redirs(t_redir **redirs)
  */
 void	free_cmd(char **cmd)
 {
-	int	count;
+	int	i;
 
 	if (!cmd)
 		return ;
-	count = 0;
-	while (cmd[count])
+	i = 0;
+	while (cmd[i])
 	{
-		free(cmd[count]);
-		cmd[count] = NULL;
-		count++;
+		if(cmd[i])
+			free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
 	}
-	// free(cmd[count]);
-	// cmd[count] = NULL;
 	free(cmd);
 }
 

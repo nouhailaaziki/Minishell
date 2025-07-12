@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/10 15:42:26 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 16:52:11 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,21 @@ void	ft_copy_keys(char **dest, t_var *current)
 	{
 		ft_memcpy(*dest, current->key, current->key_len);
 		*dest += current->key_len;
+	}
+}
+
+void	expand_a_key(t_var *current, t_env **env, int stash_status)
+{
+	char	*value;
+
+	if (current->key && !ft_strcmp(current->key,"$?"))
+		current->value = ft_itoa(stash_status);
+	else
+	{
+		value = get_env_value(env, &(current->key[1]));
+		if (!value)
+			current->value = ft_strdup("");
+		else
+			current->value = ft_strdup(value);
 	}
 }

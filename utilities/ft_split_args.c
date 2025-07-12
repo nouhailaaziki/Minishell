@@ -6,34 +6,42 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 11:49:47 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/11 20:42:18 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:32:40 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-static int	word_counter(char const *str)
+static int	word_counter(char *str)
 {
 	int	counter;
 	int	i;
-
+	char quote;
 	counter = 0;
 	i = 0;
-	while (str[i] != '\0')
+	while (str[i])
 	{
-		if (ft_isspace(str[i]))
-			i++;
+		i += skip_spaces(&str[i]);
+		if(!str[i])
+			break;
+		counter++;
+		if(ft_isquote(str[i]))
+		{
+			quote = str[i++];
+			i += in_quote_len(&str[i],quote);
+			if (str[i] == quote)
+				i++;
+		}
 		else
 		{
-			counter++;
 			while (str[i] && !ft_isspace(str[i]))
 				i++;
 		}
 	}
-	return (counter);
+	return counter;
 }
 
-static int	count_sub(char const *str)
+static int	count_sub_arg(char *str)
 {
 	int	i;
 	char quote;
@@ -46,7 +54,7 @@ static int	count_sub(char const *str)
 		{
 			quote = str[i++];
 			i += in_quote_len(&str[i], quote);
-			if(str[i])
+			if(str[i] == quote)
 				i++;
 		}
 		else
@@ -66,12 +74,12 @@ static char	**free_arr(char **str)
 	return (NULL);
 }
 
-char	**ft_split_args(char const *s)
+char	**ft_split_args(char *s)
 {
 	int		i;
 	int		j;
 	char	**args;
-
+	int		arg_len;
 	if (!s)
 		return (NULL);
 	args = (char **)ft_calloc(sizeof(char *) , (word_counter(s) + 1));
@@ -82,11 +90,13 @@ char	**ft_split_args(char const *s)
 	while (s[i] != '\0')
 	{
 		i += skip_spaces(&s[i]);
-		args[++j] = ft_substr(s, i, count_sub(&s[i]));
+		if(!s[i])
+			break;
+		arg_len = count_sub_arg(&s[i]);
+		args[++j] = ft_substr(s, i, arg_len);
 		if (!args[j])
 			return (free_arr(args));
-		while (s[i] && !ft_isspace(s[i]))
-			i++;
+		i += arg_len;
 	}
 	return (args[++j] = NULL, args);
 }
