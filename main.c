@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/08 09:26:13 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:33:31 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,15 @@
 int	init_shell(t_shell *shell)
 {
 	char	*tmp;
+	char	*error;
 
 	tmp = getcwd(0, 0);
 	if (!isatty(0) || !isatty(1) || !tmp)
 	{
-		ft_putendl_fd("L33tShell: input is not a terminal", 2);
+		error = ft_strdup("L33tShell: input is not a terminal\n");
+		if (!error)
+			return (perror("malloc"), 1);
+		write(2, error, ft_strlen(error));
 		return (1);
 	}
 	free (tmp);
@@ -80,27 +84,27 @@ Resource temporarily unavailable", 2);
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
-	t_stash	stash;
 
 	(void)argc, (void)argv;
-	7889 && (stash.status = 0, stash.heredoc_interrupted = 0);
+	7889 && (shell.stash.status = 0, shell.stash.heredoc_interrupted = 0);
 	if (init_shell(&shell))
 		return (1);
-	build_env(&shell.env_list, envp, &stash);
+	build_env(&shell.env_list, envp, &shell.stash);
 	while (1)
 	{
-		init_loop_data(&stash);
+		init_loop_data(&shell.stash);
 		shell.line = readline("L33tShell-N.Y$ ");
 		if (g_sigint_received)
-			stash.status = 1;
+			shell.stash.status = 1;
 		add_history(shell.line);
 		if (!shell.line)
 		{
+			write(1, "exit", 4);
 			(free_tokens(&shell.tokens), free_all_tracked());
-			exit(stash.status);
+			exit(shell.stash.status);
 		}
 		if (process_input(&shell))
-			execute_cmds(&shell, &stash);
+			execute_cmds(&shell, &shell.stash);
 		clear_memory(&shell);
 	}
 	return (0);

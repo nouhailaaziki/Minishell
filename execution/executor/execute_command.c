@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 16:05:21 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/09 15:13:03 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 	int		i;
 
 	i = 0;
-	while (path_list && path_list[i])
+	while (ft_strcmp(cmd[0], "") && path_list && path_list[i])
 	{
 		path = na_strjoin(path_list[i], "/");
 		path = na_strjoin(path, cmd[0]);
