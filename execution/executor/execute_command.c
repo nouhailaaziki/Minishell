@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/09 15:13:03 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/11 09:37:00 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 	int		i;
 
 	i = 0;
-	while (ft_strcmp(cmd[0], "") && path_list && path_list[i])
+	while (cmd && strcmp(*cmd, "") && path_list && path_list[i])
 	{
 		path = na_strjoin(path_list[i], "/");
 		path = na_strjoin(path, cmd[0]);

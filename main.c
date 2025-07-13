@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/12 22:33:31 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:59:30 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
+
+
+void	clear_memory(t_shell *shell)
+{
+	if (shell->ast)
+		free_tree(&shell->ast);
+	if (shell->tokens)
+		free_tokens(&shell->tokens);
+	free(shell->line);
+	shell->line = NULL;
+}
 
 int	init_shell(t_shell *shell)
 {
@@ -86,7 +97,6 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 
 	(void)argc, (void)argv;
-	7889 && (shell.stash.status = 0, shell.stash.heredoc_interrupted = 0);
 	if (init_shell(&shell))
 		return (1);
 	build_env(&shell.env_list, envp, &shell.stash);

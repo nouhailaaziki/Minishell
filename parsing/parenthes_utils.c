@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:41:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 11:17:06 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:41:58 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,32 @@ t_tree	*create_p_block(t_token **head)
 		return (NULL);
 	p_block->redirs = p_redirs_maker(head);
 	return (p_block);
+}
+
+/**
+ * @brief Checks the tokens created with the tokenizer for syntax errors
+ * @param shell shell data
+ */
+int	parser(t_shell *shell)
+{
+	t_token	*current;
+
+	if (!shell->tokens)
+		return (0);
+	current = shell->tokens;
+	if (!simple_syntax_err(shell))
+		return (0);
+	advanced_token_lexer(&shell->tokens);
+	if (!advanced_syntax_err(shell))
+		return (0);
+	while (current)
+	{
+		if (ft_is_operator(current->value) && \
+		(!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
+			return (ft_syntax_err(shell));
+		current = current->next;
+	}
+	if (!handle_parentheses(shell))
+		return (0);
+	return (1);
 }

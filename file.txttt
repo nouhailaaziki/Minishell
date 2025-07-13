@@ -1,0 +1,71 @@
+split only spaces and tabs and new_line
+-------------------------------------
+write exit in cntrl + d
+-------------------------------------
+bash-3.2$ export PATH+=:.
+bash-3.2$ Makefile
+bash: ./Makefile: Permission denied
+bash-3.2$ $?
+bash: 126: command not found
+-------------------------------------
+L33tShell-N.Y$ export PATH+=:.
+L33tShell-N.Y$ execution
+execve failed: Permission denied
+L33tShell-N.Y$ echo $?
+1
+-------------------------------------
+L33tShell-N.Y$ $erdfcv """"""""''""''///////"$BIN"/'ls'$erdf$S-l$T-A -h$r4eds''  $rdf-u$dfghj|cat -e
+minishell(49548,0x1155fddc0) malloc: *** error for object 0xc000000000000000: pointer being freed was not allocated
+minishell(49548,0x1155fddc0) malloc: *** set a breakpoint in malloc_error_break to debug
+-------------------------------------
+syntax error, should 258
+-------------------------------------
+L33tShell-N.Y$ hostname$S>p|cat<p$no_var -e
+L33tShell: p$redf: No such file or directory
+-------------------------------------
+L33tShell-N.Y$ echo ytdrds$(white spaces) // --------------------------------------------------------->        ???DONE
+minishell(58238,0x10742bdc0) malloc: *** error for object 0xf000000000000000: pointer being freed was not allocated
+minishell(58238,0x10742bdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+[1]    58238 abort      ./minishell
+-------------------------------------
+L33tShell-N.Y$ env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >> j
+// buffring in env
+-------------------------------------
+L33tShell-N.Y$ exit "      12"
+exit
+L33tShell: exit:       12: numeric argument required
+-------------------------------------
+L33tShell-N.Y$ exit 18446744073709551616
+exit
+exit: numeric argument required
+
+L33tShell-N.Y$
+-------------------------------------
+L33tShell-N.Y$ export q="'"
+L33tShell-N.Y$ echo $q$HOME$q
+/mnt/homes/yrhandou
+-------------------------------------
+L33tShell-N.Y$ export w+i=12
+L33tShell-N.Y$
+-------------------------------------
+
+L33tShell-N.Y$ export $? > ls < $?
+L33tShell: $?: No such file or directory
+-------------------------------------
+L33tShell-N.Y$ << t<< c << q <<""
+> t
+> c
+>
+ctrl + c
+-------------------------------------
+
+must close fd in parent
+
+-------------------------------------
+
+<< "" | grep "hello     "
+
+-------------------------------------
+-------------------------------------
+-------------------------------------
+-------------------------------------

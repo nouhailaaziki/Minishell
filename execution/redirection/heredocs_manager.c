@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 21:07:33 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/25 10:31:11 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 12:36:41 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	manage_heredocs(t_tree *ast, t_stash *stash)
 		return ;
 	if (ast->type == NODE_COMMAND)
 	{
+		expand_heredoc(&ast->redirs);
 		if (count_heredocs(ast->redirs) > 0)
 		{
 			if (open_heredocs(ast->redirs, stash) != 0)

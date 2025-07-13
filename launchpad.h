@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/08 11:41:07 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 12:45:46 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
-# include <sys/ioctl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -108,6 +107,7 @@ typedef struct s_redir
 	int				fd_rd;
 	int				fd_wr;
 	int				flag;
+	int				is_ambiguous;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -150,7 +150,6 @@ typedef struct s_tree
 	char			**cmd;
 	size_t			argc;
 	t_redir			*redirs;
-	int				is_ambiguous;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }	t_tree;
@@ -159,7 +158,7 @@ typedef struct s_tree
 // typedef struct	s_dirent
 // {
 // 	char			*name;
-// 	struct s_dirent	*next;    
+// 	struct s_dirent	*next;
 // }	t_dirent;
 
 
@@ -225,7 +224,7 @@ int			run_builtins(char **cmd, t_env **env_list, int status, \
 t_stash *stash);
 char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
-
+char		*expand_vars(char **old_cmd, t_env **env, int stash_status);
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
@@ -307,6 +306,7 @@ int			operator_len(char *str);
 int			token_lexer(char *str);
 int			skip_spaces(char *str);
 int			parser(t_shell *shell);
+t_token		*new_token(char *value, int type);
 
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
@@ -327,9 +327,8 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-void		expand_cmd(char **cmd, t_env **env, int stash_status);
 	/*---------------------Checkers-------------------*/
-int			ft_syntax_err(char *str, t_shell *shell);
+int			ft_syntax_err(t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
 int			simple_syntax_err(t_shell *shell);
 int			check_predecessor(t_token *head);
@@ -342,26 +341,39 @@ int			ft_is_redir(char *c);
 char		ft_isquote(char c);
 
 /*-----------Expand-----------------*/
+void		expand_cmd(t_tree *ast, t_env **env, int stash_status);
 char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
 t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
-// void 		expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status);
-void		update_cmd(char **origin, t_var **keys, char **destination);
-void		expand_cmd(char **cmd, t_env **env, int stash_status);
-void		ft_copy_keys(char **dest, int *j, t_var *current);
+void		update_cmd(char *origin, t_var **keys, char **destination);
+void		ft_copy_keys(char **dest, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
 int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
-char		*expand_special_param(char c, int stash_status);
+int			in_quote_len(char *str, char quote);
+int			expand_quotes(char **old_cmd);
+void		expand_keys(t_var **keys, t_env **env, int stash_status,\
+int *total_len);
+void		expand_a_key(t_var *current, t_env **env, int stash_status);
+void		store_args(t_token **list, char **origin);
+void		filter_empty_nodes(t_token **head, size_t *argc);
+char		**rebuild_cmd(t_token **list, size_t argc);
+int			skip_quoted_str(char *str, char quote);
+int			is_empty_values(t_var *keys);
+int			multi_str_included(char *new_cmd);
+void expand_redirs(t_redir **head, t_env **env, int stash_status);
+void expand_heredoc(t_redir **head);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
 void		free_tree(t_tree **ast);
 void		free_cmd(char **cmd);
-void	free_keys(t_var **head);
+void		free_keys(t_var **head);
 /*-----------utilities-------------*/
+char		**ft_split_args(char *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		**ft_split(char const *s,char c);
 char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_calloc(size_t count, size_t size);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
