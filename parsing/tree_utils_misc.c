@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:37:17 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:40:16 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 08:32:23 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ t_redir	*redir_maker(t_token **data)
 	(*data)->position = -1;
 	if ((*data)->next)
 	{
-		redir->file = ft_strdup((*data)->next->value);
 		(*data)->next->position = -1;
+		redir->file = ft_strdup((*data)->next->value);
 		if (!redir->file)
 			return (printf("This is not supposed to happen.\n"), NULL);
 	}

@@ -6,11 +6,24 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/12 10:54:33 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 10:53:02 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
+{
+	int	i;
+
+	expand_cmd(ast, env, stash->status);
+	expand_redirs(&ast->redirs, env, stash->status);
+	check_for_wildcards(ast, stash);
+	i = 0;
+	while(ast->cmd[i])
+		expand_quotes(&ast->cmd[i++]);
+}
+
 
 int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 {
@@ -18,8 +31,7 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 		return (stash->status);
 	if (ast->type == NODE_COMMAND)
 	{
-		expand_cmd(ast, env, stash->status);
-		check_for_wildcards(ast, stash);
+		expand_all(ast, env, stash);
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	}
 	else if (ast->type == NODE_PIPE)

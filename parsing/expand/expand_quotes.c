@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:13:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:09:58 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 12:17:57 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,24 @@ static void	fill_quote_content(char *old_cmd, char **new_cmd)
 	*cmd_pos = '\0';
 }
 
-void	expand_quotes(char **old_cmd)
+int	expand_quotes(char **old_cmd)
 {
 	int		count;
 	char	*new_cmd;
+	int		in_quote;
 
 	count = 0;
+	in_quote = 0;
 	if (!old_cmd || !*old_cmd)
-		return ;
+		return (in_quote);
+	if(ft_strchr(*old_cmd,'\'') || ft_strchr(*old_cmd,'"'))
+		in_quote = 1;
 	count_inquote(*old_cmd, &count);
 	new_cmd = ft_calloc(count + 1, sizeof(char));
 	if (!new_cmd)
-		return ;
+		return in_quote;
 	fill_quote_content(*old_cmd, &new_cmd);
 	free(*old_cmd);
 	*old_cmd = new_cmd;
+	return (in_quote);
 }

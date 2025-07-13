@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 23:15:34 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/11 15:37:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 10:51:23 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,5 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 		i++;
 	}
 	free(pwd);
-	i =0;
-	while(cmd_node->cmd[i])
-		expand_quotes(&cmd_node->cmd[i++]);
 
 }

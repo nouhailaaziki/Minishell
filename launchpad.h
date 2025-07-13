@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/12 20:40:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 12:45:46 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct s_redir
 	int				fd_rd;
 	int				fd_wr;
 	int				flag;
+	int				is_ambiguous;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -149,7 +150,6 @@ typedef struct s_tree
 	char			**cmd;
 	size_t			argc;
 	t_redir			*redirs;
-	int				is_ambiguous;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }	t_tree;
@@ -224,7 +224,7 @@ int			run_builtins(char **cmd, t_env **env_list, int status, \
 t_stash *stash);
 char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
-
+char		*expand_vars(char **old_cmd, t_env **env, int stash_status);
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
@@ -352,7 +352,7 @@ int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
 int			in_quote_len(char *str, char quote);
-void		expand_quotes(char **old_cmd);
+int			expand_quotes(char **old_cmd);
 void		expand_keys(t_var **keys, t_env **env, int stash_status,\
 int *total_len);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
@@ -362,6 +362,8 @@ char		**rebuild_cmd(t_token **list, size_t argc);
 int			skip_quoted_str(char *str, char quote);
 int			is_empty_values(t_var *keys);
 int			multi_str_included(char *new_cmd);
+void expand_redirs(t_redir **head, t_env **env, int stash_status);
+void expand_heredoc(t_redir **head);
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);

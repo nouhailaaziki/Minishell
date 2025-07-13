@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:40:29 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 06:59:54 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*expand_vars(char **old_cmd, t_env **env, int stash_status)
 	total_len = 0;
 	keys = NULL;
 	find_all_keys(*old_cmd, &keys);
-	expand_keys(&keys, env, stash_status, total_len);
+	expand_keys(&keys, env, stash_status, &total_len);
 	alloc_len = ft_strlen(*old_cmd) + total_len;
 	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
 	if (!new_cmd)

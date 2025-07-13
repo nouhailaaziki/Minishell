@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:25:19 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:45:26 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 12:39:40 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_syntax_err(t_shell *shell)
 {
-	ft_putstr_fd("DeepShell: syntax error near unexpected token ", 2);
+	ft_putstr_fd("DeepShell: syntax error near unexpected token \n", 2);
 	shell->stash.status = 258;
 	return (0);
 }
