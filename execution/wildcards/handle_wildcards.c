@@ -212,5 +212,4 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 		i++;
 	}
 	free(pwd);
-
 }

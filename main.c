@@ -26,11 +26,15 @@ void	clear_memory(t_shell *shell)
 int	init_shell(t_shell *shell)
 {
 	char	*tmp;
+	char	*error;
 
 	tmp = getcwd(0, 0);
 	if (!isatty(0) || !isatty(1) || !tmp)
 	{
-		ft_putendl_fd("L33tShell: input is not a terminal", 2);
+		error = ft_strdup("L33tShell: input is not a terminal\n");
+		if (!error)
+			return (perror("malloc"), 1);
+		write(2, error, ft_strlen(error));
 		return (1);
 	}
 	free (tmp);
@@ -105,6 +109,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(shell.line);
 		if (!shell.line)
 		{
+			write(1, "exit", 4);
 			(free_tokens(&shell.tokens), free_all_tracked());
 			exit(shell.stash.status);
 		}
