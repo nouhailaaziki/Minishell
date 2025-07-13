@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/13 10:53:02 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 14:33:19 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
 	expand_redirs(&ast->redirs, env, stash->status);
 	check_for_wildcards(ast, stash);
 	i = 0;
-	while(ast->cmd[i])
+	while(ast->cmd && ast->cmd[i])
 		expand_quotes(&ast->cmd[i++]);
 }
 

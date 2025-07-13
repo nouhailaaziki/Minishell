@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:47:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:26:42 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 14:44:31 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	clean_tabs(char *str)
 	int	i;
 
 	i = 0;
+	if(!str)
+		return ;
 	while (str[i])
 	{
 		if (!ft_isspace(str[i]))
@@ -62,19 +64,19 @@ void	filter_empty_nodes(t_token **head, size_t *argc)
 	current = *head;
 	while (current)
 	{
+		next = current->next;
 		if (current->value && current->value[0] == '\0')
 		{
-			next = current;
 			if (current->prev)
 				current->prev->next = current->next;
 			else
 				*head = current->next;
-			free(next);
-			free(next->value);
+			free(current->value);
+			free(current);
 		}
 		else
 			(*argc)++;
-		current = current->next;
+		current = next;
 	}
 }
 
