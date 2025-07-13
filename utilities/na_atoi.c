@@ -43,7 +43,7 @@ long	na_atoi(const char *str)
 					|| (i >= 19 && s == -1 && str[i] > '8')))
 			|| r > 922337203685477580)
 		{
-			puterror(0, "exit", NULL, ": numeric argument required\n");
+			puterror(0, "exit: ", str, ": numeric argument required");
 			exit(255);
 		}
 		else

@@ -47,7 +47,7 @@ all: ${NAME}
 
 ${NAME} :  ${PARSE} ${EXEC} ${UTILS}
 	@echo "${YELLOW} ${BOLD}➤ Launching compilation...${RESET}"
-	${CC} ${CFLAGS} $(PARSE) ${EXEC} ${UTILS} -o $@ -lreadline
+	${CC} ${CFLAGS} $(PARSE) ${EXEC} ${UTILS} -o $@ -lreadline 
 	@echo "${GREEN} ${BOLD}➤ ${NAME} successfully compiled ✓${RESET}"
 
 %.o : %.c ${HEADER}
