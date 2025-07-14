@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:00:51 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:36:50 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	dollar = &origin[i];
 	*pos = i;
 	i = 1;
-	if (is_special_param(dollar[i]))
+	if (dollar[i] == '?')
 		i++;
 	else
 	{
@@ -39,7 +39,6 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	*key_len = i;
 	return (dollar);
 }
-
 t_var	*create_key(char *origin, int *quote, int *pos)
 {
 	char	*dollar;
@@ -63,7 +62,6 @@ t_var	*create_key(char *origin, int *quote, int *pos)
 	key->expandable = *quote;
 	return (key);
 }
-
 void	find_all_keys(char *str, t_var **keys)
 {
 	int		pos;
@@ -100,6 +98,24 @@ void	ft_copy_keys(char **dest, t_var *current)
 	}
 }
 
+void mask_quotes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while(str[i])
+	{
+		if(ft_isquote(str[i]))
+		{
+			if (str[i] == '\'')
+				str[i] = 3;
+			else
+				str[i] = 4;
+		}
+		i++;
+	}
+}
+
 void	expand_a_key(t_var *current, t_env **env, int stash_status)
 {
 	char	*value;
@@ -111,7 +127,14 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 		value = get_env_value(env, &(current->key[1]));
 		if (!value)
 			current->value = ft_strdup("");
+		else if (ft_strchr(value, '\'') || ft_strchr(value, '"'))
+		{
+			mask_quotes(value);
+			current->value = ft_strdup(value);
+		}
 		else
 			current->value = ft_strdup(value);
 	}
 }
+
+

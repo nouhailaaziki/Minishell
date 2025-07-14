@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/13 12:45:46 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:33:36 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,6 @@ void		find_all_keys(char *str, t_var **keys);
 void		update_cmd(char *origin, t_var **keys, char **destination);
 void		ft_copy_keys(char **dest, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
-int			is_special_param(char c);
 int			is_valid_key(char key);
 void		check_quote(char *start, char *end, int *quote);
 int			in_quote_len(char *str, char quote);

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 06:13:39 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/13 12:47:13 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/14 13:44:55 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,21 @@ void expand_redirs(t_redir **head, t_env **env, int stash_status)
 		current = current->next;
 	}
 }
-void expand_heredoc(t_redir **head)
+
+int translation_check(char *current)
+{
+	int i;
+
+	i = 0;
+	while(current[i])
+	{
+
+		i++;
+	}
+	return 0;
+}
+
+void	expand_heredoc(t_redir **head)
 {
 	t_redir *current;
 	t_var *keys;
@@ -42,6 +56,8 @@ void expand_heredoc(t_redir **head)
 	current = *head;
 	while (current && current->type == REDIR_HEREDOC)
 	{
+		// if(translation_check(current->file))
+			// do_something();
 		current->flag = expand_quotes(&current->file);
 		current = current->next;
 	}

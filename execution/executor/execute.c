@@ -6,11 +6,29 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/13 14:33:19 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/14 10:30:00 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+void unmask_quotes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while(str[i])
+	{
+		if(str[i] == 3 || str[i] == 4)
+		{
+			if (str[i] == 3)
+				str[i] = '\'';
+			else
+				str[i] = '"';
+		}
+		i++;
+	}
+}
 
 void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
 {
@@ -22,6 +40,9 @@ void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
 	i = 0;
 	while(ast->cmd && ast->cmd[i])
 		expand_quotes(&ast->cmd[i++]);
+	i = 0;
+	while(ast->cmd && ast->cmd[i])
+		unmask_quotes(ast->cmd[i++]);
 }
 
 
