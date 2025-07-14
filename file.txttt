@@ -33,24 +33,16 @@ L33tShell-N.Y$ env >> j| env >> j| env >> j| env >> j| env >> j| env >> j| env >
 -------------------------------------
 L33tShell-N.Y$ exit "      12"
 exit
-L33tShell: exit:       12: numeric argument required
--------------------------------------
-L33tShell-N.Y$ exit 18446744073709551616
-exit
-exit: numeric argument required
-
-L33tShell-N.Y$
+L33tShell: exit:       12: numeric argument required    /////TEST ME
 -------------------------------------
 L33tShell-N.Y$ export q="'"
-L33tShell-N.Y$ echo $q$HOME$q
+L33tShell-N.Y$ echo $q$HOME$q     ///////////TEST ME
 /mnt/homes/yrhandou
 -------------------------------------
-L33tShell-N.Y$ export w+i=12
-L33tShell-N.Y$
--------------------------------------
-
-L33tShell-N.Y$ export $? > ls < $?
+L33tShell-N.Y$ export $? > ls < $?    ////TEST ME
 L33tShell: $?: No such file or directory
+L33tShell-N.Y$ pwd  < $?
+L33tShell: 1: No such file or directory
 -------------------------------------
 L33tShell-N.Y$ << t<< c << q <<""
 > t
@@ -63,9 +55,85 @@ must close fd in parent
 
 -------------------------------------
 
-<< "" | grep "hello     "
+<< "" | grep "hello     " ??????
 
 -------------------------------------
 -------------------------------------
 -------------------------------------
 -------------------------------------
+bash-3.2$ cd 1/2/3/
+bash-3.2$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2/3
+bash-3.2$ cd ..
+cd: error retrieving current directory: getcwd: cannot access parent directories: Permission denied
+bash-3.2$ cd ..
+bash: cd: ..: Permission denied
+bash-3.2$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2/3/..
+
+./ls /ls
+
+Wellcom to L33tShell — your default interactive shell.
+by Nouhaila Aziki [noaziki] and Youssef Rhandoumi [yrhandou].
+For more details: https://github.com/nouhailaaziki or https://github.com/youssef-rhdm.
+L33tShell-N.Y$ env
+PWD=/mnt/homes/yrhandou/DeepShell
+SHLVL=1
+_=/usr/bin/env
+L33tShell-N.Y$ unset PWD SHLVL _
+L33tShell-N.Y$ env
+L33tShell-N.Y$ echo $PATH
+/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.
+L33tShell-N.Y$ export k
+L33tShell-N.Y$ export
+declare -x OLDPWD
+declare -x k
+L33tShell-N.Y$ env
+L33tShell-N.Y$ unset OLDPWD
+L33tShell-N.Y$ unset K
+L33tShell-N.Y$ env
+L33tShell-N.Y$ export
+declare -x k
+L33tShell-N.Y$ unset K
+L33tShell-N.Y$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2/3
+L33tShell-N.Y$ unset PWD OLDPWD
+L33tShell-N.Y$ cd ..
+L33tShell-N.Y$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2/3
+L33tShell-N.Y$ cd ..
+L33tShell: cd: ..: Permission denied
+L33tShell-N.Y$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2/3
+L33tShell-N.Y$ cd ..
+L33tShell: cd: ..: Permission denied
+L33tShell-N.Y$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2
+L33tShell-N.Y$ cd 3
+L33tShell-N.Y$ cd ..
+L33tShell-N.Y$ pwd
+/mnt/homes/yrhandou/DeepShell/1/2/3
+L33tShell-N.Y$
+exit%
+
+
+echo $"USER"$gtr
+
+
+export a="q     w       e" -> export b+=$a  -> this should be b="q     w       e" not b=q (not split)
+
+
+1 ->never split
+export "b=$a"
+export b="$a"
+
+2-> this also does not split if there id no quotes in export (export"" x)
+export b=$a
+export b+=$a
+
+
+3-> if the key is not valid split, if the first rule does not exist
+export 9=$a
+
+
+env -i ./minishell and after it unset PATH and enter to another minishell press ctlr+D there ois a probleme 
