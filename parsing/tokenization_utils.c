@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/01 15:48:08 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 17:05:35 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	lexer(t_shell *shell)
 		position = i;
 		token_len = token_lookup(&shell->line[i]);
 		if (!token_len)
-			return (ft_syntax_err(&shell->line[i], shell));
+			return (ft_syntax_err(shell));
 		sub_str = ft_substr(shell->line, position, token_len);
 		link_token(&shell->tokens, new_token(sub_str, (token_lexer \
 			(&shell->line[position]))));

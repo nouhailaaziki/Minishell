@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/09 15:13:03 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/15 21:16:38 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 		path = na_strjoin(path, cmd[0]);
 		if (!access(path, X_OK))
 		{
+			if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
+			{
+				puterror(1, cmd[0], NULL, ": No such file or directory");
+				exit(1);
+			}
 			execve(path, cmd, envp);
 			perror("execve failed");
 			exit(1);
@@ -50,7 +55,7 @@ void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 	exit(127);
 }
 
-void	child_process_handler(char **cmd, t_redir *redirs, \
+void	child_process_handler(char **cmd, t_redir *redirs,
 t_env **env_list, t_stash *stash)
 {
 	char	**envp;
@@ -68,7 +73,7 @@ t_env **env_list, t_stash *stash)
 	run_and_handle_errors(path_list, cmd, envp);
 }
 
-int	execute_command(char **cmd, t_redir *redirs, \
+int	execute_command(char **cmd, t_redir *redirs,
 t_env **env_list, t_stash *stash)
 {
 	pid_t	pid;

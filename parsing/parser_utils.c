@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/07 21:02:41 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/12 16:56:56 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,32 +85,4 @@ void	advanced_token_lexer(t_token **head)
 		current = current->next;
 	}
 	cmd_lexer(head);
-}
-
-/**
- * @brief Checks the tokens created with the tokenizer for syntax errors
- * @param shell shell data
- */
-int	parser(t_shell *shell)
-{
-	t_token	*current;
-
-	if (!shell->tokens)
-		return (0);
-	current = shell->tokens;
-	if (!simple_syntax_err(shell))
-		return (0);
-	advanced_token_lexer(&shell->tokens);
-	if (!advanced_syntax_err(shell))
-		return (0);
-	while (current)
-	{
-		if (ft_is_operator(current->value) && \
-		(!current->prev || current->prev->type == TOKEN_PAREN_LEFT))
-			return (ft_syntax_err(current->value, shell));
-		current = current->next;
-	}
-	if (!handle_parentheses(shell))
-		return (0);
-	return (1);
 }

@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   na_strdup.c                                        :+:      :+:    :+:   */
+/*   na_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 13:47:50 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
+/*   Created: 2024/10/31 11:11:06 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/15 20:48:18 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../../launchpad.h"
 
-char	*na_strdup(const char *s)
+void	*na_calloc(size_t count, size_t size)
 {
-	int		i;
-	char	*p;
+	void	*p;
+	size_t	total_bytes;
 
-	i = 0;
-	p = (char *)nalloc(ft_strlen(s) + 1);
+	total_bytes = count * size;
+	if (count && total_bytes / count != size)
+		return (NULL);
+	p = nalloc(count * size);
 	if (!p)
 		return (NULL);
-	while (s && s[i])
-	{
-		p[i] = s[i];
-		i++;
-	}
-	p[i] = '\0';
+	ft_memset(p, 0, count * size);
 	return (p);
 }

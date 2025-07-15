@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:37 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/07 15:31:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:23:09 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,17 @@ void	link_nodes(t_var **head, t_var *node)
 	node->next = NULL;
 }
 
-int	is_special_param(char c)
-{
-	if (c == '?' || c == '$')
-		return (1);
-	return (0);
-}
-
 int	is_valid_key(char key)
 {
 	if (!key)
 		return (0);
-	if (is_special_param(key) || ft_isalpha(key) || key == '_')
+	if (key == '?' || ft_isquote(key)
+	|| ft_isalpha(key) || key == '_')
 		return (1);
+	if (key == '$')
+	{
+		
+	}
 	return (0);
 }
 

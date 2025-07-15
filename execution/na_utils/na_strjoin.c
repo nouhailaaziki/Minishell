@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   na_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:33:17 by noaziki           #+#    #+#             */
-/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/15 20:48:43 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../../launchpad.h"
 
 char	*na_strjoin(char const *s1, char const *s2)
 {

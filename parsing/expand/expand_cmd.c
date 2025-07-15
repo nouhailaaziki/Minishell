@@ -3,153 +3,134 @@
 /*                                                        :::      ::::::::   */
 /*   expand_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/08 11:42:13 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/15 10:42:55 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-char	*expand_special_param(char c, int stash_status)
-{
-	pid_t	my_pid;
-
-	if (c == '?')
-		return (ft_itoa(stash_status));
-	if (ioctl(STDIN_FILENO, TIOCGPGRP, &my_pid) == -1)
-	{
-		perror("ioctl");
-		exit(1);
-	}
-	return (ft_itoa(my_pid));
-}
-
-void	expand_keys(t_var **head, t_env **env, int stash_status, int *keys_len, int *values_len)
-{
-	t_var	*current;
-	char	*value;
-
-	current = *head;
-	while (current)
-	{
-		if (current->expandable != '\'')
-		{
-			*keys_len += current->key_len;
-			if (current->key && is_special_param(current->key[1]))
-				current->value = expand_special_param(current->key[1], stash_status);
-			else
-			{
-				value = get_env_value(env, &(current->key[1]));
-				if (!value)
-					current->value = ft_strdup("");
-				else
-					current->value = ft_strdup(value);
-			}
-			current->value_len = ft_strlen(current->value);
-			*values_len += current->value_len;
-		}
-		current = current->next;
-	}
-}
-
-static void count_removed_quotes(char *old_cmd, char **new_cmd)
-{
-    int		count;
-    int		j;
-    char	quote;
-
-	j = 0;
-	count = 0;
-    if (!old_cmd)
-        return ;
-    while (old_cmd[j])
-    {
-        if (ft_isquote(old_cmd[j]))
-        {
-            quote = old_cmd[j++];
-            while (old_cmd[j] && old_cmd[j] != quote)
-			{
-                count++;
-				j++;
-			}
-            if (old_cmd[j] == quote)
-                quote = 0;
-        }
-        else
-		{
-            count++;
-			j++;
-		}
-    }
-}
-
-char *expand_vars(t_var **keys, char **old_cmd, t_env **env, int stash_status)
-{
-	int		values_len;
-	int		keys_len;
-	int 	alloc_len;
-	char	*new_cmd;
-
-	keys_len = 0;
-	values_len = 0;
-	*keys = NULL;
-	find_all_keys(old_cmd[0], keys);
-	if (!keys || !*keys)
-		return NULL;
-	expand_keys(keys, env, stash_status, &keys_len, &values_len);
-	alloc_len = ft_strlen(old_cmd[0]) - keys_len + values_len;
-	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
-	if (!new_cmd)
-	{
-		free_keys(keys);
-		return NULL;
-	}
-	return new_cmd;
-}
-void	update_cmd(char **origin, t_var **keys, char **destination)
+void	update_cmd(char *origin, t_var **keys, char **destination)
 {
 	t_var	*current;
 	char	*dest;
+	char	*tmp;
 	int		i;
 
 	i = 0;
 	current = *keys;
 	dest = *destination;
-	while ((*origin)[i])
+	tmp = *destination;
+	while (origin[i])
 	{
-		if ((*origin)[i] == '$' && current && current->key
-			&& !ft_strncmp(&(*origin)[i], current->key, current->key_len))
+		if (origin[i] == '$' && current && current->key
+			&& !ft_strncmp(&origin[i], current->key, current->key_len))
 		{
-			ft_copy_keys(&dest, 0, current);
+			ft_copy_keys(&dest, current);
 			i += current->key_len;
 			current = current->next;
 		}
 		else
-			*dest++ = (*origin)[i++];
+			*dest++ = origin[i++];
 	}
-	*dest = '\0' ;
-	free(*origin);
-	*origin = *destination;
-	free_keys(keys);
+	*dest = '\0';
+	*destination = tmp;
+	free(origin);
 }
-void	expand_cmd(char **cmd, t_env **env, int stash_status)
+
+void	handle_expand(char ***to_split)
+{
+	t_token	*list;
+	size_t	argc;
+	char	**new_cmd;
+
+	if (!to_split || !**to_split)
+		return ;
+	list = NULL;
+	argc = 0;
+	store_args(&list, *to_split);
+	filter_empty_nodes(&list, &argc);
+	new_cmd = rebuild_cmd(&list, argc);
+	free_cmd(*to_split);
+	*to_split = new_cmd;
+	free_tokens(&list);
+}
+
+int	multi_str_included(char *new_cmd)
 {
 	int		i;
-	t_var	*keys;
-	char	*new_cmd;
+	char	quote;
 
-	if (!cmd || !*cmd)
+	i = 0;
+	quote = 0;
+	while (new_cmd[i])
+	{
+		if (ft_isquote(new_cmd[i]))
+		{
+			quote = new_cmd[i++];
+			i += skip_quoted_str(&new_cmd[i], quote);
+			if (ft_isspace(new_cmd[i]))
+				return (1);
+		}
+		else
+		{
+			while (new_cmd[i] && !ft_isquote(new_cmd[i]))
+			{
+				if (ft_isspace(new_cmd[i]))
+					return (1);
+				i++;
+			}
+		}
+	}
+	return (0);
+}
+
+char	*expand_vars(char **old_cmd, t_env **env, int stash_status)
+{
+	int		total_len;
+	int		alloc_len;
+	char	*new_cmd;
+	t_var	*keys;
+
+	total_len = 0;
+	keys = NULL;
+	find_all_keys(*old_cmd, &keys);
+	expand_keys(&keys, env, stash_status, &total_len);
+	alloc_len = ft_strlen(*old_cmd) + total_len;
+	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
+	if (!new_cmd)
+		return (free(keys), *old_cmd);
+	if (keys && !is_empty_values(keys))
+	{
+		update_cmd(*old_cmd, &keys, &new_cmd);
+		free_keys(&keys);
+	}
+	else
+		return (free(new_cmd), free_keys(&keys), *old_cmd);
+	return (new_cmd);
+}
+
+void	expand_cmd(t_tree *ast, t_env **env, int stash_status)
+{
+	int		i;
+	char	**current;
+
+	current = ast->cmd;
+	if (!current || !*current || !**current)
 		return ;
 	i = 0;
-	while (cmd[i])
+	while (current && current[i])
 	{
-		new_cmd = expand_vars(&keys, &cmd[i], env, stash_status);
-		if (!keys)
-			puts("NO_KEYS");// count_removed_quotes(cmd[i], &new_cmd);
-		else
-			update_cmd(&cmd[i], &keys, &new_cmd);
+		current[i] = expand_vars(&current[i], env, stash_status);
+		if (!ft_strcmp(current[i], "") || multi_str_included(current[i]))
+		{
+			handle_expand(&current);
+			ast->cmd = current;
+			i = 0;
+			continue ;
+		}
 		i++;
 	}
 }

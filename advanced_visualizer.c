@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   advanced_visualizer.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 15:20:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 15:29:12 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:38:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,8 +255,8 @@ static void	visualize_tree_recursive(t_tree *node,
 		   get_node_type_string(node->type),
 		   COLOR_RESET,
 		   COLOR_WHITE,
-		   node->is_ambiguous ? COLOR_RED : COLOR_GREEN,
-		   node->is_ambiguous ? "AMBIGUOUS" : "OK",
+		   node->redirs->is_ambiguous ? COLOR_RED : COLOR_GREEN,
+		   node->redirs->is_ambiguous ? "AMBIGUOUS" : "OK",
 		   COLOR_WHITE,
 		   COLOR_RESET,
 		   node->argc,

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 11:54:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 13:19:33 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/16 00:15:43 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,27 @@
 
 int	is_numeric(const char *str)
 {
+	int	i;
+	int	has_digits;
+
+	i = 0;
+	has_digits = 0;
 	if (!str || !*str)
 		return (0);
-	na_atoi(str);
-	if (*str == '-' || *str == '+')
-		str++;
-	while (*str)
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
 	{
-		if (!ft_isdigit(*str))
+		if (str[i] == ' ' || str[i] == '\t')
 			return (0);
-		str++;
+		if (!ft_isdigit(str[i]))
+			return (0);
+		has_digits = 1;
+		i++;
 	}
-	return (1);
+	return (has_digits);
 }
 
 void	run_exit(char **cmd, t_stash *stash)
