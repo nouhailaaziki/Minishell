@@ -1,6 +1,6 @@
 split only spaces and tabs and new_line
 -------------------------------------
-write exit followed by newline in cntrl + d
+write exit followed by newline in cntrl + d //SUCCESS
 -------------------------------------
 bash-3.2$ export PATH+=:.
 bash-3.2$ Makefile
@@ -104,19 +104,19 @@ export a="q     w       e" -> export b+=$a  -> this should be b="q     w       e
 
 
 1 ->never split
-export "b=$a"
-export b="$a"
+export "b=$a" // this works by default
+export b="$a" // this works by default
 
 2-> this also does not split if there id no quotes in export (export"" x)
 export b=$a
 export b+=$a
 
 3-> if the key is not valid split, if the first rule does not exist
-export 9=$a
+export 9=$a  // this works by default
 ------------
 
 --------------
-env -i ./minishell and after it unset PATH and enter to another minishell press ctlr+D
+env -i ./minishell and after it unset PATH and enter to another minishell press ctrl +D
 there ois a probleme
 --------------
 

@@ -6,11 +6,29 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/14 11:36:50 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:46:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+int	dollar_count(char *key) // ? fix starting from here
+{
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 0;
+	while (key[i] && key[i] == '$')
+	{
+		count++;
+		i++;
+	}
+	if (count % 2 == 0)
+		return 1;
+	return 0;
+}
+
 
 char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 {
@@ -20,7 +38,8 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	i = 0;
 	while (origin[i] && origin[i] != '$')
 		i++;
-	if (!origin[i] || !origin[i + 1] || !is_valid_key(origin[i + 1]))
+	if (!origin[i] || !origin[i + 1]
+	|| !is_valid_key(origin[i + 1]) || !dollar_count(&origin[i + 1]))
 		return (NULL);
 	check_quote(origin, &origin[i], quote);
 	dollar = &origin[i];

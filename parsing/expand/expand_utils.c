@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:37 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/14 11:38:24 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:23:09 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,13 @@ int	is_valid_key(char key)
 {
 	if (!key)
 		return (0);
-	if (key == '?' || ft_isquote(key) || ft_isalpha(key) || key == '_')
+	if (key == '?' || ft_isquote(key)
+	|| ft_isalpha(key) || key == '_')
 		return (1);
+	if (key == '$')
+	{
+		
+	}
 	return (0);
 }
 
