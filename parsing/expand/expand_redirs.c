@@ -6,23 +6,23 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 06:13:39 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/14 13:44:55 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:08:13 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void expand_redirs(t_redir **head, t_env **env, int stash_status)
+void	expand_redirs(t_redir **head, t_env **env, int stash_status)
 {
-	t_redir *current;
-	t_var *keys;
-	char *tmp;
+	t_redir	*current;
+	t_var	*keys;
+	char	*tmp;
 
 	keys = NULL;
 	current = *head;
 	while (current)
 	{
-		if(current->type != REDIR_HEREDOC)
+		if (current->type != REDIR_HEREDOC)
 		{
 			tmp = expand_vars(&current->file, env, stash_status);
 			expand_quotes(&tmp);
@@ -34,33 +34,66 @@ void expand_redirs(t_redir **head, t_env **env, int stash_status)
 	}
 }
 
-int translation_check(char *current)
+void	mask_quotes(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(current[i])
+	while (str[i])
 	{
-
+		if (ft_isquote(str[i]))
+		{
+			if (str[i] == '\'')
+				str[i] = 3;
+			else
+				str[i] = 4;
+		}
 		i++;
 	}
-	return 0;
+}
+
+void	unmask_quotes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == 3 || str[i] == 4)
+		{
+			if (str[i] == 3)
+				str[i] = '\'';
+			else
+				str[i] = '"';
+		}
+		i++;
+	}
+}
+
+int	translation_check(char *current)
+{
+	int	i;
+
+	i = 0;
+	while (current[i])
+	{
+		i++;
+	}
+	return (1);
 }
 
 void	expand_heredoc(t_redir **head)
 {
-	t_redir *current;
-	t_var *keys;
+	t_redir	*current;
+	t_var	*keys;
 
 	keys = NULL;
 	current = *head;
 	while (current && current->type == REDIR_HEREDOC)
 	{
-		// if(translation_check(current->file))
-			// do_something();
 		current->flag = expand_quotes(&current->file);
 		current = current->next;
 	}
 }
-
-
+		// if(translation_check(current->file))
+			// do_something();

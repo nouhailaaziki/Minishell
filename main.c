@@ -6,22 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 19:45:27 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:29:03 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
-
-
-void	clear_memory(t_shell *shell)
-{
-	if (shell->ast)
-		free_tree(&shell->ast);
-	if (shell->tokens)
-		free_tokens(&shell->tokens);
-	free(shell->line);
-	shell->line = NULL;
-}
 
 int	init_shell(t_shell *shell)
 {
@@ -73,7 +62,7 @@ int	process_input(t_shell *shell)
 
 void	execute_cmds(t_shell *shell, t_stash *stash)
 {
-	int required_forks;
+	int	required_forks;
 
 	setup_signals_heredoc();
 	manage_heredocs(shell->ast, stash);

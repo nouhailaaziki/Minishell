@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:37:17 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/13 08:32:23 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:29:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,14 @@ void	expand_keys(t_var **keys, t_env **env, int stash_status, int *total_len)
 		current = current->next;
 	}
 	*total_len = values_len - keys_len;
+}
+
+void	clear_memory(t_shell *shell)
+{
+	if (shell->ast)
+		free_tree(&shell->ast);
+	if (shell->tokens)
+		free_tokens(&shell->tokens);
+	free(shell->line);
+	shell->line = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:13:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/13 12:17:57 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:27:21 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	in_quote_len(char *str, char quote)
 	return (i);
 }
 
-int	in_quote_fill(char *old_cmd, char **new_cmd, char quote)
+static int	in_quote_fill(char *old_cmd, char **new_cmd, char quote)
 {
 	int	i;
 
@@ -101,12 +101,12 @@ int	expand_quotes(char **old_cmd)
 	in_quote = 0;
 	if (!old_cmd || !*old_cmd)
 		return (in_quote);
-	if(ft_strchr(*old_cmd,'\'') || ft_strchr(*old_cmd,'"'))
+	if (ft_strchr(*old_cmd, '\'') || ft_strchr(*old_cmd, '"'))
 		in_quote = 1;
 	count_inquote(*old_cmd, &count);
 	new_cmd = ft_calloc(count + 1, sizeof(char));
 	if (!new_cmd)
-		return in_quote;
+		return (in_quote);
 	fill_quote_content(*old_cmd, &new_cmd);
 	free(*old_cmd);
 	*old_cmd = new_cmd;

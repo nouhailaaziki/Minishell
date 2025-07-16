@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:37 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/15 19:23:09 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:42:31 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,9 @@ int	is_valid_key(char key)
 {
 	if (!key)
 		return (0);
-	if (key == '?' || ft_isquote(key)
-	|| ft_isalpha(key) || key == '_')
+	if (key == '?' || key == '$' || ft_isquote(key)
+		|| ft_isalpha(key) || key == '_')
 		return (1);
-	if (key == '$')
-	{
-		
-	}
 	return (0);
 }
 
@@ -64,4 +60,36 @@ void	check_quote(char *start, char *end, int *quote)
 		}
 		start++;
 	}
+}
+
+int	value_scan(char *arg)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	value = ft_strchr(arg, '=');
+	if (!value || !++value)
+		return (0);
+	if (is_in_quotes(arg))
+		return (0);
+	return (1);
+}
+
+int	key_scan(char *arg)
+{
+		// if(is_valid_key(arg[i]))
+		// 	return 0;
+	int	i;
+
+	i = 0;
+	if (!arg)
+		return (0);
+	if (ft_strchr(arg, '\'') || ft_strchr(arg, '\"'))
+		return (0);
+	while (arg[i] && arg[i] != '=')
+	{
+		i++;
+	}
+	return (1);
 }
