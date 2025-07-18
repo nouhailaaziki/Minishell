@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/15 10:42:55 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/17 18:28:29 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	handle_expand(char ***to_split)
 	free_tokens(&list);
 }
 
-int	multi_str_included(char *new_cmd)
+
+int	multi_str_included(char *new_cmd) // todo: HERE
 {
 	int		i;
 	char	quote;
@@ -97,7 +98,7 @@ char	*expand_vars(char **old_cmd, t_env **env, int stash_status)
 	total_len = 0;
 	keys = NULL;
 	find_all_keys(*old_cmd, &keys);
-	expand_keys(&keys, env, stash_status, &total_len);
+	expand_keys(&keys, env, stash_status, &total_len); //looking for the horizonta tab where it disappears with ft_isspace
 	alloc_len = ft_strlen(*old_cmd) + total_len;
 	new_cmd = ft_calloc(alloc_len + 1, sizeof(char));
 	if (!new_cmd)

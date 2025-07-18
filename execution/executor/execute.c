@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/18 15:04:49 by noaziki          ###   ########.fr       */
@@ -11,6 +11,46 @@
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+void	expand_export(t_tree *ast, t_env **env, int stash_status)
+{
+	int		i;
+	char	**current;
+
+	current = ast->cmd;
+	if (!current || !*current || !**current)
+		return ;
+	if (ft_strcmp(ast->cmd[0], "export"))
+		return ;
+	i = 1;
+	while (current && current[i])
+	{
+		if (!key_scan(ast->cmd[i]) || !value_scan(ast->cmd[i]))
+		{
+			i++;
+			continue ;
+		}
+		current[i] = expand_vars(&current[i], env, stash_status);
+		inject_quotes(&current[i]);
+		i++;
+	}
+}
+
+void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
+{
+	int	i;
+
+	expand_export(ast, env, stash->status);
+	expand_cmd(ast, env, stash->status);
+	expand_redirs(&ast->redirs, env, stash->status);
+	check_for_wildcards(ast, stash);
+	i = 0;
+	while (ast->cmd && ast->cmd[i])
+		expand_quotes(&ast->cmd[i++]);
+	i = 0;
+	while (ast->cmd && ast->cmd[i])
+		unmask_quotes(ast->cmd[i++]);
+}
 
 int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 {

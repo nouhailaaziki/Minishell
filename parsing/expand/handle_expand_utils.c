@@ -6,22 +6,41 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:47:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/13 14:44:31 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/18 10:34:52 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+void	inject_quotes(char **str)
+{
+	char	*value;
+	char	*new_value;
+
+	value = ft_strchr(*str, '=');
+	if (!value || !++value)
+		return ;
+	new_value = ft_calloc(sizeof(char), ft_strlen(*str) + 3);
+	if (!new_value)
+		return ;
+	new_value[0] = '"';
+	ft_memcpy(&new_value[1], *str, ft_strlen(*str));
+	new_value[ft_strlen(*str) + 1] = '"';
+	new_value[ft_strlen(*str) + 2] = '\0';
+	free(*str);
+	*str = new_value;
+}
 
 void	clean_tabs(char *str)
 {
 	int	i;
 
 	i = 0;
-	if(!str)
+	if (!str)
 		return ;
 	while (str[i])
 	{
-		if (!ft_isspace(str[i]))
+		if (!ft_isspace(str[i]))//(str[i] == 10 || str[i] == 11 || str[i] == 12 || str[i] == 13))
 			i++;
 		else
 			str[i++] = ' ';
@@ -43,7 +62,7 @@ void	store_args(t_token **list, char **origin)
 			j = 0;
 			while (tmp && tmp[j])
 			{
-				clean_tabs(tmp[i]);
+				clean_tabs(tmp[j]);
 				link_token(list, new_token(tmp[j++], 1));
 			}
 			free_cmd(tmp);

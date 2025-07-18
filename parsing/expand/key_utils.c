@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/15 19:46:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:27:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	dollar = &origin[i];
 	*pos = i;
 	i = 1;
-	if (dollar[i] == '?')
+	if (dollar[i] == '?' || dollar[i] == '$')
 		i++;
 	else
 	{
@@ -117,30 +117,14 @@ void	ft_copy_keys(char **dest, t_var *current)
 	}
 }
 
-void mask_quotes(char *str)
-{
-	int	i;
-
-	i = 0;
-	while(str[i])
-	{
-		if(ft_isquote(str[i]))
-		{
-			if (str[i] == '\'')
-				str[i] = 3;
-			else
-				str[i] = 4;
-		}
-		i++;
-	}
-}
-
 void	expand_a_key(t_var *current, t_env **env, int stash_status)
 {
 	char	*value;
 
-	if (current->key && !ft_strcmp(current->key, "$?"))
+	if (!ft_strcmp(current->key, "$?"))
 		current->value = ft_itoa(stash_status);
+	else if (!ft_strcmp(current->key, "$$"))
+		current->value = ft_strdup("$$");
 	else
 	{
 		value = get_env_value(env, &(current->key[1]));
@@ -155,5 +139,3 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 			current->value = ft_strdup(value);
 	}
 }
-
-

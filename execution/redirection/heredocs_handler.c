@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/17 14:08:30 by noaziki          ###   ########.fr       */
