@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 09:12:50 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 19:51:27 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/04 09:21:58 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*handle_component_case(int dotdots, t_stash *stash)
 	return (target);
 }
 
-char	*process_components(const char *path, int dotdots,
+char	*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component)
 {
 	char	*current_path;

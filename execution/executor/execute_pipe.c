@@ -6,13 +6,13 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:47:01 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 19:55:43 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 11:58:52 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	execute_left_child(t_tree *ast, t_env **env_list,
+void	execute_left_child(t_tree *ast, t_env **env_list, \
 t_stash *stash, int *pipes)
 {
 	close(pipes[0]);
@@ -22,7 +22,7 @@ t_stash *stash, int *pipes)
 	exit(stash->status);
 }
 
-void	execute_right_child(t_tree *ast, t_env **env_list,
+void	execute_right_child(t_tree *ast, t_env **env_list, \
 t_stash *stash, int *pipes)
 {
 	close(pipes[1]);

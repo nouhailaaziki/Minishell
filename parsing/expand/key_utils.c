@@ -6,29 +6,11 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/15 19:46:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:27:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
-int	dollar_count(char *key) // ? fix starting from here
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (key[i] && key[i] == '$')
-	{
-		count++;
-		i++;
-	}
-	if (count % 2 == 0)
-		return 1;
-	return 0;
-}
-
 
 char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 {
@@ -38,14 +20,13 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	i = 0;
 	while (origin[i] && origin[i] != '$')
 		i++;
-	if (!origin[i] || !origin[i + 1]
-	|| !is_valid_key(origin[i + 1]) || !dollar_count(&origin[i + 1]))
+	if (!origin[i] || !origin[i + 1] || !is_valid_key(origin[i + 1]))
 		return (NULL);
 	check_quote(origin, &origin[i], quote);
 	dollar = &origin[i];
 	*pos = i;
 	i = 1;
-	if (dollar[i] == '?')
+	if (dollar[i] == '?' || dollar[i] == '$')
 		i++;
 	else
 	{
@@ -58,6 +39,7 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	*key_len = i;
 	return (dollar);
 }
+
 t_var	*create_key(char *origin, int *quote, int *pos)
 {
 	char	*dollar;
@@ -81,6 +63,7 @@ t_var	*create_key(char *origin, int *quote, int *pos)
 	key->expandable = *quote;
 	return (key);
 }
+
 void	find_all_keys(char *str, t_var **keys)
 {
 	int		pos;
@@ -117,30 +100,14 @@ void	ft_copy_keys(char **dest, t_var *current)
 	}
 }
 
-void mask_quotes(char *str)
-{
-	int	i;
-
-	i = 0;
-	while(str[i])
-	{
-		if(ft_isquote(str[i]))
-		{
-			if (str[i] == '\'')
-				str[i] = 3;
-			else
-				str[i] = 4;
-		}
-		i++;
-	}
-}
-
 void	expand_a_key(t_var *current, t_env **env, int stash_status)
 {
 	char	*value;
 
-	if (current->key && !ft_strcmp(current->key, "$?"))
+	if (!ft_strcmp(current->key, "$?"))
 		current->value = ft_itoa(stash_status);
+	else if (!ft_strcmp(current->key, "$$"))
+		current->value = ft_strdup("$$");
 	else
 	{
 		value = get_env_value(env, &(current->key[1]));
@@ -155,5 +122,3 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 			current->value = ft_strdup(value);
 	}
 }
-
-

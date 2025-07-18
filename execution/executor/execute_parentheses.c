@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_parentheses.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/17 14:10:44 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/06 16:06:34 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	execute_parentheses(t_tree *ast, t_env **env,
+int	execute_parentheses(t_tree *ast, t_env **env, \
 t_stash *stash, t_redir *redir)
 {
 	pid_t	pid;
@@ -24,7 +24,7 @@ t_stash *stash, t_redir *redir)
 		return (perror("fork failed"), 1);
 	if (pid == 0)
 	{
-		handle_redirs(redir, stash);
+		handle_redirs(redir);
 		exit_status = execute_ast(ast->left, env, stash);
 		exit(exit_status);
 	}

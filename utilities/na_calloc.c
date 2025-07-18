@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   na_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 10:05:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/05/18 09:17:59 by yrhandou         ###   ########.fr       */
+/*   Created: 2024/10/31 11:11:06 by noaziki           #+#    #+#             */
+/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../launchpad.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*na_calloc(size_t count, size_t size)
 {
-	size_t				i;
-	unsigned char		*dest;
-	const unsigned char	*sorc;
+	void	*p;
+	size_t	total_bytes;
 
-	dest = (unsigned char *)dst;
-	sorc = (const unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		dest[i] = sorc[i];
-		i++;
-	}
-	return (dst);
+	total_bytes = count * size;
+	if (count && total_bytes / count != size)
+		return (NULL);
+	p = nalloc(count * size);
+	if (!p)
+		return (NULL);
+	ft_memset(p, 0, count * size);
+	return (p);
 }

@@ -1,0 +1,39 @@
+export a="       " (spaces or tabs)
+$a
+NOothing happen (NULL)
+ls$a-l$a-a => ls -l -a (form multi withespaces to one space)
+$a"" and $""a => like $a
+"$a" => keep its content
+
+L33tShell-N.Y$ $USER"$USER"'$USER'
+L33tShell: yrhandouyrhandou: command not found
+
+bash-3.2$ $HOME
+bash: /mnt/homes/yrhandou: is a directory
+bash-3.2$ $"$HOME"
+bash: /mnt/homes/yrhandou: is a directory
+bash-3.2$ $"$HOME$"
+bash: /mnt/homes/yrhandou$: No such file or directory
+bash-3.2$ $"HOME$"
+bash: HOME$: command not found
+bash-3.2$
+-------
+from what i understood quotes expansion should be indeppendant , expand of vars shuld be independant ,
+
+i need to also create a reallocating function for export $a=$a..., th heredoc expand should also be handled
+
+the value that should be exported should be checked and splitted only when it has space inside of it
+
+----
+function that checks if there is a space outside the quotes inside a command {"alpha"$a} ={"alpha"ls la} =>{{"alpha"ls} {la}}
+---
+i think i store all the args ina linked list ,
+ then i filter the empty ones then i re allocate a new 2d array where i put only the valid ones,
+ then i rest the main expand index to restart the check for the newly created array, something is wrong when looping , sometimes it works raely , others it returns empty string
+----
+single quote failure , probably in rebuild list ,things that expand and shouldnt split does , probably in store arg as well . thats what i c an remember
+-------
+ok , from eat i can tell the xport cases are almost all andled by default in y current setup , what i need to do right now is
+make a function that checks if export is the first command with the valid instructions as show in the tdr file , and then i should just make it inject quotes if all the checks are done correctly, else it shoul just sip it and allow expand vars to work normally .
+where there would be a problem is when it works but im  afraid of the case where it would try to loop to infinty because i keep rebuild ing the d array , but then again , it sgouldnt bae an issue right ? ,
+because if it works  its work it should not reverse aain right ? for expand le a expand of a variable that would be filled with export , how can i chck tht it is an expanded value or an original, ill figure that later/

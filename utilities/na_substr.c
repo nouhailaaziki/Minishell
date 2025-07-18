@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   na_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:51:37 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 20:48:46 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../launchpad.h"
+#include "../launchpad.h"
 
 char	*na_substr(char const *s, unsigned int start, size_t len)
 {
