@@ -1,0 +1,53 @@
+executor >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+L33tShell-N.Y$ echo 'hello'*
+hello*
+L33tShell-N.Y$ echo "hello"*
+hello*
+
+---------------------------------------------------
+
+L33tShell-N.Y$ touch 'hello"4'
+L33tShell-N.Y$ echo $a
+h"*"
+L33tShell-N.Y$ echo *
+hello4 hello1 hello2 hello3 ls
+
+bash-3.2$ echo *
+hello"4 hello1 hello2 hello3 ls
+
+
+
+
+parser >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+L33tShell-N.Y$ ls < $JJ
+L33tShell: : ambiguous redirect
+
+bash-3.2$ ls > $JJ
+bash: $JJ: ambiguous redirect
+
+---------------------------------------------------
+
+L33tShell-N.Y$ << $"USER" cat
+> USER
+> $USER
+USER
+
+bash-3.2$ << $"USER" cat
+> USER
+bash-3.2$
+
+---------------------------------------------------
+
+L33tShell-N.Y$ cat << l
+> '$USER'
+> l
+'$USER'
+
+bash-3.2$ cat << l
+> '$USER'
+> l
+'noaziki'
+
+---------------------------------------------------

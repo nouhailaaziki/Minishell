@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 18:10:35 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/18 21:34:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,7 @@ void		free_all_tracked(void);
 t_gcnode	**memory_tracker(void);
 
 /*------------------------------Utilities-----------------------------*/
+void		close_fd(void);
 char		*na_itoa(int n);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
