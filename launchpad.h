@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 12:18:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/18 18:10:35 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
-/*------------------------Linked list of expand-----------------------*/
 typedef struct s_var
 {
 	char			*key;
@@ -98,7 +97,6 @@ typedef struct s_var
 	int				expandable;
 	struct s_var	*next;
 }	t_var;
-
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
 {
@@ -191,7 +189,6 @@ typedef struct s_match_data
 	size_t	count;
 }	t_match_data;
 
-int	setup_heredoc_file(t_redir *redirs, t_stash *stash);
 /*------------------------wildcards fonctions-------------------------*/
 void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
 size_t		match_pattern(const char *pattern, const char *string);
@@ -234,29 +231,49 @@ t_stash *stash);
 char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
 char		*expand_vars(char **old_cmd, t_env **env, int stash_status);
-
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
 t_gcnode	**memory_tracker(void);
 
-/*-------------------------Updated utilities--------------------------*/
+/*------------------------------Utilities-----------------------------*/
 char		*na_itoa(int n);
+int			ft_isalpha(int c);
+int			ft_isdigit(int c);
+int			ft_isspace(int c);
+int			ft_isalnum(int c);
+int			ft_isascii(int c);
 int			na_arrlen(char **arr);
+int			ft_atoi(const char *str);
+size_t		ft_strlen(const char *s);
 long		na_atoi(const char *str);
 char		*na_strdup(const char *s);
+int			ft_str_isspace(char *str);
+char		*ft_strdup(const char *s1);
+int			ft_strcmp(char *s1, char *s2);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putchar_fd(char c, int fd);
+void		ft_putendl_fd(char *s, int fd);
+char		*ft_strchr(const char *s, int c);
 char		**na_split(char const *s, char c);
+char		*ft_strrchr(const char *s, int c);
+int			ft_isallchar(const char *str, char c);
 void		*na_calloc(size_t count, size_t size);
+void		*ft_calloc(size_t count, size_t size);
+void		*ft_memset(void *b, int c, size_t len);
 int			na_mkstemp(char *template, t_redir *redir);
 char		*na_strjoin(char const *s1, char const *s2);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*get_next_line(int fd);
+
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir, t_stash *stash);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
 int			open_heredocs(t_redir *redir, t_stash *stash);
 void		check_heredoc_limit(t_shell *shell, t_tree *ast);
-int			count_heredocs(t_redir *redir);
 
 /*------------------------------Events--------------------------------*/
 void		display_intro(void);
@@ -274,8 +291,7 @@ t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
 int			count_required_forks(t_tree *ast);
-int perform_dry_run_fork_test(int required_forks, t_stash *stash);
-
+int			perform_dry_run_fork_test(int required_forks, t_stash *stash);
 /*------------------------------signals-------------------------------*/
 void		restore_terminal(t_stash *stash);
 void		disable_echoctl(t_stash *stash);
@@ -283,29 +299,6 @@ void		handle_sigint_heredoc(int sig);
 void		handle_sigint_prompt(int sig);
 void		setup_signals_heredoc(void);
 void		setup_signals_prompt(void);
-
-/*------------------------------Utilities-----------------------------*/
-int			ft_isalpha(int c);
-int			ft_isdigit(int c);
-int			ft_isspace(int c);
-int			ft_isalnum(int c);
-int			ft_isascii(int c);
-int			ft_atoi(const char *str);
-size_t		ft_strlen(const char *s);
-int			ft_str_isspace(char *str);
-char		*ft_strdup(const char *s1);
-int			ft_strcmp(char *s1, char *s2);
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putchar_fd(char c, int fd);
-void		ft_putendl_fd(char *s, int fd);
-char		*ft_strchr(const char *s, int c);
-char		*ft_strrchr(const char *s, int c);
-int			ft_isallchar(const char *str, char c);
-void		*ft_calloc(size_t count, size_t size);
-void		*ft_memset(void *b, int c, size_t len);
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
-char		*ft_substr(char const *s, unsigned int start, size_t len);
-char		*get_next_line(int fd);
 
 /*---------------------Parsing STUFF------------------------------------------*/
 int			init_shell(t_shell *shell);
@@ -343,7 +336,6 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-
 	/*---------------------Checkers-------------------*/
 char		ft_isquote(char c);
 int			ft_is_redir(char *c);
@@ -385,7 +377,6 @@ int			is_valid_key(char key);
 void		mask_quotes(char *str);
 int			value_scan(char *arg);
 int			key_scan(char *arg);
-
 /*-----------free-------------*/
 void		free_cmd(char **cmd);
 void		free_tree(t_tree **ast);

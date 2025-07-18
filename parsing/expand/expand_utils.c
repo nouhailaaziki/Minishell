@@ -41,10 +41,6 @@ int	is_valid_key(char key)
 	if (key == '?' || key == '$' || ft_isquote(key)
 		|| ft_isalpha(key) || key == '_')
 		return (1);
-	if (key == '$')
-	{
-		
-	}
 	return (0);
 }
 

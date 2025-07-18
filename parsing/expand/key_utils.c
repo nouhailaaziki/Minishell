@@ -12,24 +12,6 @@
 
 #include "../../launchpad.h"
 
-int	dollar_count(char *key) // ? fix starting from here
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (key[i] && key[i] == '$')
-	{
-		count++;
-		i++;
-	}
-	if (count % 2 == 0)
-		return 1;
-	return 0;
-}
-
-
 char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 {
 	int		i;
@@ -38,8 +20,7 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	i = 0;
 	while (origin[i] && origin[i] != '$')
 		i++;
-	if (!origin[i] || !origin[i + 1]
-	|| !is_valid_key(origin[i + 1]) || !dollar_count(&origin[i + 1]))
+	if (!origin[i] || !origin[i + 1] || !is_valid_key(origin[i + 1]))
 		return (NULL);
 	check_quote(origin, &origin[i], quote);
 	dollar = &origin[i];
@@ -58,6 +39,7 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	*key_len = i;
 	return (dollar);
 }
+
 t_var	*create_key(char *origin, int *quote, int *pos)
 {
 	char	*dollar;
@@ -81,6 +63,7 @@ t_var	*create_key(char *origin, int *quote, int *pos)
 	key->expandable = *quote;
 	return (key);
 }
+
 void	find_all_keys(char *str, t_var **keys)
 {
 	int		pos;

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   na_mkstemp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 11:10:28 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 20:48:26 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../launchpad.h"
+#include "../launchpad.h"
 
 int	get_random_byte(void)
 {

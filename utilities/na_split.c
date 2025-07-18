@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   na_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:06:29 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 20:48:36 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/06/29 12:14:04 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../launchpad.h"
+#include "../launchpad.h"
 
 size_t	ft_counter(char const *s, char c)
 {

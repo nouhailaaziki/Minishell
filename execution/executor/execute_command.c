@@ -18,7 +18,7 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 	int		i;
 
 	i = 0;
-	while (cmd && strcmp(*cmd, "") && path_list && path_list[i])
+	while (ft_strcmp(cmd[0], "") && path_list && path_list[i])
 	{
 		path = na_strjoin(path_list[i], "/");
 		path = na_strjoin(path, cmd[0]);

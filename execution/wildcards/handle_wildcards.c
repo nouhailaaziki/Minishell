@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   handle_wildcards.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 23:15:34 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/16 11:57:23 by noaziki          ###   ########.fr       */

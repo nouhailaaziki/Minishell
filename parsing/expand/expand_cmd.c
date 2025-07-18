@@ -58,7 +58,6 @@ void	handle_expand(char ***to_split)
 	free_tokens(&list);
 }
 
-
 int	multi_str_included(char *new_cmd) // todo: HERE
 {
 	int		i;

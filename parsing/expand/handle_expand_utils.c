@@ -31,6 +31,7 @@ void	inject_quotes(char **str)
 	*str = new_value;
 }
 
+
 void	clean_tabs(char *str)
 {
 	int	i;
