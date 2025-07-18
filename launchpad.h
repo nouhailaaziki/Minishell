@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 11:44:47 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/18 18:10:35 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,15 @@
 # include <limits.h>
 # include <signal.h>
 # include <dirent.h>
+# include <stdbool.h>
 # include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
 /*-----------------------Format and Color Macros----------------------*/
 # define BOLD "\033[1m"
@@ -150,13 +154,6 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
-/*--------------------------wildcards struct--------------------------*/
-// typedef struct	s_dirent
-// {
-// 	char			*name;
-// 	struct s_dirent	*next;
-// }	t_dirent;
-
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
@@ -168,7 +165,8 @@ typedef struct s_stash
 	char			*pwd_backup;
 	char			*heredoc_store;
 	int				heredoc_interrupted;
-	// t_dirent		*dirent;
+	int				is_parent_flag;
+	t_env			**env_list;
 	struct termios	orig_termios;
 }	t_stash;
 
@@ -183,7 +181,20 @@ typedef struct s_shell
 	t_stash	stash;
 }	t_shell;
 
+/*--------------------------wildcards tool---------------------------*/
+typedef struct s_match_data
+{
+	char	**matches;
+	size_t	capacity;
+	size_t	count;
+}	t_match_data;
+
+/*------------------------wildcards fonctions-------------------------*/
 void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
+size_t		match_pattern(const char *pattern, const char *string);
+void		sort_matches(char **matches, size_t count);
+void		resize_matches_if_needed(t_match_data *data);
+void		cleanup_string_array(char **array);
 
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
@@ -255,9 +266,11 @@ char		*na_strjoin(char const *s1, char const *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*get_next_line(int fd);
+
 
 /*----------------------Redirections && heredoc-----------------------*/
-int			handle_redirs(t_redir *redir);
+int			handle_redirs(t_redir *redir, t_stash *stash);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
 int			open_heredocs(t_redir *redir, t_stash *stash);
 void		check_heredoc_limit(t_shell *shell, t_tree *ast);

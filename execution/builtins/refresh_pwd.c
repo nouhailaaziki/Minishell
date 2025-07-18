@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 09:01:30 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 14:36:23 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/16 00:13:21 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	handle_failed_getcwd(t_env *pwd_node, t_stash *stash, char *cmd)
 	ft_putendl_fd(" No such file or directory", 2);
 }
 
-char	*update_pwd_node(t_env *pwd_node, t_stash *stash, \
+char	*update_pwd_node(t_env *pwd_node, t_stash *stash,
 char *new_pwd, char *cmd)
 {
 	char	*oldpwd_val;
