@@ -6,39 +6,18 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:47:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/16 11:08:02 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/13 14:44:31 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
-void	inject_quotes(char **str)
-{
-	char	*value;
-	char	*new_value;
-	char	*tmp;
-
-	value = ft_strchr(*str, '=');
-	if (!value || !++value)
-		return ;
-	new_value = ft_calloc(sizeof(char), ft_strlen(value) + 2);
-	if (!new_value)
-		return ;
-	tmp = new_value;
-	new_value[0] = '"';
-	new_value = ft_strjoin(new_value, *str);
-	free(tmp);
-	new_value[ft_strlen(*str) + 1] = '\"';
-	free(*str);
-	*str = new_value;
-}
 
 void	clean_tabs(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (!str)
+	if(!str)
 		return ;
 	while (str[i])
 	{

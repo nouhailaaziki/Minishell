@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/16 11:37:10 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/12 17:05:35 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,20 +108,4 @@ int	lexer(t_shell *shell)
 			break ;
 	}
 	return (1);
-}
-
-int	is_in_quotes(char *str)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	quote = ft_isquote(str[i]);
-	if (!ft_isquote(str[i]))
-		return (0);
-	while (str[i] && str[i] != quote)
-		i++;
-	if (str[i] == quote)
-		return (1);
-	return (0);
 }

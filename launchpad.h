@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 11:44:47 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:18:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,15 @@
 # include <limits.h>
 # include <signal.h>
 # include <dirent.h>
+# include <stdbool.h>
 # include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
 /*-----------------------Format and Color Macros----------------------*/
 # define BOLD "\033[1m"
@@ -52,7 +56,7 @@
 # define RESET "\e[0m"
 
 /*----------------------------global flag-----------------------------*/
-int		g_sigint_received;
+int	g_sigint_received;
 
 /*-----------------------The kind of each token-----------------------*/
 typedef enum e_token_type
@@ -84,15 +88,17 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
+/*------------------------Linked list of expand-----------------------*/
 typedef struct s_var
 {
-	char			*key;
-	char			*value;
-	int				key_len;
-	int				value_len;
-	int				expandable;
-	struct s_var	*next;
-}	t_var;
+	char	*key;
+	char	*value;
+	int 	key_len;
+	int 	value_len;
+	int		expandable;
+	struct s_var *next;
+} t_var;
+
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
 {
@@ -150,13 +156,6 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
-/*--------------------------wildcards struct--------------------------*/
-// typedef struct	s_dirent
-// {
-// 	char			*name;
-// 	struct s_dirent	*next;
-// }	t_dirent;
-
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
@@ -168,7 +167,8 @@ typedef struct s_stash
 	char			*pwd_backup;
 	char			*heredoc_store;
 	int				heredoc_interrupted;
-	// t_dirent		*dirent;
+	int				is_parent_flag;
+	t_env			**env_list;
 	struct termios	orig_termios;
 }	t_stash;
 
@@ -183,7 +183,21 @@ typedef struct s_shell
 	t_stash	stash;
 }	t_shell;
 
+/*--------------------------wildcards tool---------------------------*/
+typedef struct s_match_data
+{
+	char	**matches;
+	size_t	capacity;
+	size_t	count;
+}	t_match_data;
+
+int	setup_heredoc_file(t_redir *redirs, t_stash *stash);
+/*------------------------wildcards fonctions-------------------------*/
 void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
+size_t		match_pattern(const char *pattern, const char *string);
+void		sort_matches(char **matches, size_t count);
+void		resize_matches_if_needed(t_match_data *data);
+void		cleanup_string_array(char **array);
 
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
@@ -220,47 +234,29 @@ t_stash *stash);
 char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
 char		*expand_vars(char **old_cmd, t_env **env, int stash_status);
+
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
 t_gcnode	**memory_tracker(void);
 
-/*------------------------------Utilities-----------------------------*/
+/*-------------------------Updated utilities--------------------------*/
 char		*na_itoa(int n);
-int			ft_isalpha(int c);
-int			ft_isdigit(int c);
-int			ft_isspace(int c);
-int			ft_isalnum(int c);
-int			ft_isascii(int c);
 int			na_arrlen(char **arr);
-int			ft_atoi(const char *str);
-size_t		ft_strlen(const char *s);
 long		na_atoi(const char *str);
 char		*na_strdup(const char *s);
-int			ft_str_isspace(char *str);
-char		*ft_strdup(const char *s1);
-int			ft_strcmp(char *s1, char *s2);
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putchar_fd(char c, int fd);
-void		ft_putendl_fd(char *s, int fd);
-char		*ft_strchr(const char *s, int c);
 char		**na_split(char const *s, char c);
-char		*ft_strrchr(const char *s, int c);
-int			ft_isallchar(const char *str, char c);
 void		*na_calloc(size_t count, size_t size);
-void		*ft_calloc(size_t count, size_t size);
-void		*ft_memset(void *b, int c, size_t len);
 int			na_mkstemp(char *template, t_redir *redir);
 char		*na_strjoin(char const *s1, char const *s2);
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
-char		*ft_substr(char const *s, unsigned int start, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
-int			handle_redirs(t_redir *redir);
+int			handle_redirs(t_redir *redir, t_stash *stash);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
 int			open_heredocs(t_redir *redir, t_stash *stash);
 void		check_heredoc_limit(t_shell *shell, t_tree *ast);
+int			count_heredocs(t_redir *redir);
 
 /*------------------------------Events--------------------------------*/
 void		display_intro(void);
@@ -278,7 +274,8 @@ t_redir *redir);
 int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
 int			count_required_forks(t_tree *ast);
-int			perform_dry_run_fork_test(int required_forks, t_stash *stash);
+int perform_dry_run_fork_test(int required_forks, t_stash *stash);
+
 /*------------------------------signals-------------------------------*/
 void		restore_terminal(t_stash *stash);
 void		disable_echoctl(t_stash *stash);
@@ -287,22 +284,44 @@ void		handle_sigint_prompt(int sig);
 void		setup_signals_heredoc(void);
 void		setup_signals_prompt(void);
 
+/*------------------------------Utilities-----------------------------*/
+int			ft_isalpha(int c);
+int			ft_isdigit(int c);
+int			ft_isspace(int c);
+int			ft_isalnum(int c);
+int			ft_isascii(int c);
+int			ft_atoi(const char *str);
+size_t		ft_strlen(const char *s);
+int			ft_str_isspace(char *str);
+char		*ft_strdup(const char *s1);
+int			ft_strcmp(char *s1, char *s2);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putchar_fd(char c, int fd);
+void		ft_putendl_fd(char *s, int fd);
+char		*ft_strchr(const char *s, int c);
+char		*ft_strrchr(const char *s, int c);
+int			ft_isallchar(const char *str, char c);
+void		*ft_calloc(size_t count, size_t size);
+void		*ft_memset(void *b, int c, size_t len);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*get_next_line(int fd);
+
 /*---------------------Parsing STUFF------------------------------------------*/
 int			init_shell(t_shell *shell);
 int			lexer(t_shell *shell);
+void		parentheses_lexer(t_token **head);
+void		link_token(t_token **head, t_token *node);
+int			handle_quotes(char *str, char quote_type);
+void		advanced_token_lexer(t_token **head);
+int			parentheses_counter_v2(t_token *head);
+int			handle_parentheses(t_shell *shell);
+int			ft_syntax_analyzer(char *str);
+int			operator_len(char *str);
 int			token_lexer(char *str);
 int			skip_spaces(char *str);
 int			parser(t_shell *shell);
-int			operator_len(char *str);
-int			ft_syntax_analyzer(char *str);
 t_token		*new_token(char *value, int type);
-void		parentheses_lexer(t_token **head);
-int			handle_parentheses(t_shell *shell);
-void		advanced_token_lexer(t_token **head);
-int			parentheses_counter_v2(t_token *head);
-int			handle_quotes(char *str, char quote_type);
-void		link_token(t_token **head, t_token *node);
-int			is_in_quotes(char *str);
 
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
@@ -323,65 +342,63 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
+
 	/*---------------------Checkers-------------------*/
-char		ft_isquote(char c);
-int			ft_is_redir(char *c);
-int			ft_is_operator(char *c);
-int			ft_isparentheses(char *c);
-int			redir_identifier(char *str);
 int			ft_syntax_err(t_shell *shell);
-int			check_successor(t_token *head);
-int			ft_is_bonus_operator(char *str);
-int			check_predecessor(t_token *head);
-int			simple_syntax_err(t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
+int			simple_syntax_err(t_shell *shell);
+int			check_predecessor(t_token *head);
+int			ft_is_bonus_operator(char *str);
+int			check_successor(t_token *head);
+int			redir_identifier(char *str);
+int			ft_isparentheses(char *c);
+int			ft_is_operator(char *c);
+int			ft_is_redir(char *c);
+char		ft_isquote(char c);
 
 /*-----------Expand-----------------*/
-void		expand_keys(t_var **keys, t_env **env, int stash_status, \
-int *total_len);
-char		*find_a_key(char *origin, int *quote, int *key_len, int *pos);
-void		expand_redirs(t_redir **head, t_env **env, int stash_status);
-void		expand_a_key(t_var *current, t_env **env, int stash_status);
-void		update_cmd(char *origin, t_var **keys, char **destination);
 void		expand_cmd(t_tree *ast, t_env **env, int stash_status);
-void		filter_empty_nodes(t_token **head, size_t *argc);
-void		check_quote(char *start, char *end, int *quote);
-t_var		*create_key(char *origin, int *quote, int *pos);
-char		**rebuild_cmd(t_token **list, size_t argc);
-void		ft_copy_keys(char **dest, t_var *current);
-void		store_args(t_token **list, char **origin);
+char		*find_a_key(char *origin, int *quote , int *key_len ,int *pos);
+t_var		*create_key(char *origin, int *quote , int *pos);
 void		find_all_keys(char *str, t_var **keys);
-int			skip_quoted_str(char *str, char quote);
+void		update_cmd(char *origin, t_var **keys, char **destination);
+void		ft_copy_keys(char **dest, t_var *current);
 void		link_nodes(t_var **head, t_var *node);
-int			in_quote_len(char *str, char quote);
-int			multi_str_included(char *new_cmd);
-void		expand_heredoc(t_redir **head);
-int			expand_quotes(char **old_cmd);
-int			is_empty_values(t_var *keys);
-void		inject_quotes(char **str);
-void		unmask_quotes(char *str);
 int			is_valid_key(char key);
-void		mask_quotes(char *str);
-int			value_scan(char *arg);
-int			key_scan(char *arg);
+void		check_quote(char *start, char *end, int *quote);
+int			in_quote_len(char *str, char quote);
+int			expand_quotes(char **old_cmd);
+void		expand_keys(t_var **keys, t_env **env, int stash_status,\
+int *total_len);
+void		expand_a_key(t_var *current, t_env **env, int stash_status);
+void		store_args(t_token **list, char **origin);
+void		filter_empty_nodes(t_token **head, size_t *argc);
+char		**rebuild_cmd(t_token **list, size_t argc);
+int			skip_quoted_str(char *str, char quote);
+int			is_empty_values(t_var *keys);
+int			multi_str_included(char *new_cmd);
+void expand_redirs(t_redir **head, t_env **env, int stash_status);
+void expand_heredoc(t_redir **head);
+void expand_all(t_tree *ast, t_env **env, t_stash *stash);
+
 /*-----------free-------------*/
-void		free_cmd(char **cmd);
-void		free_tree(t_tree **ast);
-void		free_keys(t_var **head);
-void		free_tokens(t_token **head);
 void		clear_memory(t_shell *shell);
+void		free_tokens(t_token **head);
+void		free_tree(t_tree **ast);
+void		free_cmd(char **cmd);
+void		free_keys(t_var **head);
 /*-----------utilities-------------*/
-char		**ft_split(char const *s, char c);
-char		*ft_strjoin(char const *s1, char const *s2);
+char		**ft_split_args(char *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
-void		*ft_memcpy(void *dst, const void *src, size_t n);
+char		**ft_split(char const *s,char c);
+char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_calloc(size_t count, size_t size);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putstr_fd(char *s, int fd);
 void		ft_putchar_fd(char c, int fd);
 char		*ft_strdup(const char *s1);
 int			ft_str_isspace(char *str);
-char		**ft_split_args(char *s);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_isspace(int c);

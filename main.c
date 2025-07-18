@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 11:29:03 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:20:17 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
+
+void	clear_memory(t_shell *shell)
+{
+	if (shell->ast)
+		free_tree(&shell->ast);
+	if (shell->tokens)
+		free_tokens(&shell->tokens);
+	free(shell->line);
+	shell->line = NULL;
+}
 
 int	init_shell(t_shell *shell)
 {
@@ -40,6 +50,7 @@ int	init_shell(t_shell *shell)
 
 void	init_loop_data(t_stash *stash)
 {
+	stash->is_parent_flag = 0;
 	g_sigint_received = 0;
 	stash->heredoc_interrupted = 0;
 	stash->exit_flag = 0;
@@ -62,7 +73,7 @@ int	process_input(t_shell *shell)
 
 void	execute_cmds(t_shell *shell, t_stash *stash)
 {
-	int	required_forks;
+	int required_forks;
 
 	setup_signals_heredoc();
 	manage_heredocs(shell->ast, stash);
@@ -79,6 +90,15 @@ Resource temporarily unavailable", 2);
 	else
 		return ;
 	restore_terminal(stash);
+}
+
+void	close_fd()
+{
+	int	i;
+
+	i = 3;
+	while (i < OPEN_MAX)
+		close(i++);	
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -98,13 +118,14 @@ int	main(int argc, char **argv, char **envp)
 		add_history(shell.line);
 		if (!shell.line)
 		{
-			write(1, "exit", 4);
+			write(1, "exit\n", 5);
 			(free_tokens(&shell.tokens), free_all_tracked());
 			exit(shell.stash.status);
 		}
 		if (process_input(&shell))
 			execute_cmds(&shell, &shell.stash);
 		clear_memory(&shell);
+		close_fd();
 	}
 	return (0);
 }

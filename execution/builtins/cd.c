@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 11:54:36 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/06 21:45:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/16 00:13:56 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ int	handle_path_access(char **path, char *arg, t_stash *stash)
 		if (process_cd_path(arg, stash))
 			*path = process_cd_path(arg, stash);
 		if (access(*path, F_OK) != 0)
-			return (puterror(1, "cd: ", arg, \
-			": No such file or directory"));
+			return (puterror(1, "cd: ", arg,
+					": No such file or directory"));
 	}
 	return (0);
 }
 
-int	handle_directory_check(char *path, char *arg, \
+int	handle_directory_check(char *path, char *arg,
 t_env **env_list, t_stash *stash)
 {
 	struct stat	sb;

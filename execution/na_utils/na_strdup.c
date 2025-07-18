@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_parentheses.c                              :+:      :+:    :+:   */
+/*   na_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 17:37:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/17 14:10:44 by noaziki          ###   ########.fr       */
+/*   Created: 2025/05/26 13:47:50 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/15 20:48:40 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-int	execute_parentheses(t_tree *ast, t_env **env,
-t_stash *stash, t_redir *redir)
+char	*na_strdup(const char *s)
 {
-	pid_t	pid;
-	int		status;
-	int		exit_status;
+	int		i;
+	char	*p;
 
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork failed"), 1);
-	if (pid == 0)
+	i = 0;
+	p = (char *)nalloc(ft_strlen(s) + 1);
+	if (!p)
+		return (NULL);
+	while (s && s[i])
 	{
-		handle_redirs(redir, stash);
-		exit_status = execute_ast(ast->left, env, stash);
-		exit(exit_status);
+		p[i] = s[i];
+		i++;
 	}
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	p[i] = '\0';
+	return (p);
 }

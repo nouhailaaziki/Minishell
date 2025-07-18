@@ -6,11 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 09:06:48 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 13:17:11 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/15 20:48:02 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../launchpad.h"
+#include "../../launchpad.h"
 
 int	na_arrlen(char **arr)
 {

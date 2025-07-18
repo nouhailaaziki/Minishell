@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:09:27 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/14 15:11:24 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:43:40 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ int	handle_argument(t_env **env_list, char *cmd)
 	if (cmd[j] == '+' && cmd[j + 1] == '=')
 		return (handle_plus_equal(env_list, cmd, j));
 	else if (cmd[j] == '+' && cmd[j + 1] != '=')
-		return (puterror("L33tShell: ", "export: ", \
-		cmd, ": not a valid identifier"));
+		return (puterror(1, "export: ", cmd, ": not a valid identifier"));
 	else if (cmd[j] == '=')
 		return (handle_equal(env_list, cmd, j));
 	else

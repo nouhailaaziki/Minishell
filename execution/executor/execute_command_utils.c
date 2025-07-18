@@ -6,11 +6,39 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 11:58:23 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 14:39:19 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/16 00:07:08 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+int	is_full_of_points(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != '.')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	remove_full_of_points(char **arr)
+{
+	int	i;
+
+	i = na_arrlen(arr);
+	while (i > 0 && is_full_of_points(arr[i - 1]))
+	{
+		arr[i - 1] = NULL;
+		i--;
+	}
+}
 
 char	**get_path_list(char **env)
 {
@@ -25,6 +53,7 @@ char	**get_path_list(char **env)
 		{
 			str = na_substr(env[i], 5, ft_strlen(env[i]) - 5);
 			arr = na_split(str, ':');
+			remove_full_of_points(arr);
 			return (arr);
 		}
 		i++;

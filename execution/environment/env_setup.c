@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:12:51 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/03 15:40:41 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/17 14:12:02 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,5 @@ void	build_env(t_env **env_list, char **envp, t_stash *stash)
 		envp++;
 	}
 	add_if_missing(env_list, stash);
+	stash->env_list = env_list;
 }
