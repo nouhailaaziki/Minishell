@@ -6,12 +6,20 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/07/18 13:20:17 by noaziki          ###   ########.fr       */
+=======
+/*   Updated: 2025/07/15 19:45:27 by yrhandou         ###   ########.fr       */
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 void	clear_memory(t_shell *shell)
 {
 	if (shell->ast)

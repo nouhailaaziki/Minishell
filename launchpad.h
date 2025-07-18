@@ -6,7 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/07/18 12:18:53 by noaziki          ###   ########.fr       */
+=======
+/*   Updated: 2025/07/14 11:33:36 by yrhandou         ###   ########.fr       */
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +59,7 @@
 # define BHWHT "\e[1;97m"
 # define RESET "\e[0m"
 
+// #define malloc(x) NULL
 /*----------------------------global flag-----------------------------*/
 int	g_sigint_received;
 
@@ -99,6 +104,11 @@ typedef struct s_var
 	struct s_var *next;
 } t_var;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
 {
@@ -156,6 +166,17 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
+<<<<<<< HEAD
+=======
+/*--------------------------wildcards struct--------------------------*/
+// typedef struct	s_dirent
+// {
+// 	char			*name;
+// 	struct s_dirent	*next;
+// }	t_dirent;
+
+
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 /*--------------------------struct of tools---------------------------*/
 typedef struct s_stash
 {
@@ -183,6 +204,7 @@ typedef struct s_shell
 	t_stash	stash;
 }	t_shell;
 
+<<<<<<< HEAD
 /*--------------------------wildcards tool---------------------------*/
 typedef struct s_match_data
 {
@@ -198,6 +220,9 @@ size_t		match_pattern(const char *pattern, const char *string);
 void		sort_matches(char **matches, size_t count);
 void		resize_matches_if_needed(t_match_data *data);
 void		cleanup_string_array(char **array);
+=======
+void    check_for_wildcards(t_tree *cmd_node, t_stash *stash);
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
@@ -275,7 +300,10 @@ int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
 int			count_required_forks(t_tree *ast);
 int perform_dry_run_fork_test(int required_forks, t_stash *stash);
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 /*------------------------------signals-------------------------------*/
 void		restore_terminal(t_stash *stash);
 void		disable_echoctl(t_stash *stash);
@@ -379,8 +407,11 @@ int			is_empty_values(t_var *keys);
 int			multi_str_included(char *new_cmd);
 void expand_redirs(t_redir **head, t_env **env, int stash_status);
 void expand_heredoc(t_redir **head);
+<<<<<<< HEAD
 void expand_all(t_tree *ast, t_env **env, t_stash *stash);
 
+=======
+>>>>>>> parent of 3ea6703... Fixed Norminette and clean
 /*-----------free-------------*/
 void		clear_memory(t_shell *shell);
 void		free_tokens(t_token **head);
