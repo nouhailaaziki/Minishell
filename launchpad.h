@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 00:19:31 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/18 12:18:53 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,15 @@
 # include <limits.h>
 # include <signal.h>
 # include <dirent.h>
+# include <stdbool.h>
 # include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
 /*-----------------------Format and Color Macros----------------------*/
 # define BOLD "\033[1m"
@@ -163,6 +167,8 @@ typedef struct s_stash
 	char			*pwd_backup;
 	char			*heredoc_store;
 	int				heredoc_interrupted;
+	int				is_parent_flag;
+	t_env			**env_list;
 	struct termios	orig_termios;
 }	t_stash;
 
@@ -185,6 +191,7 @@ typedef struct s_match_data
 	size_t	count;
 }	t_match_data;
 
+int	setup_heredoc_file(t_redir *redirs, t_stash *stash);
 /*------------------------wildcards fonctions-------------------------*/
 void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
 size_t		match_pattern(const char *pattern, const char *string);
@@ -245,10 +252,11 @@ char		*na_strjoin(char const *s1, char const *s2);
 char		*na_substr(char const *s, unsigned int start, size_t len);
 
 /*----------------------Redirections && heredoc-----------------------*/
-int			handle_redirs(t_redir *redir);
+int			handle_redirs(t_redir *redir, t_stash *stash);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
 int			open_heredocs(t_redir *redir, t_stash *stash);
 void		check_heredoc_limit(t_shell *shell, t_tree *ast);
+int			count_heredocs(t_redir *redir);
 
 /*------------------------------Events--------------------------------*/
 void		display_intro(void);
@@ -297,6 +305,7 @@ void		*ft_calloc(size_t count, size_t size);
 void		*ft_memset(void *b, int c, size_t len);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*get_next_line(int fd);
 
 /*---------------------Parsing STUFF------------------------------------------*/
 int			init_shell(t_shell *shell);

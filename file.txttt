@@ -1,20 +1,5 @@
-L33tShell-N.Y$ export $? > ls < $?    ////TEST ME
-L33tShell: $?: No such file or directory
-L33tShell-N.Y$ pwd  < $?
-L33tShell: 1: No such file or directory
--------------------------------------
-L33tShell-N.Y$ << t << c << q << ""  
-> t
-> c
->
--------------------------------------
-fd leaks
-{./minishell -> ./minishell}
-in cat , env , echo
-
-in command not found
-
-in heredoc alone
-
---------------------------------------
 wildcards parsing
+
+
+
+ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls 

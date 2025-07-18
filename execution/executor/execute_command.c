@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 21:16:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/18 13:10:40 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_env **env_list, t_stash *stash)
 	signal(SIGQUIT, SIG_DFL);
 	envp = get_env_arr(*env_list);
 	path_list = get_path_list(envp);
-	handle_redirs(redirs);
+	handle_redirs(redirs, stash);
 	stats = run_builtins(cmd, env_list, stash->status, stash);
 	if (stats >= 0)
 		exit(stats);
@@ -84,7 +84,13 @@ t_env **env_list, t_stash *stash)
 	7889 && (restore[0] = dup(STDIN_FILENO), restore[1] = dup(STDOUT_FILENO));
 	if (cmd && is_parent_builtin(cmd[0]))
 	{
-		handle_redirs(redirs);
+		stash->is_parent_flag = 1;
+		if (handle_redirs(redirs, stash))
+		{
+			(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
+			(close(restore[0]), close(restore[1]));
+			return (1);
+		}
 		i = run_builtins(cmd, env_list, stash->status, stash);
 		(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
 		(close(restore[0]), close(restore[1]));

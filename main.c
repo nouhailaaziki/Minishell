@@ -6,12 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 20:55:22 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/18 13:20:17 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "launchpad.h"
-
 
 void	clear_memory(t_shell *shell)
 {
@@ -51,6 +50,7 @@ int	init_shell(t_shell *shell)
 
 void	init_loop_data(t_stash *stash)
 {
+	stash->is_parent_flag = 0;
 	g_sigint_received = 0;
 	stash->heredoc_interrupted = 0;
 	stash->exit_flag = 0;
@@ -92,6 +92,15 @@ Resource temporarily unavailable", 2);
 	restore_terminal(stash);
 }
 
+void	close_fd()
+{
+	int	i;
+
+	i = 3;
+	while (i < OPEN_MAX)
+		close(i++);	
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
@@ -116,6 +125,7 @@ int	main(int argc, char **argv, char **envp)
 		if (process_input(&shell))
 			execute_cmds(&shell, &shell.stash);
 		clear_memory(&shell);
+		close_fd();
 	}
 	return (0);
 }

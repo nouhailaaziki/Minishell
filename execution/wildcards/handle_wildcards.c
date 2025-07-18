@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 23:15:34 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 19:48:03 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/16 11:57:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 {
 	size_t	i;
 	char	*pwd;
-	int		original_len;
 
 	if (!cmd_node || !cmd_node->cmd)
 		return ;
@@ -129,10 +128,7 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 	while (cmd_node->cmd[i])
 	{
 		if (ft_strchr(cmd_node->cmd[i], '*'))
-		{
-			original_len = na_arrlen(cmd_node->cmd);
 			handle_wildcards(cmd_node, cmd_node->cmd[i], i, pwd);
-		}
 		i++;
 	}
 	free(pwd);

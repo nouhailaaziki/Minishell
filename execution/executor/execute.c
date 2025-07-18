@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 00:12:27 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/18 15:04:49 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	execute_ast(t_tree *ast, t_env **env, t_stash *stash)
 	if (ast->type == NODE_COMMAND)
 	{
 		expand_all(ast, env, stash);
-		check_for_wildcards(ast, stash);
 		stash->status = execute_command(ast->cmd, ast->redirs, env, stash);
 	}
 	else if (ast->type == NODE_PIPE)
