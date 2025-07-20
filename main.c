@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 21:32:19 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/20 13:58:40 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	process_input(t_shell *shell)
 
 void	execute_cmds(t_shell *shell, t_stash *stash)
 {
-	int required_forks;
+	int	required_forks;
 
 	setup_signals_heredoc();
 	manage_heredocs(shell->ast, stash);

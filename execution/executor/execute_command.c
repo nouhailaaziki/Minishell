@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 21:43:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/20 13:57:14 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	execute_command(char **cmd, t_redir *redirs,
 t_env **env_list, t_stash *stash)
 {
 	pid_t	pid;
+	int		sig;
 	int		status;
 
 	if (cmd && is_parent_builtin(cmd[0]))
@@ -109,6 +110,13 @@ t_env **env_list, t_stash *stash)
 	(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
-		return (WTERMSIG(status) + 128);
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			return (write(1, "\n", 1), 130);
+		if (sig == SIGQUIT)
+			return (write(1, "Quit: 3\n", 8), 131);
+		return (sig + 128);
+	}
 	return (WEXITSTATUS(status));
 }
