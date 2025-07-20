@@ -6,130 +6,177 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 23:15:34 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 11:57:23 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/20 10:45:03 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	process_directory_entries(DIR *dir, const char *pattern,
-		t_match_data *data)
+bool	has_quoted_wildcard(const char *s)
 {
-	struct dirent	*entry;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
 
-	entry = readdir(dir);
-	while (entry)
+	in_single_quotes = false;
+	in_double_quotes = false;
+	while (*s)
 	{
-		if (entry->d_name[0] == '.' && pattern[0] != '.')
-		{
-			entry = readdir(dir);
-			continue ;
-		}
-		if (match_pattern(pattern, entry->d_name))
-		{
-			resize_matches_if_needed(data);
-			if (!data->matches)
-				break ;
-			data->matches[(data->count)++] = ft_strdup(entry->d_name);
-		}
-		entry = readdir(dir);
+		if (*s == '\'' && !in_double_quotes)
+			in_single_quotes = !in_single_quotes;
+		else if (*s == '\"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		else if (*s == '*' && (in_single_quotes || in_double_quotes))
+			return (true);
+		s++;
 	}
+	return (false);
 }
 
-char	**find_matching_entries(const char *pattern, const char *pwd,
-		size_t *matches_count)
+bool	has_unquoted_wildcard(const char *s)
 {
-	DIR				*dir;
-	t_match_data	data;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
 
-	data.capacity = 10;
-	data.matches = malloc(data.capacity * sizeof(char *));
-	if (!data.matches)
-		return (NULL);
-	data.count = 0;
-	dir = opendir(pwd);
-	if (!dir)
+	in_single_quotes = false;
+	in_double_quotes = false;
+	while (*s)
 	{
-		perror("opendir");
-		free(data.matches);
-		return (NULL);
+		if (*s == '\'' && !in_double_quotes)
+			in_single_quotes = !in_single_quotes;
+		else if (*s == '\"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		else if (*s == '*' && !in_single_quotes && !in_double_quotes)
+			return (true);
+		s++;
 	}
-	process_directory_entries(dir, pattern, &data);
-	closedir(dir);
-	*matches_count = data.count;
-	return (data.matches);
+	return (false);
 }
 
-char	**build_new_argv(char **old_argv, char **matches, size_t arg_index,
-		size_t matches_count)
+char	*remove_quotes(const char *s)
 {
-	char	**new_argv;
-	size_t	new_argc;
-	size_t	current_pos;
+	char	*new_str;
 	size_t	i;
+	size_t	j;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
 
-	new_argc = na_arrlen(old_argv) - 1 + matches_count;
-	new_argv = malloc((new_argc + 1) * sizeof(char *));
-	if (!new_argv)
+	i = 0;
+	j = 0;
+	in_single_quotes = false;
+	in_double_quotes = false;
+	new_str = malloc(strlen(s) + 1);
+	if (!new_str)
 		return (NULL);
-	current_pos = 0;
-	i = 0;
-	while (i < arg_index)
-		new_argv[current_pos++] = ft_strdup(old_argv[i++]);
-	i = 0;
-	while (i < matches_count)
-		new_argv[current_pos++] = matches[i++];
-	i = arg_index + 1;
-	while (old_argv[i])
-		new_argv[current_pos++] = ft_strdup(old_argv[i++]);
-	new_argv[current_pos] = NULL;
-	return (new_argv);
-}
-
-void	handle_wildcards(t_tree *cmd_node, const char *pattern,
-size_t arg_index, const char *pwd)
-{
-	char	**matches;
-	size_t	matches_count;
-	char	**new_argv;
-	size_t	i;
-
-	matches = find_matching_entries(pattern, pwd, &matches_count);
-	if (!matches || matches_count == 0)
-		return (free(matches));
-	sort_matches(matches, matches_count);
-	new_argv = build_new_argv(cmd_node->cmd, matches, arg_index,
-			matches_count);
-	if (!new_argv)
+	while (s[i])
 	{
-		i = 0;
-		while (i < matches_count)
-			free(matches[i++]);
-		return (free(matches));
-	}
-	cleanup_string_array(cmd_node->cmd);
-	cmd_node->cmd = new_argv;
-	free(matches);
-}
-
-void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
-{
-	size_t	i;
-	char	*pwd;
-
-	if (!cmd_node || !cmd_node->cmd)
-		return ;
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		pwd = ft_strdup(stash->pwd_backup);
-	if (!pwd)
-		return (perror("malloc"));
-	i = 0;
-	while (cmd_node->cmd[i])
-	{
-		if (ft_strchr(cmd_node->cmd[i], '*'))
-			handle_wildcards(cmd_node, cmd_node->cmd[i], i, pwd);
+		if (s[i] == '\'' && !in_double_quotes)
+			in_single_quotes = !in_single_quotes;
+		else if (s[i] == '\"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		else
+			new_str[j++] = s[i];
 		i++;
 	}
-	free(pwd);
+	new_str[j] = '\0';
+	return (new_str);
+}
+
+// Change the return type from void to size_t
+size_t  handle_wildcards(t_tree *cmd_node, const char *pattern,
+        size_t arg_index, const char *pwd)
+{
+    char    **matches;
+    size_t  matches_count;
+    char    **new_argv;
+    char    *temp_match[2];
+    size_t  i;
+
+    matches = find_matching_entries(pattern, pwd, &matches_count);
+    if (!matches)
+    {
+        perror("malloc");
+        return (arg_index + 1); // Return next index on error
+    }
+    if (matches_count > 0)
+    {
+        sort_matches(matches, matches_count);
+        new_argv = build_new_argv(cmd_node->cmd, matches, arg_index,
+                matches_count);
+        i = 0;
+        while (i < matches_count)
+            free(matches[i++]);
+        free(matches);
+        // If build_new_argv fails, we have a problem, but let's assume it works
+        if (!new_argv)
+        {
+            perror("malloc");
+            return (arg_index + 1);
+        }
+        cleanup_string_array(cmd_node->cmd);
+        cmd_node->cmd = new_argv;
+        return (matches_count); // Return the number of matches found
+    }
+    else // No matches found
+    {
+        free(matches);
+        temp_match[0] = (char *)pattern;
+        temp_match[1] = NULL;
+        new_argv = build_new_argv(cmd_node->cmd, temp_match, arg_index, 1);
+        if (!new_argv)
+        {
+            perror("malloc");
+            return (arg_index + 1);
+        }
+        cleanup_string_array(cmd_node->cmd);
+        cmd_node->cmd = new_argv;
+        return (1); // Return 1, as the pattern itself becomes an argument
+    }
+}
+
+void    check_for_wildcards(t_tree *cmd_node, t_stash *stash)
+{
+    size_t  i;
+    char    *pwd;
+    char    *pattern_no_quotes;
+    size_t  expansion_count;
+
+    if (!cmd_node || !cmd_node->cmd)
+        return ;
+    pwd = getcwd(NULL, 0);
+    if (!pwd)
+        pwd = ft_strdup(stash->pwd_backup);
+    if (!pwd)
+        return (perror("malloc"));
+    i = 0;
+    while (cmd_node->cmd[i])
+    {
+        // This condition correctly identifies arguments that need expansion
+        if (has_unquoted_wildcard(cmd_node->cmd[i]))
+        {
+            pattern_no_quotes = remove_quotes(cmd_node->cmd[i]);
+            if (!pattern_no_quotes)
+            {
+                perror("malloc");
+                break ;
+            }
+            // Get the count of new args and advance 'i' past them
+            expansion_count = handle_wildcards(cmd_node, pattern_no_quotes, i, pwd);
+            free(pattern_no_quotes);
+            i += expansion_count; // Advance index past the new arguments
+        }
+        else
+        {
+            // If no expansion, just remove quotes from the argument
+            pattern_no_quotes = remove_quotes(cmd_node->cmd[i]);
+            if (!pattern_no_quotes)
+            {
+                perror("malloc");
+                break ;
+            }
+            free(cmd_node->cmd[i]);
+            cmd_node->cmd[i] = pattern_no_quotes;
+            i++; // Move to the next argument
+        }
+    }
+    free(pwd);
 }

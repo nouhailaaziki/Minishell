@@ -1,23 +1,68 @@
-executor >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+exeution >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+/*--------------working tests--------------*/
+
+L33tShell-N.Y$ ls
+hello"4 hello1  hello2  hello3
 L33tShell-N.Y$ echo 'hello'*
-hello*
+hello4 hello1  hello2  hello3
 L33tShell-N.Y$ echo "hello"*
+hello4 hello1  hello2  hello3
+L33tShell-N.Y$ echo *
+hello4 hello1  hello2  hello3
+L33tShell-N.Y$ echo "*"
+*
+L33tShell-N.Y$ echo hello"*"
+hello*
+L33tShell-N.Y$ echo "hello""*"
 hello*
 
----------------------------------------------------
-
-L33tShell-N.Y$ touch 'hello"4'
-L33tShell-N.Y$ echo $a
-h"*"
-L33tShell-N.Y$ echo *
-hello4 hello1 hello2 hello3 ls
-
+bash-3.2$ ls
+hello"4 hello1  hello2  hello3
+bash-3.2$ echo 'hello'*
+hello"4 hello1 hello2 hello3
+bash-3.2$ echo "hello"*
+hello"4 hello1 hello2 hello3
 bash-3.2$ echo *
-hello"4 hello1 hello2 hello3 ls
+hello"4 hello1 hello2 hello3
+L33tShell-N.Y$ echo *
+hello4 hello1 hello2 hello3
+bash-3.2$ echo "*"
+*
+bash-3.2$ echo hello"*"
+hello*
+bash-3.2$ echo "hello""*"
+hello*
 
 
+/*------------non working tests------------*/
 
+my code :
+
+L33tShell-N.Y$  *"*"
+L33tShell: hello"4: command not found
+L33tShell-N.Y$ ls *"*"
+hello"4 hello1  hello2  hello3
+
+L33tShell-N.Y$ cat \\ctrl + c
+L33tShell-N.Y$ cat \\ ctrl + d
+L33tShell-N.Y$ 
+
+bash :
+
+bash-3.2$ *"*"
+bash: **: command not found
+bash-3.2$ ls *"*"
+ls: **: No such file or directory
+
+bash-3.2$ cat
+^C
+bash-3.2$ cat
+^C   \\\\\ ctrl + c
+bash-3.2$ cat
+bash-3.2$ cat
+^\Quit: 3 ctrl + d
+bash-3.2$ 
 
 parser >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -29,7 +74,7 @@ bash: $JJ: ambiguous redirect
 
 ---------------------------------------------------
 
-L33tShell-N.Y$ << $"USER" cat
+L33tShell-N.Y$ << $"USER" cat ///// 
 > USER
 > $USER
 USER

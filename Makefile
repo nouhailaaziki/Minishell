@@ -10,7 +10,7 @@ RM = rm -rf
 
 CC = cc
 
-CFLAGS = -g -Wall -Wextra
+CFLAGS = -Wall -Wextra -Werror
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
 			utilities/ft_strdup.c utilities/ft_substr.c utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
@@ -34,7 +34,7 @@ EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtin
 			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
 			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
 			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd.c execution/environment/env_update.c \
-			execution/wildcards/handle_wildcards.c execution/wildcards/wildcards_utils.c
+			execution/wildcards/handle_wildcards.c execution/wildcards/wildcards_utils.c execution/wildcards/match_finder.c
 
 EXEC = ${EXECUTION:.c=.o}
 

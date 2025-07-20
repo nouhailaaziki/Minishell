@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 21:34:00 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/19 09:59:41 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,12 @@ size_t		match_pattern(const char *pattern, const char *string);
 void		sort_matches(char **matches, size_t count);
 void		resize_matches_if_needed(t_match_data *data);
 void		cleanup_string_array(char **array);
-
+char		**find_matching_entries(const char *pattern, const char *pwd, \
+size_t *matches_count);
+char		**build_new_argv(char **old_argv, char **matches, size_t arg_index, \
+size_t matches_count);
+int			has_active_wildcard(const char *str);
+char    	*remove_quotes_from_string(const char *str);
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
 char		**get_env_arr(t_env *env_list);
