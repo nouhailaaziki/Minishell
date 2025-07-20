@@ -25,8 +25,6 @@ bash-3.2$ echo "hello"*
 hello"4 hello1 hello2 hello3
 bash-3.2$ echo *
 hello"4 hello1 hello2 hello3
-L33tShell-N.Y$ echo *
-hello4 hello1 hello2 hello3
 bash-3.2$ echo "*"
 *
 bash-3.2$ echo hello"*"
@@ -39,21 +37,12 @@ hello*
 
 my code :
 
-L33tShell-N.Y$  *"*"
-L33tShell: hello"4: command not found
-L33tShell-N.Y$ ls *"*"
-hello"4 hello1  hello2  hello3
-
 L33tShell-N.Y$ cat \\ctrl + c
 L33tShell-N.Y$ cat \\ ctrl + d
 L33tShell-N.Y$ 
 
-bash :
 
-bash-3.2$ *"*"
-bash: **: command not found
-bash-3.2$ ls *"*"
-ls: **: No such file or directory
+bash:
 
 bash-3.2$ cat
 ^C
