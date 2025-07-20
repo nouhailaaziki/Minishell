@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 18:01:34 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/19 14:52:52 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	expand_export(t_tree *ast, t_env **env, int stash_status)
 			i++;
 			continue ;
 		}
-		current[i] = expand_vars(&current[i], env, stash_status);
+		current[i] = expand_vars(&current[i], env, stash_status, 0);
 		inject_quotes(&current[i]);
 		i++;
 	}

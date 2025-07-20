@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/16 11:29:03 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 08:32:20 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv, char **envp)
 		shell.line = readline("L33tShell-N.Y$ ");
 		if (g_sigint_received)
 			shell.stash.status = 1;
-		add_history(shell.line);
+		// add_history(shell.line);
 		if (!shell.line)
 		{
 			write(1, "exit", 4);

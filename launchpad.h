@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 18:10:35 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/19 14:51:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ int			run_builtins(char **cmd, t_env **env_list, int status, \
 t_stash *stash);
 char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
-char		*expand_vars(char **old_cmd, t_env **env, int stash_status);
+char		*expand_vars(char **old_cmd, t_env **env, int stash_status, int heredoc);
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
@@ -307,6 +307,7 @@ int			token_lexer(char *str);
 int			skip_spaces(char *str);
 int			parser(t_shell *shell);
 int			operator_len(char *str);
+int			is_in_quotes(char *str);
 int			ft_syntax_analyzer(char *str);
 t_token		*new_token(char *value, int type);
 void		parentheses_lexer(t_token **head);
@@ -315,7 +316,6 @@ void		advanced_token_lexer(t_token **head);
 int			parentheses_counter_v2(t_token *head);
 int			handle_quotes(char *str, char quote_type);
 void		link_token(t_token **head, t_token *node);
-int			is_in_quotes(char *str);
 
 /*-----------Tree Stuff-------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
@@ -352,16 +352,18 @@ int			advanced_syntax_err(t_shell *shell);
 /*-----------Expand-----------------*/
 void		expand_keys(t_var **keys, t_env **env, int stash_status, \
 int *total_len);
+void		expand_keys_heredoc(t_var **keys, t_env **env, int stash_status, \
+int *total_len);
 char		*find_a_key(char *origin, int *quote, int *key_len, int *pos);
 void		expand_redirs(t_redir **head, t_env **env, int stash_status);
+void		update_cmd(char *origin, t_var **keys, char **destination, int heredoc);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
-void		update_cmd(char *origin, t_var **keys, char **destination);
+void		ft_copy_keys(char **dest, t_var *current, int heredoc);
 void		expand_cmd(t_tree *ast, t_env **env, int stash_status);
 void		filter_empty_nodes(t_token **head, size_t *argc);
 void		check_quote(char *start, char *end, int *quote);
 t_var		*create_key(char *origin, int *quote, int *pos);
 char		**rebuild_cmd(t_token **list, size_t argc);
-void		ft_copy_keys(char **dest, t_var *current);
 void		store_args(t_token **list, char **origin);
 void		find_all_keys(char *str, t_var **keys);
 int			skip_quoted_str(char *str, char quote);
@@ -384,40 +386,9 @@ void		free_keys(t_var **head);
 void		free_tokens(t_token **head);
 void		clear_memory(t_shell *shell);
 /*-----------utilities-------------*/
-char		**ft_split(char const *s, char c);
 char		*ft_strjoin(char const *s1, char const *s2);
-char		*ft_substr(char const *s, unsigned int start, size_t len);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
-void		*ft_calloc(size_t count, size_t size);
-void		ft_putendl_fd(char *s, int fd);
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putchar_fd(char c, int fd);
-char		*ft_strdup(const char *s1);
-int			ft_str_isspace(char *str);
 char		**ft_split_args(char *s);
-int			ft_isalpha(int c);
-int			ft_isdigit(int c);
-int			ft_isspace(int c);
-int			ft_isalnum(int c);
-int			ft_isascii(int c);
 char		*ft_itoa(int n);
-	// ! REMOVE THS LATER
-void		print_tokens(t_var **head);
-void		print_redirs(t_redir *redir);
-void		print_tree(t_tree *tree);
-/*-- -- -- -- -- -- -- -Tree Visualization Functions-- -- -- -- -- -- -*/
-
-/**
- * @brief Main function to visualize the AST tree with colors and structure
- * @param root Pointer to the root node of the AST
- *
- * Displays a detailed tree structure with:
- * - Color-coded node types
- * - Command arguments
- * - Redirection information
- * - Tree depth and node count
- */
-void		visualize_ast_tree(t_tree *root);
-void		visualize_tokens(t_token *head);
 
 #endif

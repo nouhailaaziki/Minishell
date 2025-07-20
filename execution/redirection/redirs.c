@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 14:46:55 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/19 10:43:48 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*expand_heredoc_line(char *line, t_stash *stash)
 {
 	char	*expanded_line;
 
-	expanded_line = expand_vars(&line, stash->env_list, stash->status);
+	expanded_line = expand_vars(&line, stash->env_list, stash->status, 1);
 	return (expanded_line);
 }
 
@@ -65,7 +65,7 @@ int	expand_heredoc_and_get_fd(t_redir *redir, t_stash *stash)
 	char	*line;
 	char	*expanded_line;
 	char	*filename;
-	
+
 	filename = na_strdup("/tmp/.l33tshell-XXXXXX");
 	if (!filename)
 		return (perror("malloc"), -2);
@@ -89,7 +89,7 @@ int	expand_heredoc_and_get_fd(t_redir *redir, t_stash *stash)
 	unlink(filename);
 	return (expanded_fd);
 }
- 
+
 int	handle_redirs(t_redir *redir, t_stash *stash)
 {
 	int	fd;
