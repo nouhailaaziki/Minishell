@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:12 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/20 08:17:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 09:38:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	multi_str_included(char *new_cmd)
 	}
 	return (0);
 }
+
 char	*expand_vars(char **old_cmd, t_env **env, int stash_status, int heredoc)
 {
 	int		total_len;
@@ -96,7 +97,7 @@ char	*expand_vars(char **old_cmd, t_env **env, int stash_status, int heredoc)
 	total_len = 0;
 	keys = NULL;
 	find_all_keys(*old_cmd, &keys);
-	if(!heredoc)
+	if (!heredoc)
 		expand_keys(&keys, env, stash_status, &total_len);
 	else
 		expand_keys_heredoc(&keys, env, stash_status, &total_len);

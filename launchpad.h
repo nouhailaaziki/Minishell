@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/19 14:51:51 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 09:45:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,8 @@ int			run_builtins(char **cmd, t_env **env_list, int status, \
 t_stash *stash);
 char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
-char		*expand_vars(char **old_cmd, t_env **env, int stash_status, int heredoc);
+char		*expand_vars(char **old_cmd, t_env **env, int stash_status, \
+int heredoc);
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
@@ -267,8 +268,6 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*get_next_line(int fd);
-
-
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir, t_stash *stash);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
@@ -356,7 +355,8 @@ void		expand_keys_heredoc(t_var **keys, t_env **env, int stash_status, \
 int *total_len);
 char		*find_a_key(char *origin, int *quote, int *key_len, int *pos);
 void		expand_redirs(t_redir **head, t_env **env, int stash_status);
-void		update_cmd(char *origin, t_var **keys, char **destination, int heredoc);
+void		update_cmd(char *origin, t_var **keys, char **destination, \
+int heredoc);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
 void		ft_copy_keys(char **dest, t_var *current, int heredoc);
 void		expand_cmd(t_tree *ast, t_env **env, int stash_status);

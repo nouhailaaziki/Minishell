@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:37 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/17 09:42:08 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 09:39:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	key_scan(char *arg)
 	while (arg[i])
 	{
 		if ((arg[i] == '+' && arg[i + 1] == '=' ) || arg[i] == '=')
-			break;
+			break ;
 		else if (!ft_isalnum(arg[i]))
 			return (0);
 		i++;
