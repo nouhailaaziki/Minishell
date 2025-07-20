@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 10:12:49 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/20 13:32:59 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
 	expand_redirs(&ast->redirs, env, stash->status);
 	check_for_wildcards(ast, stash);
 	i = 0;
-	// Commented out the call to expand_quotes because it's doing unnecessary work here
 	// while (ast->cmd && ast->cmd[i])
 	// 	expand_quotes(&ast->cmd[i++]);
 	i = 0;

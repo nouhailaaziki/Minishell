@@ -1,16 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   match_finder.c                                     :+:      :+:    :+:   */
+/*   wildcard_matcher.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/19 10:08:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 09:15:52 by noaziki          ###   ########.fr       */
+/*   Created: 2025/07/20 13:11:15 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/20 13:17:03 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+char	**find_matching_entries(const char *pattern, const char *pwd,
+size_t *matches_count)
+{
+	DIR				*dir;
+	t_match_data	data;
+
+	data.capacity = 10;
+	data.matches = malloc(data.capacity * sizeof(char *));
+	if (!data.matches)
+		return (NULL);
+	data.count = 0;
+	dir = opendir(pwd);
+	if (!dir)
+	{
+		perror("opendir");
+		free(data.matches);
+		return (NULL);
+	}
+	process_directory_entries(dir, pattern, &data);
+	closedir(dir);
+	*matches_count = data.count;
+	return (data.matches);
+}
 
 void	process_directory_entries(DIR *dir, const char *pattern,
 t_match_data *data)
@@ -36,28 +60,33 @@ t_match_data *data)
 	}
 }
 
-char	**find_matching_entries(const char *pattern, const char *pwd,
-size_t *matches_count)
+size_t	match_pattern(const char *pattern, const char *string)
 {
-	DIR				*dir;
-	t_match_data	data;
-
-	data.capacity = 10;
-	data.matches = malloc(data.capacity * sizeof(char *));
-	if (!data.matches)
-		return (NULL);
-	data.count = 0;
-	dir = opendir(pwd);
-	if (!dir)
+	while (*pattern)
 	{
-		perror("opendir");
-		free(data.matches);
-		return (NULL);
+		if (*pattern == '*')
+		{
+			while (*pattern == '*')
+				pattern++;
+			if (*pattern == '\0')
+				return (1);
+			while (*string)
+			{
+				if (match_pattern(pattern, string))
+					return (1);
+				string++;
+			}
+			return (0);
+		}
+		else if (*pattern == *string)
+		{
+			pattern++;
+			string++;
+		}
+		else
+			return (0);
 	}
-	process_directory_entries(dir, pattern, &data);
-	closedir(dir);
-	*matches_count = data.count;
-	return (data.matches);
+	return (*string == '\0');
 }
 
 void	resize_matches_if_needed(t_match_data *data)
@@ -84,28 +113,4 @@ void	resize_matches_if_needed(t_match_data *data)
 	}
 	free(data->matches);
 	data->matches = new_matches;
-}
-
-void	sort_matches(char **matches, size_t count)
-{
-	size_t	i;
-	size_t	j;
-	char	*temp;
-
-	i = 0;
-	while (i < count - 1)
-	{
-		j = 0;
-		while (j < count - i - 1)
-		{
-			if (ft_strcmp(matches[j], matches[j + 1]) > 0)
-			{
-				temp = matches[j];
-				matches[j] = matches[j + 1];
-				matches[j + 1] = temp;
-			}
-			j++;
-		}
-		i++;
-	}
 }
