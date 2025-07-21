@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 05:31:43 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/05 14:37:53 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	errno_manager(char	*cmd)
 {
 	char	*error;
 
-	error = na_strjoin("Leetshell: ", cmd);
+	error = na_strjoin("L33tShell: ", cmd);
 	perror(error);
 	if (errno == 13 || errno == 20)
 		exit(126);

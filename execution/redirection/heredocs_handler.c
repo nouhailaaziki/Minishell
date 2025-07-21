@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:14:39 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/17 14:08:30 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	fill_file(t_redir *redir, t_stash *stash)
 
 int	setup_heredoc_file(t_redir *redirs, t_stash *stash)
 {
-	stash->heredoc_store = na_strdup("/tmp/.l33tshell-XXXXXX");
+	stash->heredoc_store = na_strdup("/tmp/.L33tShell-XXXXXX");
 	if (!stash->heredoc_store)
 		return (perror("malloc"), 1);
 	redirs->fd_wr = na_mkstemp(stash->heredoc_store, redirs);

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 21:35:41 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	expand_heredoc_and_get_fd(t_redir *redir, t_stash *stash)
 	char	*expanded_line;
 	char	*filename;
 
-	filename = na_strdup("/tmp/.l33tshell-XXXXXX");
+	filename = na_strdup("/tmp/.L33tShell-XXXXXX");
 	if (!filename)
 		return (perror("malloc"), -2);
 	expanded_fd = na_mkstemp(filename, redir);
