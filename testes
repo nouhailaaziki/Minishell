@@ -1,37 +1,54 @@
-bash-3.2$ ls
-*file5  file"4  file*2  file1   file3*
-bash-3.2$ echo 'hello'*
-hello*
-bash-3.2$ echo "hello"*
-hello*
-bash-3.2$ echo *
-*file5 file"4 file*2 file1 file3*
+WORKING TESTES: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+MY CODE : >>>>>>>>>>>>>>>>>>>>>>
 
-bash-3.2$ ls
-hello"4 hello1 hello2 hello3
-bash-3.2$ echo 'hello'*
-hello"4 hello1 hello2 hello3
-bash-3.2$ echo "hello"*
-hello"4 hello1 hello2 hello3
-bash-3.2$ echo *
-hello"4 hello1 hello2 hello3
-bash-3.2$ echo "*"
+L33tShell-N.Y$ ls
+*fi*le2*        a*b             file*2          file3*
+*file5          file"4          file1
+L33tShell-N.Y$ echo 'hello'*
+hello*
+L33tShell-N.Y$ echo "hello"*
+hello*
+L33tShell-N.Y$ echo *
+*fi*le2* *file5 a*b file"4 file*2 file1 file3*
+L33tShell-N.Y$ echo "*"
 *
-bash-3.2$ echo hello""
+L33tShell-N.Y$ echo hello""
 hello
-bash-3.2$ echo "hello"""
+L33tShell-N.Y$ echo "hello"""
 hello
-bash-3.2$ ""
-bash: : command not found
-bash-3.2$ ls ""
+L33tShell-N.Y$ ""
+L33tShell: : command not found
+L33tShell-N.Y$ ls ""
 ls: : No such file or directory
-bash-3.2$ export a="ls -al 'hello''"
-bash-3.2$ echo $a
+L33tShell-N.Y$ export a="ls -al 'hello''"
+L33tShell-N.Y$ echo $a
 ls -al 'hello''
-bash-3.2$ export a="ls -al 'hello'*'"
-bash-3.2$ echo $a
+L33tShell-N.Y$ export a="ls -al 'hello'*'"
+L33tShell-N.Y$ echo $a
 ls -al 'hello'*'
-bash-3.2$ export a="ls -al "hello''''""
-bash-3.2$ echo $a
+L33tShell-N.Y$ export a="ls -al "hello''''""
+L33tShell-N.Y$ echo $a
 ls -al hello
+L33tShell-N.Y$ echo *"*"b
+a*b
+L33tShell-N.Y$ echo a"*"*
+a*b
+L33tShell-N.Y$ echo a"*"b
+a*b
+
+
+NON WORKING TESTES: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+MY CODE : >>>
+L33tShell-N.Y$ echo *'*'*
+*fi*le2* *file5 a*b file"4 file*2 file1 file3*
+L33tShell-N.Y$ echo *"*"
+*fi*le2* *file5 a*b file"4 file*2 file1 file3*
+
+
+BASG : >>>
+bash-3.2$ echo *'*'*
+*fi*le2* *file5 a*b file*2 file3*
+bash-3.2$ echo *"*"
+*fi*le2* file3*

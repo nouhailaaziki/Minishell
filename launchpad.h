@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 08:44:52 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 10:55:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,8 +198,6 @@ void		sort_matches(char **matches, size_t count);
 void		cleanup_matches(char **matches, size_t matches_count);
 char		**find_matching_entries(const char *pattern, \
 const char *pwd, size_t *matches_count);
-bool		has_quoted_wildcard(const char *s);
-bool		has_unquoted_wildcard(const char *s);
 char		*remove_quotes(const char *s);
 char		*get_working_directory(t_stash *stash);
 void		resize_matches_if_needed(t_match_data *data);

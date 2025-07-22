@@ -6,51 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:06:54 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 13:08:08 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 10:54:54 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
-bool	has_quoted_wildcard(const char *s)
-{
-	bool	in_single_quotes;
-	bool	in_double_quotes;
-
-	in_single_quotes = false;
-	in_double_quotes = false;
-	while (*s)
-	{
-		if (*s == '\'' && !in_double_quotes)
-			in_single_quotes = !in_single_quotes;
-		else if (*s == '\"' && !in_single_quotes)
-			in_double_quotes = !in_double_quotes;
-		else if (*s == '*' && (in_single_quotes || in_double_quotes))
-			return (true);
-		s++;
-	}
-	return (false);
-}
-
-bool	has_unquoted_wildcard(const char *s)
-{
-	bool	in_single_quotes;
-	bool	in_double_quotes;
-
-	in_single_quotes = false;
-	in_double_quotes = false;
-	while (*s)
-	{
-		if (*s == '\'' && !in_double_quotes)
-			in_single_quotes = !in_single_quotes;
-		else if (*s == '\"' && !in_single_quotes)
-			in_double_quotes = !in_double_quotes;
-		else if (*s == '*' && !in_single_quotes && !in_double_quotes)
-			return (true);
-		s++;
-	}
-	return (false);
-}
 
 char	*remove_quotes(const char *s)
 {

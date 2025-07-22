@@ -6,11 +6,29 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:12:20 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 08:38:15 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 10:53:24 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+bool contains_unquoted_wildcard(const char *s)
+{
+	bool in_single = false;
+	bool in_double = false;
+
+	while (*s)
+	{
+		if (*s == '\'' && !in_double)
+			in_single = !in_single;
+		else if (*s == '"' && !in_single)
+			in_double = !in_double;
+		else if (*s == '*' && !in_single && !in_double)
+			return true;
+		s++;
+	}
+	return false;
+}
 
 void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 {
@@ -27,10 +45,10 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 	increment = 1;
 	while (cmd_node->cmd[i])
 	{
-		if (has_quoted_wildcard(cmd_node->cmd[i]))
-			increment = process_quoted_wildcard(cmd_node, i);
-		else if (has_unquoted_wildcard(cmd_node->cmd[i]))
+		if (contains_unquoted_wildcard(cmd_node->cmd[i]))
 			increment = process_unquoted_wildcard(cmd_node, i, pwd);
+		else if (!contains_unquoted_wildcard(cmd_node->cmd[i]))
+			increment = process_quoted_wildcard(cmd_node, i);
 		else
 			expand_quotes(&cmd_node->cmd[i]);
 		if (increment == 0)
