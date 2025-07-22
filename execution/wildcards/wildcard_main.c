@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:12:20 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 13:12:56 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 08:38:15 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 	if (!pwd)
 		return ;
 	i = 0;
+	increment = 1;
 	while (cmd_node->cmd[i])
 	{
 		if (has_quoted_wildcard(cmd_node->cmd[i]))
@@ -31,7 +32,7 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 		else if (has_unquoted_wildcard(cmd_node->cmd[i]))
 			increment = process_unquoted_wildcard(cmd_node, i, pwd);
 		else
-			increment = process_no_wildcard(cmd_node, i);
+			expand_quotes(&cmd_node->cmd[i]);
 		if (increment == 0)
 			break ;
 		i += increment;

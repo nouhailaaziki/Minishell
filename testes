@@ -1,0 +1,37 @@
+bash-3.2$ ls
+*file5  file"4  file*2  file1   file3*
+bash-3.2$ echo 'hello'*
+hello*
+bash-3.2$ echo "hello"*
+hello*
+bash-3.2$ echo *
+*file5 file"4 file*2 file1 file3*
+
+
+bash-3.2$ ls
+hello"4 hello1 hello2 hello3
+bash-3.2$ echo 'hello'*
+hello"4 hello1 hello2 hello3
+bash-3.2$ echo "hello"*
+hello"4 hello1 hello2 hello3
+bash-3.2$ echo *
+hello"4 hello1 hello2 hello3
+bash-3.2$ echo "*"
+*
+bash-3.2$ echo hello""
+hello
+bash-3.2$ echo "hello"""
+hello
+bash-3.2$ ""
+bash: : command not found
+bash-3.2$ ls ""
+ls: : No such file or directory
+bash-3.2$ export a="ls -al 'hello''"
+bash-3.2$ echo $a
+ls -al 'hello''
+bash-3.2$ export a="ls -al 'hello'*'"
+bash-3.2$ echo $a
+ls -al 'hello'*'
+bash-3.2$ export a="ls -al "hello''''""
+bash-3.2$ echo $a
+ls -al hello
