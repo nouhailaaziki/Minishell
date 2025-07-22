@@ -5,12 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 13:11:15 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 15:30:23 by noaziki          ###   ########.fr       */
+/*   Created: 2025/07/22 20:41:53 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/22 20:43:37 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
+
+char	**prepare_and_find_matches(const char *pattern, const char *pwd,
+size_t *matches_count)
+{
+	char	*optimized_pattern;
+	char	*masked_pattern;
+	char	**matches;
+
+	optimized_pattern = collapse_consecutive_asterisks(pattern);
+	if (!optimized_pattern)
+		return (perror("malloc"), NULL);
+	masked_pattern = create_masked_pattern(optimized_pattern);
+	free(optimized_pattern);
+	if (!masked_pattern)
+		return (perror("malloc"), NULL);
+	matches = find_matching_entries(masked_pattern, pwd, matches_count);
+	free(masked_pattern);
+	return (matches);
+}
+
+char	*collapse_consecutive_asterisks(const char *pattern)
+{
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*new_pattern;
+
+	if (!pattern)
+		return (NULL);
+	len = strlen(pattern);
+	new_pattern = (char *)malloc(len + 1);
+	if (!new_pattern)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < len)
+	{
+		new_pattern[j++] = pattern[i];
+		if (pattern[i] == '*')
+			while (i + 1 < len && pattern[i + 1] == '*')
+				i++;
+		i++;
+	}
+	new_pattern[j] = '\0';
+	return (new_pattern);
+}
 
 char	**find_matching_entries(const char *pattern, const char *pwd,
 size_t *matches_count)
@@ -58,24 +104,6 @@ t_match_data *data)
 		}
 		entry = readdir(dir);
 	}
-}
-
-size_t	match_pattern(const char *pattern, const char *string)
-{
-	if (*pattern == '\0')
-		return (*string == '\0');
-	if (*pattern == '*')
-	{
-		if (match_pattern(pattern + 1, string))
-			return (1);
-		if (*string != '\0' && match_pattern(pattern, string + 1))
-			return (1);
-		return (0);
-	}
-	else if ((*pattern == 1 && *string == '*')
-		|| (*pattern == *string && *string != '\0'))
-		return (match_pattern(pattern + 1, string + 1));
-	return (0);
 }
 
 void	resize_matches_if_needed(t_match_data *data)

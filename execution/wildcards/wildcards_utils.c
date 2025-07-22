@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard_helpers.c                                 :+:      :+:    :+:   */
+/*   wildcard_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 13:13:02 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 13:30:44 by noaziki          ###   ########.fr       */
+/*   Created: 2025/07/22 20:45:43 by noaziki           #+#    #+#             */
+/*   Updated: 2025/07/22 20:46:49 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,22 @@ void	cleanup_matches(char **matches, size_t matches_count)
 	while (i < matches_count)
 		free(matches[i++]);
 	free(matches);
+}
+
+size_t	match_pattern(const char *pattern, const char *string)
+{
+	if (*pattern == '\0')
+		return (*string == '\0');
+	if (*pattern == '*')
+	{
+		if (match_pattern(pattern + 1, string))
+			return (1);
+		if (*string != '\0' && match_pattern(pattern, string + 1))
+			return (1);
+		return (0);
+	}
+	else if ((*pattern == 1 && *string == '*')
+		|| (*pattern == *string && *string != '\0'))
+		return (match_pattern(pattern + 1, string + 1));
+	return (0);
 }

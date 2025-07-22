@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 15:17:57 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 21:02:35 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ typedef struct s_shell
 	t_stash	stash;
 }	t_shell;
 
-/*--------------------------wildcards tool---------------------------*/
+/*--------------------------wildcards tools---------------------------*/
 typedef struct s_match_data
 {
 	char	**matches;
@@ -189,28 +189,36 @@ typedef struct s_match_data
 	size_t	count;
 }	t_match_data;
 
+typedef struct s_mask_state
+{
+	bool	in_single_quotes;
+	bool	in_double_quotes;
+	size_t	j;
+}	t_mask_state;
+
 /*------------------------wildcards fonctions-------------------------*/
+char		*collapse_consecutive_asterisks(const char *pattern);
 void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
-char		**build_new_argv(char **old_argv, char **matches, \
-size_t arg_index, size_t matches_count);
-void		cleanup_string_array(char **array);
 void		sort_matches(char **matches, size_t count);
+char		**build_new_argv(char **old_argv, char **matches, size_t arg_index, \
+size_t matches_count);
+void		cleanup_string_array(char **array);
 void		cleanup_matches(char **matches, size_t matches_count);
-char		**find_matching_entries(const char *pattern, \
-const char *pwd, size_t *matches_count);
-char		*remove_quotes(const char *s);
-char		*get_working_directory(t_stash *stash);
-void		resize_matches_if_needed(t_match_data *data);
-void		process_directory_entries(DIR *dir, \
-const char *pattern, t_match_data *data);
 size_t		match_pattern(const char *pattern, const char *string);
-size_t		handle_wildcards(t_tree *cmd_node, const char *pattern, \
-size_t arg_index, const char *pwd);
-size_t		process_no_wildcard(t_tree *cmd_node, size_t i);
-size_t		process_quoted_wildcard(t_tree *cmd_node, size_t i);
-size_t		process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd);
-size_t	handle_matches_found(t_tree *cmd_node, char **matches,
+char		**find_matching_entries(const char *pattern, const char *pwd, \
+size_t *matches_count);
+void		resize_matches_if_needed(t_match_data *data);
+void		process_directory_entries(DIR *dir, const char *pattern,
+t_match_data *data);
+char		*create_masked_pattern(const char *s);
+bool		contains_unquoted_wildcard(const char *s);
+char		*remove_quotes(const char *s);
+size_t		resolve_wildcard_entries(t_tree *cmd_node, size_t i);
+char		**prepare_and_find_matches(const char *pattern, const char *pwd, \
+size_t *matches_count);
+size_t		handle_matches_found(t_tree *cmd_node, char **matches, \
 size_t matches_count, size_t arg_index);
+
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
 char		**get_env_arr(t_env *env_list);
