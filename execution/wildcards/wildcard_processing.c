@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:10:16 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 15:32:33 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 20:01:44 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,33 @@ char	*create_masked_pattern(const char *s)
 	return (new_str);
 }
 
+char	*collapse_consecutive_asterisks(const char *pattern)
+{
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*new_pattern;
+
+	if (!pattern)
+		return (NULL);
+	len = strlen(pattern);
+	new_pattern = (char *)malloc(len + 1);
+	if (!new_pattern)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < len)
+	{
+		new_pattern[j++] = pattern[i];
+		if (pattern[i] == '*')
+			while (i + 1 < len && pattern[i + 1] == '*')
+				i++;
+		i++;
+	}
+	new_pattern[j] = '\0';
+	return (new_pattern);
+}
+
 size_t	process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd)
 {
 	char	*masked_pattern;
@@ -70,14 +97,19 @@ size_t	process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd)
 	char	*literal_arg;
 	char	*temp_match[2];
 	char	**new_argv;
+	char	*optimized_pattern;
 
-	masked_pattern = create_masked_pattern(cmd_node->cmd[i]);
+	optimized_pattern = collapse_consecutive_asterisks(cmd_node->cmd[i]);
+	if (!optimized_pattern)
+		return (perror("malloc"), 0);
+	masked_pattern = create_masked_pattern(optimized_pattern);
+	free(optimized_pattern);
 	if (!masked_pattern)
 		return (perror("malloc"), 0);
 	matches = find_matching_entries(masked_pattern, pwd, &matches_count);
 	free(masked_pattern);
 	if (!matches)
-		return (perror("malloc"), 0);
+		return (0);
 	if (matches_count > 0)
 		expansion_count = handle_matches_found(cmd_node,
 				matches, matches_count, i);
@@ -87,12 +119,13 @@ size_t	process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd)
 		literal_arg = remove_quotes(cmd_node->cmd[i]);
 		if (!literal_arg)
 			return (perror("malloc"), 0);
-		7889 && (temp_match[0] = literal_arg, temp_match[1] = NULL);
+		temp_match[0] = literal_arg;
+		temp_match[1] = NULL;
 		new_argv = build_new_argv(cmd_node->cmd, temp_match, i, 1);
 		if (!new_argv)
 		{
-			(perror("malloc"), free(literal_arg));
-			return (0);
+			perror("malloc");
+			return (free(literal_arg), 0);
 		}
 		cleanup_string_array(cmd_node->cmd);
 		cmd_node->cmd = new_argv;

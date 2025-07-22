@@ -9,6 +9,8 @@ L33tShell-N.Y$ export a="ls -al 'hello''"
 L33tShell-N.Y$ echo $a
 L33tShell-N.Y$ export a="ls -al "hello''''""
 L33tShell-N.Y$ echo $a
+L33tShell-N.Y$ export a="ls -al 'hello'*'"
+L33tShell-N.Y$ echo $a
 L33tShell-N.Y$ echo *"*"b
 L33tShell-N.Y$ echo a"*"*
 L33tShell-N.Y$ echo *'*'*
