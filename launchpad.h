@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 10:55:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 15:17:57 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,8 @@ size_t arg_index, const char *pwd);
 size_t		process_no_wildcard(t_tree *cmd_node, size_t i);
 size_t		process_quoted_wildcard(t_tree *cmd_node, size_t i);
 size_t		process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd);
-
+size_t	handle_matches_found(t_tree *cmd_node, char **matches,
+size_t matches_count, size_t arg_index);
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
 char		**get_env_arr(t_env *env_list);

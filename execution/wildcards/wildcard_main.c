@@ -6,17 +6,19 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:12:20 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 10:53:24 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 15:29:50 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-bool contains_unquoted_wildcard(const char *s)
+bool	contains_unquoted_wildcard(const char *s)
 {
-	bool in_single = false;
-	bool in_double = false;
+	bool	in_single;
+	bool	in_double;
 
+	in_single = false;
+	in_double = false;
 	while (*s)
 	{
 		if (*s == '\'' && !in_double)
@@ -24,10 +26,10 @@ bool contains_unquoted_wildcard(const char *s)
 		else if (*s == '"' && !in_single)
 			in_double = !in_double;
 		else if (*s == '*' && !in_single && !in_double)
-			return true;
+			return (true);
 		s++;
 	}
-	return false;
+	return (false);
 }
 
 void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:11:15 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 10:54:18 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/22 15:30:23 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,20 @@ t_match_data *data)
 
 size_t	match_pattern(const char *pattern, const char *string)
 {
-	while (*pattern)
+	if (*pattern == '\0')
+		return (*string == '\0');
+	if (*pattern == '*')
 	{
-		if (*pattern == '*')
-		{
-			while (*pattern == '*')
-				pattern++;
-			if (*pattern == '\0')
-				return (1);
-			while (*string)
-			{
-				if (match_pattern(pattern, string))
-					return (1);
-				string++;
-			}
-			return (0);
-		}
-		else if (*pattern == *string)
-		{
-			pattern++;
-			string++;
-		}
-		else
-			return (0);
+		if (match_pattern(pattern + 1, string))
+			return (1);
+		if (*string != '\0' && match_pattern(pattern, string + 1))
+			return (1);
+		return (0);
 	}
-	return (*string == '\0');
+	else if ((*pattern == 1 && *string == '*')
+		|| (*pattern == *string && *string != '\0'))
+		return (match_pattern(pattern + 1, string + 1));
+	return (0);
 }
 
 void	resize_matches_if_needed(t_match_data *data)
