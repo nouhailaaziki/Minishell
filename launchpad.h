@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 09:39:47 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/23 18:16:18 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,7 @@ int *total_len);
 void		expand_keys_heredoc(t_var **keys, t_env **env, int stash_status, \
 int *total_len);
 char		*find_a_key(char *origin, int *quote, int *key_len, int *pos);
-void		expand_redirs(t_redir **head, t_env **env, int stash_status);
+void		expand_redirs(t_tree *ast, t_env **env, t_stash *stash, int stash_status);
 void		update_cmd(char *origin, t_var **keys, char **destination, \
 int heredoc);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
@@ -381,6 +381,7 @@ void		expand_all(t_tree *ast, t_env **env, t_stash *stash);
 void		filter_empty_nodes(t_token **head, size_t *argc);
 void		check_quote(char *start, char *end, int *quote);
 t_var		*create_key(char *origin, int *quote, int *pos);
+void		rebuild_redirs(t_tree *ast, t_stash *stash);
 char		**rebuild_cmd(t_token **list, size_t argc);
 void		store_args(t_token **list, char **origin);
 void		find_all_keys(char *str, t_var **keys);
@@ -401,6 +402,7 @@ int			key_scan(char *arg);
 void		free_cmd(char **cmd);
 void		free_tree(t_tree **ast);
 void		free_keys(t_var **head);
+void		free_redirs(t_redir **redirs);
 void		free_tokens(t_token **head);
 void		clear_memory(t_shell *shell);
 /*-----------utilities-------------*/

@@ -6,26 +6,26 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 06:13:39 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/23 13:23:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/23 18:12:17 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
 
-void	expand_redirs(t_redir **head, t_env **env, int stash_status)
+void	expand_redirs(t_tree *ast, t_env **env, t_stash *stash, int stash_status)
 {
 	t_redir	*current;
 	char	*tmp;
 	char	*copy;
 
-	current = *head;
+	current = ast->redirs;
 	while (current)
 	{
-		if (current->type == REDIR_HEREDOC)
+		if (current->type != REDIR_HEREDOC)
 		{
 			copy = ft_strdup(current->file);
 			tmp = expand_vars(&current->file, env, stash_status, 0);
-			expand_quotes(&tmp);
+			// expand_quotes(&tmp);
 			if (!ft_strcmp(tmp, "") || multi_str_included(tmp))
 			{
 				current->is_ambiguous = 1;
@@ -38,35 +38,71 @@ void	expand_redirs(t_redir **head, t_env **env, int stash_status)
 		}
 		current = current->next;
 	}
+	rebuild_redirs(ast, stash);
 }
 
-void	expand_wild_redir(t_tree *ast, t_stash *stash)
+char	**redirs_to_arr(t_redir **head, size_t count)
 {
-	size_t	i;
-	char	*pwd;
-	size_t	increment;
+	char	**redir_arr;
+	t_redir	*current;
 
-	if (!ast || !ast->redirs)
-		return ;
-	pwd = get_working_directory(stash);
-	if (!pwd)
-		return ;
-	i = 0;
-	increment = 1;
-	while (ast->cmd[i])
+	if (!head || !*head)
+		return (NULL);
+	redir_arr = ft_calloc(count, sizeof(char *));
+	if (!redir_arr)
+		return (NULL);
+	current = *head;
+	count = 0;
+	while (current)
 	{
-		if (has_quoted_wildcard(ast->cmd[i]))
-			increment = process_quoted_wildcard(ast, i);
-		else if (has_unquoted_wildcard(ast->cmd[i]))
-			increment = process_unquoted_wildcard(ast, i, pwd);
-		else
-			expand_quotes(&ast->cmd[i]);
-		if (increment == 0)
-			break ;
-		i += increment;
+		redir_arr[count++] = ft_strdup(current->file);
+		current = current->next;
 	}
-	free(pwd);
+	return (redir_arr);
 }
+
+void	arr_to_redirs(t_redir *redirs, char **redir_arr)
+{
+	t_redir *current;
+	int	i;
+	current = redirs;
+
+	i = 0;
+	while (current)
+	{
+		free(current->file);
+		current->file = ft_strdup(redir_arr[i++]);
+		if (!ft_strcmp(current->file, "") || multi_str_included(current->file))
+			current->is_ambiguous = 1;
+		current = current->next;
+	}
+}
+void rebuild_redirs(t_tree *ast, t_stash *stash)
+{
+	char	**redir_arr;
+	t_redir	*current;
+	size_t	count;
+
+	if (!ast)
+		return ;
+	count = 0;
+	current = ast->redirs;
+	while(current)
+	{
+		count++;
+		current = current->next;
+	}
+	redir_arr = redirs_to_arr(&ast->redirs, count);
+	if(!redir_arr)
+		return ;
+	check_for_wildcards(ast,stash);
+	arr_to_redirs(ast->redirs,redir_arr);
+}
+
+
+
+
+
 
 
 void	mask_quotes(char *str)
