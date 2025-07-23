@@ -6,27 +6,11 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 11:58:23 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 18:01:34 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 18:11:06 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
-int	is_full_of_points(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-	{
-		if (str[i] != '.')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 char	**get_path_list(char **env)
 {
