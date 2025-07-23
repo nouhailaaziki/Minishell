@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 09:03:50 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/21 17:03:42 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int	main(int argc, char **argv, char **envp)
 		shell.line = readline("L33tShell-N.Y$ ");
 		if (g_sigint_received)
 			shell.stash.status = 1;
-		add_history(shell.line);
 		if (!shell.line)
 		{
 			write(1, "exit\n", 5);

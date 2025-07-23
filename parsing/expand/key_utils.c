@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/17 10:27:24 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 08:17:37 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ void	find_all_keys(char *str, t_var **keys)
 	}
 }
 
-void	ft_copy_keys(char **dest, t_var *current)
+void	ft_copy_keys(char **dest, t_var *current, int heredoc)
 {
-	if (current->expandable != '\'' && current->value)
+	if ((current->expandable != '\'' || heredoc) && current->value)
 	{
 		ft_memcpy(*dest, current->value, current->value_len);
 		*dest += current->value_len;

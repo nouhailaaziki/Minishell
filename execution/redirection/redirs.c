@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   redirs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/23 12:00:42 by noaziki          ###   ########.fr       */
@@ -52,7 +52,7 @@ char	*expand_heredoc_line(char *line, t_stash *stash)
 {
 	char	*expanded_line;
 
-	expanded_line = expand_vars(&line, stash->env_list, stash->status);
+	expanded_line = expand_vars(&line, stash->env_list, stash->status, 1);
 	return (expanded_line);
 }
 

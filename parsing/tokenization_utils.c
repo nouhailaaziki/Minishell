@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/16 11:37:10 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 08:32:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	lexer(t_shell *shell)
 	char	*sub_str;
 
 	i = 0;
+	add_history(shell->line);
 	while (shell->line[i])
 	{
 		i += skip_spaces(&shell->line[i]);

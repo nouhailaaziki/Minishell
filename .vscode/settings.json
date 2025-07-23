@@ -8,6 +8,10 @@
 		"unordered_map": "c",
 		"launchpad.h": "c",
 		"__node_handle": "c",
-		"iterator": "c"
+		"iterator": "c",
+		"dirent.h": "c",
+		"__string": "c",
+		"string": "c",
+		"string_view": "c"
 	}
 }
