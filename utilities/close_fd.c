@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:32:06 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 21:33:37 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 11:18:24 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ void	close_fd(void)
 
 	i = 3;
 	while (i < OPEN_MAX)
-		close(i++);	
+		close(i++);
 }

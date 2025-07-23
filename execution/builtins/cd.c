@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 11:54:36 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 09:10:58 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	*process_cd_path(const char *path, t_stash *stash)
 	component = get_next_component(path, &start, &i);
 	if (!component && dotdots > 0)
 		return (handle_component_case(dotdots, stash));
+	if (!component)
+		return (NULL);
 	return (process_components(path, dotdots, stash, component));
 }
 
@@ -52,13 +54,16 @@ int	handle_no_arg(t_env **env_list, t_stash *stash)
 
 int	handle_path_access(char **path, char *arg, t_stash *stash)
 {
+	char	*processed;
+
 	if (access(*path, F_OK) != 0)
 	{
-		if (process_cd_path(arg, stash))
-			*path = process_cd_path(arg, stash);
+		processed = process_cd_path(arg, stash);
+		if (!processed)
+			return (puterror(1, "cd: ", arg, ": No such file or directory"));
+		*path = processed;
 		if (access(*path, F_OK) != 0)
-			return (puterror(1, "cd: ", arg,
-					": No such file or directory"));
+			return (puterror(1, "cd: ", arg, ": No such file or directory"));
 	}
 	return (0);
 }

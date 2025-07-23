@@ -16,3 +16,6 @@ L33tShell-N.Y$ echo a"*"*
 L33tShell-N.Y$ echo *'*'*
 L33tShell-N.Y$ echo *"*"
 L33tShell-N.Y$ echo file'*'*
+L33tShell-N.Y$ ls *
+L33tShell-N.Y$ touch "*hhh*"
+L33tShell-N.Y$ echo *

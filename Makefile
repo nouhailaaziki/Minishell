@@ -9,7 +9,7 @@ RM = rm -rf
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
 			utilities/ft_strdup.c utilities/ft_substr.c utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \

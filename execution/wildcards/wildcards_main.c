@@ -1,31 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard_main.c                                    :+:      :+:    :+:   */
+/*   wildcards_main.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:35:45 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 20:41:28 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 11:17:08 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../launchpad.h"
-
-size_t	process_quoted_wildcard(t_tree *cmd_node, size_t i)
-{
-	char	*pattern_no_quotes;
-
-	pattern_no_quotes = remove_quotes(cmd_node->cmd[i]);
-	if (!pattern_no_quotes)
-	{
-		perror("malloc");
-		return (0);
-	}
-	free(cmd_node->cmd[i]);
-	cmd_node->cmd[i] = pattern_no_quotes;
-	return (1);
-}
 
 size_t	process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd)
 {
@@ -97,19 +82,16 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 	if (!pwd)
 		return ;
 	7889 && (i = 0, increment = 1);
-	while (cmd_node->cmd[i])
+	while (cmd_node->cmd[i] && i < ft_strlen(cmd_node->cmd[i]))
 	{
 		if (contains_unquoted_wildcard(cmd_node->cmd[i]) == true)
 		{
 			increment = process_unquoted_wildcard(cmd_node, i, pwd);
 			if (increment == 0)
 				break ;
-			increment = process_quoted_wildcard(cmd_node, i);
 		}
 		else
 			expand_quotes(&cmd_node->cmd[i]);
-		if (increment == 0)
-			break ;
 		i += increment;
 	}
 	free(pwd);

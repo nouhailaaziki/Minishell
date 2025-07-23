@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 09:03:50 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	init_shell(t_shell *shell)
 	shell->tokens = NULL;
 	shell->current = NULL;
 	shell->ast = NULL;
+	shell->stash.pwd_backup = NULL;
+
 	return (0);
 }
 

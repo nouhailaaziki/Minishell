@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 09:31:31 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 int	apply_fd_redirection(t_redir *redir, int fd, t_stash *stash)
 {
-	if (redir->is_ambiguous && !stash->is_parent_flag)
-		exit (puterror(1, redir->file, NULL, ": ambiguous redirect"));
-	if (redir->is_ambiguous && stash->is_parent_flag)
-		return (puterror(1, redir->file, NULL, ": ambiguous redirect"), -1);
 	if (fd == -1 && !stash->is_parent_flag)
 		exit (puterror(1, redir->file, NULL, ": No such file or directory"));
 	else if ((fd == -1 && stash->is_parent_flag))
@@ -98,6 +94,10 @@ int	handle_redirs(t_redir *redir, t_stash *stash)
 		return (0);
 	while (redir)
 	{
+		if (redir->is_ambiguous && !stash->is_parent_flag)
+			exit (puterror(1, redir->file, NULL, ": ambiguous redirect"));
+		if (redir->is_ambiguous && stash->is_parent_flag)
+			return (puterror(1, redir->file, NULL, ": ambiguous redirect"), -1);
 		if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND
 			|| redir->type == REDIR_IN)
 			fd = init_fd(redir);
