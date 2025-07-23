@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:37:00 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 14:00:03 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:23:01 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,17 @@ bool	contains_unquoted_wildcard(const char *s)
 	return (false);
 }
 
-size_t	process_no_wildcard(t_tree *cmd_node, size_t i)
+size_t	process_no_wildcard(char **cmd, size_t i)
 {
 	char	*pattern_no_quotes;
 
-	pattern_no_quotes = remove_quotes(cmd_node->cmd[i]);
+	pattern_no_quotes = remove_quotes(cmd[i]);
 	if (!pattern_no_quotes)
 	{
 		perror("malloc");
 		return (0);
 	}
-	free(cmd_node->cmd[i]);
-	cmd_node->cmd[i] = pattern_no_quotes;
+	free(cmd[i]);
+	cmd[i] = pattern_no_quotes;
 	return (1);
 }

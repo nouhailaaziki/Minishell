@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/22 21:02:35 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:23:50 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ typedef struct s_mask_state
 
 /*------------------------wildcards fonctions-------------------------*/
 char		*collapse_consecutive_asterisks(const char *pattern);
-void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
+void		check_for_wildcards(char ***cmd, t_stash *stash);
 void		sort_matches(char **matches, size_t count);
 char		**build_new_argv(char **old_argv, char **matches, size_t arg_index, \
 size_t matches_count);
@@ -213,10 +213,10 @@ t_match_data *data);
 char		*create_masked_pattern(const char *s);
 bool		contains_unquoted_wildcard(const char *s);
 char		*remove_quotes(const char *s);
-size_t		resolve_wildcard_entries(t_tree *cmd_node, size_t i);
+size_t		resolve_wildcard_entries(char ***cmd, size_t i);
 char		**prepare_and_find_matches(const char *pattern, const char *pwd, \
 size_t *matches_count);
-size_t		handle_matches_found(t_tree *cmd_node, char **matches, \
+size_t		handle_matches_found(char ***cmd, char **matches, \
 size_t matches_count, size_t arg_index);
 
 /*-----------------------Environment fonctions------------------------*/
