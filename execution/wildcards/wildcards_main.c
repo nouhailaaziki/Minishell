@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:35:45 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 11:45:20 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 13:59:50 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	check_for_wildcards(t_tree *cmd_node, t_stash *stash)
 	if (!pwd)
 		return ;
 	7889 && (i = 0, increment = 1);
-	while (cmd_node->cmd[i] && i < ft_strlen(cmd_node->cmd[i]))
+	while (cmd_node->cmd[i] && i <= ft_strlen(cmd_node->cmd[i]))
 	{
 		if (contains_unquoted_wildcard(cmd_node->cmd[i]) == true)
 		{
