@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 11:58:23 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 18:01:34 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,6 @@ int	is_full_of_points(char *str)
 	return (1);
 }
 
-void	remove_full_of_points(char **arr)
-{
-	int	i;
-
-	i = na_arrlen(arr);
-	while (i > 0 && is_full_of_points(arr[i - 1]))
-	{
-		arr[i - 1] = NULL;
-		i--;
-	}
-}
-
 char	**get_path_list(char **env)
 {
 	int		i;
@@ -53,7 +41,6 @@ char	**get_path_list(char **env)
 		{
 			str = na_substr(env[i], 5, ft_strlen(env[i]) - 5);
 			arr = na_split(str, ':');
-			remove_full_of_points(arr);
 			return (arr);
 		}
 		i++;
