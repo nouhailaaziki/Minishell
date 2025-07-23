@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:25:19 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/13 12:39:40 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:54:57 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_syntax_err(t_shell *shell)
 {
-	ft_putstr_fd("DeepShell: syntax error near unexpected token \n", 2);
+	ft_putstr_fd("L33tShell: syntax error near unexpected token \n", 2);
 	shell->stash.status = 258;
 	return (0);
 }

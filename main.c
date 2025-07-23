@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
 /*   Updated: 2025/07/21 17:03:42 by yrhandou         ###   ########.fr       */
@@ -35,11 +35,14 @@ int	init_shell(t_shell *shell)
 	shell->tokens = NULL;
 	shell->current = NULL;
 	shell->ast = NULL;
+	shell->stash.pwd_backup = NULL;
+
 	return (0);
 }
 
 void	init_loop_data(t_stash *stash)
 {
+	stash->is_parent_flag = 0;
 	g_sigint_received = 0;
 	stash->heredoc_interrupted = 0;
 	stash->exit_flag = 0;
@@ -95,10 +98,9 @@ int	main(int argc, char **argv, char **envp)
 		shell.line = readline("L33tShell-N.Y$ ");
 		if (g_sigint_received)
 			shell.stash.status = 1;
-		// add_history(shell.line);
 		if (!shell.line)
 		{
-			write(1, "exit", 4);
+			write(1, "exit\n", 5);
 			(free_tokens(&shell.tokens), free_all_tracked());
 			exit(shell.stash.status);
 		}

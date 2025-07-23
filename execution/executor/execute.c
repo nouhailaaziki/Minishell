@@ -42,8 +42,10 @@ void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
 
 	expand_export(ast, env, stash->status);
 	expand_cmd(ast, env, stash->status);
+
 	expand_redirs(ast, env, stash, stash->status);
 	check_for_wildcards(ast, stash);
+
 	i = 0;
 	while (ast->cmd && ast->cmd[i])
 		unmask_quotes(ast->cmd[i++]);

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:59:03 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/19 10:43:48 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:00:42 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 int	apply_fd_redirection(t_redir *redir, int fd, t_stash *stash)
 {
 	if (fd == -1 && !stash->is_parent_flag)
-		exit (puterror(1, redir->file, NULL, ": No such file or directory"));
-	else if (fd == -1 && stash->is_parent_flag)
-	{
-		ft_putstr_fd("L33tShell: ", 2);
-		ft_putstr_fd(redir->file, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		return (-1);
-	}
+		exit (puterror(1, redir->file, NULL,
+				na_strjoin(": ", strerror(errno))));
+	else if ((fd == -1 && stash->is_parent_flag))
+		return (puterror(1, redir->file, NULL,
+				na_strjoin(": ", strerror(errno))), -1);
 	if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
 	{
 		if (dup2(fd, STDIN_FILENO) == -1)
@@ -66,7 +63,7 @@ int	expand_heredoc_and_get_fd(t_redir *redir, t_stash *stash)
 	char	*expanded_line;
 	char	*filename;
 
-	filename = na_strdup("/tmp/.l33tshell-XXXXXX");
+	filename = na_strdup("/tmp/.L33tShell-XXXXXX");
 	if (!filename)
 		return (perror("malloc"), -2);
 	expanded_fd = na_mkstemp(filename, redir);
@@ -84,10 +81,8 @@ int	expand_heredoc_and_get_fd(t_redir *redir, t_stash *stash)
 			write(expanded_fd, line, ft_strlen(line));
 		line = get_next_line(redir->fd_rd);
 	}
-	close(expanded_fd);
-	expanded_fd = open(filename, O_RDONLY);
-	unlink(filename);
-	return (expanded_fd);
+	(close(expanded_fd), expanded_fd = open(filename, O_RDONLY));
+	return (unlink(filename), expanded_fd);
 }
 
 int	handle_redirs(t_redir *redir, t_stash *stash)
@@ -98,6 +93,10 @@ int	handle_redirs(t_redir *redir, t_stash *stash)
 		return (0);
 	while (redir)
 	{
+		if (redir->is_ambiguous && !stash->is_parent_flag)
+			exit (puterror(1, redir->file, NULL, ": ambiguous redirect"));
+		if (redir->is_ambiguous && stash->is_parent_flag)
+			return (puterror(1, redir->file, NULL, ": ambiguous redirect"), -1);
 		if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND
 			|| redir->type == REDIR_IN)
 			fd = init_fd(redir);
