@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/18 13:10:40 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,29 +73,35 @@ t_env **env_list, t_stash *stash)
 	run_and_handle_errors(path_list, cmd, envp);
 }
 
+int	handle_parent_builtin(char **cmd, t_redir *redirs,
+t_env **env_list, t_stash *stash)
+{
+	int	i;
+	int	restore[2];
+
+	7889 && (restore[0] = dup(STDIN_FILENO), restore[1] = dup(STDOUT_FILENO));
+	stash->is_parent_flag = 1;
+	if (handle_redirs(redirs, stash))
+	{
+		(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
+		(close(restore[0]), close(restore[1]));
+		return (1);
+	}
+	i = run_builtins(cmd, env_list, stash->status, stash);
+	(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
+	(close(restore[0]), close(restore[1]));
+	return (i);
+}
+
 int	execute_command(char **cmd, t_redir *redirs,
 t_env **env_list, t_stash *stash)
 {
 	pid_t	pid;
-	int		i;
+	int		sig;
 	int		status;
-	int		restore[2];
 
-	7889 && (restore[0] = dup(STDIN_FILENO), restore[1] = dup(STDOUT_FILENO));
 	if (cmd && is_parent_builtin(cmd[0]))
-	{
-		stash->is_parent_flag = 1;
-		if (handle_redirs(redirs, stash))
-		{
-			(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
-			(close(restore[0]), close(restore[1]));
-			return (1);
-		}
-		i = run_builtins(cmd, env_list, stash->status, stash);
-		(dup2(restore[0], STDIN_FILENO), dup2(restore[1], STDOUT_FILENO));
-		(close(restore[0]), close(restore[1]));
-		return (i);
-	}
+		return (handle_parent_builtin(cmd, redirs, env_list, stash));
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed"), 1);
@@ -104,6 +110,13 @@ t_env **env_list, t_stash *stash)
 	(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
-		return (WTERMSIG(status) + 128);
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			return (write(1, "\n", 1), 130);
+		if (sig == SIGQUIT)
+			return (write(1, "Quit: 3\n", 8), 131);
+		return (sig + 128);
+	}
 	return (WEXITSTATUS(status));
 }

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 09:12:50 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/15 19:51:27 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/23 09:04:26 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*build_target_path(int dotdots, const char *component, t_stash *stash)
 
 	if (!stash || !stash->pwd_backup)
 		return (NULL);
-	pwd = stash->pwd_backup;
+	pwd = na_strdup(stash->pwd_backup);
 	new_path = na_strdup(pwd);
 	if (!new_path)
 		return (NULL);
