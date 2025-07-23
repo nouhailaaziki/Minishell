@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 08:32:20 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:03:42 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int	main(int argc, char **argv, char **envp)
 		if (process_input(&shell))
 			execute_cmds(&shell, &shell.stash);
 		clear_memory(&shell);
+		close_fd();
 	}
 	return (0);
 }

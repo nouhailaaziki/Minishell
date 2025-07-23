@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 06:13:39 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/20 09:41:41 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:23:05 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,35 @@ void	expand_redirs(t_redir **head, t_env **env, int stash_status)
 		current = current->next;
 	}
 }
+
+void	expand_wild_redir(t_tree *ast, t_stash *stash)
+{
+	size_t	i;
+	char	*pwd;
+	size_t	increment;
+
+	if (!ast || !ast->redirs)
+		return ;
+	pwd = get_working_directory(stash);
+	if (!pwd)
+		return ;
+	i = 0;
+	increment = 1;
+	while (ast->cmd[i])
+	{
+		if (has_quoted_wildcard(ast->cmd[i]))
+			increment = process_quoted_wildcard(ast, i);
+		else if (has_unquoted_wildcard(ast->cmd[i]))
+			increment = process_unquoted_wildcard(ast, i, pwd);
+		else
+			expand_quotes(&ast->cmd[i]);
+		if (increment == 0)
+			break ;
+		i += increment;
+	}
+	free(pwd);
+}
+
 
 void	mask_quotes(char *str)
 {

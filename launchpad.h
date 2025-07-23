@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/20 09:45:05 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/22 09:39:47 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,10 +191,26 @@ typedef struct s_match_data
 
 /*------------------------wildcards fonctions-------------------------*/
 void		check_for_wildcards(t_tree *cmd_node, t_stash *stash);
-size_t		match_pattern(const char *pattern, const char *string);
-void		sort_matches(char **matches, size_t count);
-void		resize_matches_if_needed(t_match_data *data);
+char		**build_new_argv(char **old_argv, char **matches, \
+size_t arg_index, size_t matches_count);
 void		cleanup_string_array(char **array);
+void		sort_matches(char **matches, size_t count);
+void		cleanup_matches(char **matches, size_t matches_count);
+char		**find_matching_entries(const char *pattern, \
+const char *pwd, size_t *matches_count);
+bool		has_quoted_wildcard(const char *s);
+bool		has_unquoted_wildcard(const char *s);
+char		*remove_quotes(const char *s);
+char		*get_working_directory(t_stash *stash);
+void		resize_matches_if_needed(t_match_data *data);
+void		process_directory_entries(DIR *dir, \
+const char *pattern, t_match_data *data);
+size_t		match_pattern(const char *pattern, const char *string);
+size_t		handle_wildcards(t_tree *cmd_node, const char *pattern, \
+size_t arg_index, const char *pwd);
+size_t		process_no_wildcard(t_tree *cmd_node, size_t i);
+size_t		process_quoted_wildcard(t_tree *cmd_node, size_t i);
+size_t		process_unquoted_wildcard(t_tree *cmd_node, size_t i, char *pwd);
 
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
@@ -238,6 +254,7 @@ void		free_all_tracked(void);
 t_gcnode	**memory_tracker(void);
 
 /*------------------------------Utilities-----------------------------*/
+void		close_fd(void);
 char		*na_itoa(int n);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
@@ -360,6 +377,7 @@ int heredoc);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
 void		ft_copy_keys(char **dest, t_var *current, int heredoc);
 void		expand_cmd(t_tree *ast, t_env **env, int stash_status);
+void		expand_all(t_tree *ast, t_env **env, t_stash *stash);
 void		filter_empty_nodes(t_token **head, size_t *argc);
 void		check_quote(char *start, char *end, int *quote);
 t_var		*create_key(char *origin, int *quote, int *pos);

@@ -16,7 +16,8 @@ UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c ut
 			utilities/ft_strdup.c utilities/ft_substr.c utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
 			utilities/ft_memset.c utilities/ft_strchr.c utilities/ft_strcmp.c utilities/ft_strncmp.c utilities/ft_strlen.c utilities/ft_strjoin.c utilities/ft_split_args.c\
 			utilities/na_calloc.c utilities/na_itoa.c utilities/na_split.c utilities/na_strdup.c utilities/na_strjoin.c utilities/na_substr.c utilities/ft_memcpy.c\
-			utilities/na_atoi.c utilities/na_mkstemp.c utilities/ft_putchar_fd.c utilities/ft_putstr_fd.c utilities/ft_putendl_fd.c utilities/ft_itoa.c utilities/get_next_line.c
+			utilities/na_atoi.c utilities/na_mkstemp.c utilities/ft_putchar_fd.c utilities/ft_putstr_fd.c utilities/ft_putendl_fd.c utilities/ft_itoa.c utilities/get_next_line.c\
+			utilities/close_fd.c
 
 PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_utils.c \
 		  parsing/str_lexer_utils.c parsing/tree_utils.c parsing/tree_utils_misc.c parsing/parser_utils.c\
@@ -33,7 +34,8 @@ EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtin
 			execution/executor/execute_command.c execution/executor/execute_pipe.c  execution/redirection/heredocs_handler.c execution/signals/setup_signals.c \
 			execution/signals/handle_sigint.c execution/signals/terminal_control.c execution/executor/execute_parentheses.c execution/environment/env_utils.c \
 			execution/executor/execute_command_utils.c utilities/ft_strrchr.c execution/environment/get_env_value.c execution/builtins/cd.c execution/environment/env_update.c \
-			execution/wildcards/handle_wildcards.c execution/wildcards/wildcards_utils.c
+			execution/wildcards/wildcard_utils.c execution/wildcards/wildcard_handlers.c execution/wildcards/wildcard_processing.c execution/wildcards/wildcard_matcher.c \
+			execution/wildcards/wildcard_helpers.c execution/wildcards/wildcard_main.c
 
 EXEC = ${EXECUTION:.c=.o}
 
