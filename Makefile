@@ -10,7 +10,7 @@ RM = rm -rf
 CC = cc
 
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -g3 -Wall -Wextra #-Werror
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
 			utilities/ft_strdup.c utilities/ft_substr.c utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
@@ -24,7 +24,7 @@ PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_util
 		  parsing/ft_free.c parsing/advanced_tree_utils.c parsing/errors.c parsing/token_utils.c \
 		  parsing/expand/expand_cmd.c parsing/expand/expand_utils.c parsing/expand/key_utils.c \
 		  parsing/expand/expand_quotes.c parsing/expand/handle_expand_utils.c parsing/expand/expand_redirs.c \
-		  main.c #basic_visualiser.c advanced_visualizer.c misc_utils.c main.c
+		  main.c
 
 EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c execution/builtins/path_build.c \
 			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c execution/executor/dry_run_fork.c \

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 20:23:50 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 10:21:46 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,7 +387,6 @@ void		expand_all(t_tree *ast, t_env **env, t_stash *stash);
 void		filter_empty_nodes(t_token **head, size_t *argc);
 void		check_quote(char *start, char *end, int *quote);
 t_var		*create_key(char *origin, int *quote, int *pos);
-void		rebuild_redirs(t_tree *ast, t_stash *stash);
 char		**rebuild_cmd(t_token **list, size_t argc);
 void		store_args(t_token **list, char **origin);
 void		find_all_keys(char *str, t_var **keys);

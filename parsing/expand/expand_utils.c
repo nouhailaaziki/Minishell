@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:37 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/20 09:39:51 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/24 08:40:59 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	value_scan(char *arg)
 
 	i = 0;
 	value = ft_strchr(arg, '=');
-	if (!value || !++value)
+	if (!value || value[1] =='\0')
 		return (0);
 	if (is_in_quotes(arg))
 		return (0);
