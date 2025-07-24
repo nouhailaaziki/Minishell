@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:41:53 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 20:22:33 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 16:53:39 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*collapse_consecutive_asterisks(const char *pattern)
 
 	if (!pattern)
 		return (NULL);
-	len = strlen(pattern);
+	len = ft_strlen(pattern);
 	new_pattern = (char *)malloc(len + 1);
 	if (!new_pattern)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:37:00 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 20:23:01 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 16:54:00 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*remove_quotes(const char *s)
 	j = 0;
 	in_single_quotes = false;
 	in_double_quotes = false;
-	new_str = malloc(strlen(s) + 1);
+	new_str = malloc(ft_strlen(s) + 1);
 	if (!new_str)
 		return (NULL);
 	while (s[i])
@@ -66,7 +66,7 @@ char	*create_masked_pattern(const char *s)
 	state.in_single_quotes = false;
 	state.in_double_quotes = false;
 	state.j = 0;
-	new_str = malloc(strlen(s) + 1);
+	new_str = malloc(ft_strlen(s) + 1);
 	if (!new_str)
 		return (NULL);
 	while (s[i])
