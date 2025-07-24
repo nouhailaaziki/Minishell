@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 20:23:50 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 11:50:03 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ size_t		match_pattern(const char *pattern, const char *string);
 char		**find_matching_entries(const char *pattern, const char *pwd, \
 size_t *matches_count);
 void		resize_matches_if_needed(t_match_data *data);
-void		process_directory_entries(DIR *dir, const char *pattern,
+void		process_directory_entries(DIR *dir, const char *pattern, \
 t_match_data *data);
 char		*create_masked_pattern(const char *s);
 bool		contains_unquoted_wildcard(const char *s);

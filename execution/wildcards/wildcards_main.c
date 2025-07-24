@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:35:45 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 20:26:54 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 11:47:34 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char	*get_working_directory(t_stash *stash, char **cmd)
 void	check_for_wildcards(char ***cmd, t_stash *stash)
 {
 	size_t	i;
+	size_t	len;
 	char	*pwd;
 	size_t	increment;
 
@@ -82,13 +83,15 @@ void	check_for_wildcards(char ***cmd, t_stash *stash)
 	if (!pwd)
 		return ;
 	7889 && (i = 0, increment = 1);
-	while ((*cmd)[i] && i <= ft_strlen((*cmd)[i]))
+	len = (size_t)na_arrlen(*cmd);
+	while (i < len && (*cmd)[i])
 	{
 		if (contains_unquoted_wildcard((*cmd)[i]) == true)
 		{
 			increment = process_unquoted_wildcard(cmd, i, pwd);
 			if (increment == 0)
 				break ;
+			len = na_arrlen(*cmd);
 		}
 		else
 			expand_quotes(&(*cmd)[i]);
