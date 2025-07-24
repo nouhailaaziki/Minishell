@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/24 14:01:37 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/24 14:05:20 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,6 +389,7 @@ int			is_valid_key(char key);
 void		mask_quotes(char *str);
 int			value_scan(char *arg);
 int			key_scan(char *arg);
+void		expand_wild_redirs(t_tree *ast, t_stash *stash);
 /*-----------free-------------*/
 void		free_cmd(char **cmd);
 void		free_tree(t_tree **ast);
