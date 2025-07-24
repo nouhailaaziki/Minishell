@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/24 11:49:32 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/24 12:26:00 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 		current->value = ft_itoa(stash_status);
 	else if (!ft_strcmp(current->key, "$$"))
 		current->value = ft_strdup("$$");
+	else if (!ft_strcmp(current->key, "$"))
+		current->value = ft_strdup("$");
 	else
 	{
 		value = get_env_value(env, &(current->key[1]));

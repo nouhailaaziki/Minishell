@@ -24,7 +24,7 @@ PARSING = parsing/tokenization_utils.c parsing/handlers.c parsing/parenthes_util
 		  parsing/ft_free.c parsing/advanced_tree_utils.c parsing/errors.c parsing/token_utils.c \
 		  parsing/expand/expand_cmd.c parsing/expand/expand_utils.c parsing/expand/key_utils.c \
 		  parsing/expand/expand_quotes.c parsing/expand/handle_expand_utils.c parsing/expand/expand_redirs.c \
-		  main.c
+		  parsing/expand/expand_wild.c main.c
 
 EXECUTION =	execution/builtins/pwd.c execution/builtins/echo.c execution/builtins/exit.c execution/builtins/unset.c execution/builtins/path_build.c \
 			execution/builtins/export.c execution/builtins/export_utils.c execution/builtins/env.c execution/environment/env_setup.c execution/executor/dry_run_fork.c \

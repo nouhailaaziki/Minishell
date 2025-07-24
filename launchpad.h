@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/24 11:50:03 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 13:53:13 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,8 @@ int *total_len);
 void		expand_keys_heredoc(t_var **keys, t_env **env, int stash_status, \
 int *total_len);
 char		*find_a_key(char *origin, int *quote, int *key_len, int *pos);
-void		expand_redirs(t_tree *ast, t_env **env, t_stash *stash, int stash_status);
+void		expand_redirs(t_tree *ast, t_env **env, t_stash *stash, \
+int stash_status);
 void		update_cmd(char *origin, t_var **keys, char **destination, \
 int heredoc);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
@@ -403,6 +404,8 @@ int			is_valid_key(char key);
 void		mask_quotes(char *str);
 int			value_scan(char *arg);
 int			key_scan(char *arg);
+int			wild_check(char **tmp, t_stash *stash);
+void		expand_wild_redirs(t_tree *ast, t_stash *stash);
 /*-----------free-------------*/
 void		free_cmd(char **cmd);
 void		free_tree(t_tree **ast);
