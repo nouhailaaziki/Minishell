@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:05:35 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/24 11:49:42 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:20:43 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	init_shell(t_shell *shell)
 		write(2, error, ft_strlen(error));
 		return (free(error), 1);
 	}
+	free(tmp);
 	display_intro();
 	shell->env_list = NULL;
 	shell->stash.status = 0;
