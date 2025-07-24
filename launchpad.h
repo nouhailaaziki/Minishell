@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/24 13:53:13 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/24 14:01:37 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,28 +32,6 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
-
-/*-----------------------Format and Color Macros----------------------*/
-# define BOLD "\033[1m"
-# define ORANGE "\x1b[38;5;214m"
-# define PINK "\x1b[95m"
-# define BLK "\e[0;30m"
-# define RED "\e[0;31m"
-# define GRN "\e[0;32m"
-# define YEL "\e[0;33m"
-# define BLU "\e[0;34m"
-# define MAG "\e[0;35m"
-# define CYN "\e[0;36m"
-# define WHT "\e[0;37m"
-# define BHBLK "\e[1;90m"
-# define BHRED "\e[1;91m"
-# define BHGRN "\e[1;92m"
-# define BHYEL "\e[1;93m"
-# define BHBLU "\e[1;94m"
-# define BHMAG "\e[1;95m"
-# define BHCYN "\e[1;96m"
-# define BHWHT "\e[1;97m"
-# define RESET "\e[0m"
 
 /*----------------------------global flag-----------------------------*/
 int		g_sigint_received;
@@ -88,6 +66,7 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
+/*-----------------------Linked list for expand-----------------------*/
 typedef struct s_var
 {
 	char			*key;
@@ -97,6 +76,7 @@ typedef struct s_var
 	int				expandable;
 	struct s_var	*next;
 }	t_var;
+
 /*--------------------Redirection info for a command------------------*/
 typedef struct s_redir
 {
@@ -218,6 +198,7 @@ char		**prepare_and_find_matches(const char *pattern, const char *pwd, \
 size_t *matches_count);
 size_t		handle_matches_found(char ***cmd, char **matches, \
 size_t matches_count, size_t arg_index);
+
 /*-----------------------Environment fonctions------------------------*/
 void		swap_env(t_env *a, t_env *b);
 char		**get_env_arr(t_env *env_list);
@@ -254,6 +235,7 @@ char		*process_components(const char *path, int dotdots, \
 t_stash *stash, char *component);
 char		*expand_vars(char **old_cmd, t_env **env, int stash_status, \
 int heredoc);
+
 /*--------------------Garbage collector fonctions---------------------*/
 void		*nalloc(size_t __size);
 void		free_all_tracked(void);
@@ -291,6 +273,7 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*get_next_line(int fd);
+
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir, t_stash *stash);
 void		manage_heredocs(t_tree *ast, t_stash *stash);
@@ -314,6 +297,7 @@ int			execute_command(char **cmd, t_redir *redirs, t_env **env_list, \
 t_stash *stash);
 int			count_required_forks(t_tree *ast);
 int			perform_dry_run_fork_test(int required_forks, t_stash *stash);
+
 /*------------------------------signals-------------------------------*/
 void		restore_terminal(t_stash *stash);
 void		disable_echoctl(t_stash *stash);
@@ -322,7 +306,7 @@ void		handle_sigint_prompt(int sig);
 void		setup_signals_heredoc(void);
 void		setup_signals_prompt(void);
 
-/*---------------------Parsing STUFF------------------------------------------*/
+/*----------------------------Parsing STUFF---------------------------*/
 int			init_shell(t_shell *shell);
 int			lexer(t_shell *shell);
 int			token_lexer(char *str);
@@ -339,7 +323,7 @@ int			parentheses_counter_v2(t_token *head);
 int			handle_quotes(char *str, char quote_type);
 void		link_token(t_token **head, t_token *node);
 
-/*-----------Tree Stuff-------------------*/
+/*-----------------------------Tree Stuff-----------------------------*/
 t_tree		*create_block(t_token **head, int count, int type);
 void		create_pseudotree(t_tree **ast, t_token **tokens);
 void		create_one_tree(t_tree **ast, t_token **tokens);
@@ -358,7 +342,8 @@ t_token		*find_and_or(t_token *head);
 t_token		*find_pipe(t_token *head);
 int			token_lookup(char *line);
 int			count_chars(char *str);
-	/*---------------------Checkers-------------------*/
+
+/*------------------------------Checkers------------------------------*/
 char		ft_isquote(char c);
 int			ft_is_redir(char *c);
 int			ft_is_operator(char *c);
@@ -371,7 +356,7 @@ int			check_predecessor(t_token *head);
 int			simple_syntax_err(t_shell *shell);
 int			advanced_syntax_err(t_shell *shell);
 
-/*-----------Expand-----------------*/
+/*-------------------------------Expand-------------------------------*/
 void		expand_keys(t_var **keys, t_env **env, int stash_status, \
 int *total_len);
 void		expand_keys_heredoc(t_var **keys, t_env **env, int stash_status, \
@@ -404,8 +389,6 @@ int			is_valid_key(char key);
 void		mask_quotes(char *str);
 int			value_scan(char *arg);
 int			key_scan(char *arg);
-int			wild_check(char **tmp, t_stash *stash);
-void		expand_wild_redirs(t_tree *ast, t_stash *stash);
 /*-----------free-------------*/
 void		free_cmd(char **cmd);
 void		free_tree(t_tree **ast);
@@ -413,7 +396,8 @@ void		free_keys(t_var **head);
 void		free_redirs(t_redir **redirs);
 void		free_tokens(t_token **head);
 void		clear_memory(t_shell *shell);
-/*-----------utilities-------------*/
+
+/*------------------------------utilities-----------------------------*/
 char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 char		**ft_split_args(char *s);
