@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:12 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/23 20:24:19 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/24 10:24:02 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	expand_export(t_tree *ast, t_env **env, int stash_status)
 			i++;
 			continue ;
 		}
-		current[i] = expand_vars(&current[i], env, stash_status);
+		current[i] = expand_vars(&current[i], env, stash_status, 0);
 		inject_quotes(&current[i]);
 		i++;
 	}
@@ -42,7 +42,7 @@ void	expand_all(t_tree *ast, t_env **env, t_stash *stash)
 
 	expand_export(ast, env, stash->status);
 	expand_cmd(ast, env, stash->status);
-	expand_redirs(&ast->redirs, env, stash->status);
+	expand_redirs(ast, env, stash, stash->status);
 	check_for_wildcards(&ast->cmd, stash);
 	i = 0;
 	while (ast->cmd && ast->cmd[i])

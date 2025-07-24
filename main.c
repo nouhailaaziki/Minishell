@@ -98,7 +98,6 @@ int	main(int argc, char **argv, char **envp)
 		shell.line = readline("L33tShell-N.Y$ ");
 		if (g_sigint_received)
 			shell.stash.status = 1;
-		add_history(shell.line);
 		if (!shell.line)
 		{
 			write(1, "exit\n", 5);

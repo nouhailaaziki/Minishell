@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:47:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/18 10:34:52 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/20 09:41:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	inject_quotes(char **str)
 	*str = new_value;
 }
 
-
 void	clean_tabs(char *str)
 {
 	int	i;
@@ -41,7 +40,7 @@ void	clean_tabs(char *str)
 		return ;
 	while (str[i])
 	{
-		if (!ft_isspace(str[i]))//(str[i] == 10 || str[i] == 11 || str[i] == 12 || str[i] == 13))
+		if (str[i] != 9 && str[i] != 10)
 			i++;
 		else
 			str[i++] = ' ';
