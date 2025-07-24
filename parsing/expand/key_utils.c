@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/20 08:17:37 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/24 11:49:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	ft_copy_keys(char **dest, t_var *current, int heredoc)
 void	expand_a_key(t_var *current, t_env **env, int stash_status)
 {
 	char	*value;
+	char	*copy;
 
 	if (!ft_strcmp(current->key, "$?"))
 		current->value = ft_itoa(stash_status);
@@ -115,8 +116,9 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 			current->value = ft_strdup("");
 		else if (ft_strchr(value, '\'') || ft_strchr(value, '"'))
 		{
-			mask_quotes(value);
-			current->value = ft_strdup(value);
+			copy = ft_strdup(value);
+			mask_quotes(copy);
+			current->value = copy;
 		}
 		else
 			current->value = ft_strdup(value);
