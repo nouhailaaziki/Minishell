@@ -9,7 +9,7 @@ RM = rm -rf
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 UTILITIES = utilities/ft_bzero.c utilities/ft_calloc.c utilities/ft_isalnum.c utilities/ft_isalpha.c utilities/ft_isascii.c utilities/ft_isdigit.c utilities/ft_isspace.c \
 			utilities/ft_strdup.c utilities/ft_substr.c utilities/ft_str_isspace.c utilities/na_arrlen.c utilities/ft_atoi.c utilities/ft_isallchar.c \
@@ -50,11 +50,12 @@ all: ${NAME}
 
 ${NAME} :  ${PARSE} ${EXEC} ${UTILS}
 	@echo "${YELLOW} ${BOLD}➤ Launching compilation...${RESET}"
-	${CC} ${CFLAGS} $(PARSE) ${EXEC} ${UTILS} -o $@ -lreadline
+	@${CC} ${CFLAGS} $(PARSE) ${EXEC} ${UTILS} -o $@ -lreadline
 	@echo "${GREEN} ${BOLD}➤ ${NAME} successfully compiled ✓${RESET}"
 
 %.o : %.c ${HEADER}
-	${CC} ${CFLAGS} -c $< -o $@
+	@printf "\033[0;32m Compiling minishell: \033[0;33m$<\033[0m\r"
+	@${CC} ${CFLAGS} -c $< -o $@
 
 clean:
 	${RM} ${PARSE} ${EXEC} ${UTILS}

@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 10:46:52 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/21 13:52:07 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/25 12:02:15 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,15 @@ void	execcmd(char **path_list, char **cmd, char **envp)
 	int		i;
 
 	i = 0;
-	while (ft_strcmp(cmd[0], "") && path_list && path_list[i])
+	while (!ft_strchr(cmd[0], '/') && ft_strcmp(cmd[0], "")
+		&& path_list && path_list[i])
 	{
 		path = na_strjoin(path_list[i], "/");
 		path = na_strjoin(path, cmd[0]);
 		if (!access(path, X_OK))
 		{
-			if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
-			{
-				puterror(1, cmd[0], NULL, ": No such file or directory");
-				exit(1);
-			}
 			execve(path, cmd, envp);
+			errno_manager(cmd[0]);
 			perror("execve failed");
 			exit(1);
 		}
@@ -41,13 +38,15 @@ void	run_and_handle_errors(char **path_list, char **cmd, char **envp)
 {
 	handle_special_cases(path_list, cmd);
 	execcmd(path_list, cmd, envp);
-	if ((ft_strchr(cmd[0], '/') || !path_list) && !access(cmd[0], X_OK))
+	if ((ft_strchr(cmd[0], '/') || !path_list
+			|| !path_list[0]) && !access(cmd[0], X_OK))
 	{
 		execve(cmd[0], cmd, envp);
+		errno_manager(cmd[0]);
 		perror("execve failed");
 		exit(1);
 	}
-	if (ft_strchr(cmd[0], '/') || !path_list
+	if (errno == 13 || ft_strchr(cmd[0], '/') || !path_list
 		|| !path_list[0] || !ft_strcmp(path_list[0], ""))
 		errno_manager(cmd[0]);
 	(ft_putstr_fd("L33tShell: ", 2), ft_putstr_fd(cmd[0], 2));
