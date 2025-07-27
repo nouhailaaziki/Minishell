@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:47:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/20 09:41:07 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 06:51:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	inject_quotes(char **str)
 	*str = new_value;
 }
 
-void	clean_tabs(char *str)
+void	clean_whitespace(char *str)
 {
 	int	i;
 
@@ -40,7 +40,7 @@ void	clean_tabs(char *str)
 		return ;
 	while (str[i])
 	{
-		if (str[i] != 9 && str[i] != 10)
+		if (!(str[i] == ' ' || str[i] == '\t' ))
 			i++;
 		else
 			str[i++] = ' ';
@@ -62,7 +62,7 @@ void	store_args(t_token **list, char **origin)
 			j = 0;
 			while (tmp && tmp[j])
 			{
-				clean_tabs(tmp[j]);
+				clean_whitespace(tmp[j]);
 				link_token(list, new_token(tmp[j++], 1));
 			}
 			free_cmd(tmp);

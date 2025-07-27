@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 08:51:25 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 12:17:32 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/26 09:56:53 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_str_isspace(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_isspace(str[i]))
+		if (!ft_issubspace(str[i]))
 			return (0);
 		i++;
 	}

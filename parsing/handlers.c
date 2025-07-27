@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 10:04:38 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/26 09:57:51 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	ft_syntax_analyzer(char *str)
 
 	i = 0;
 	while (str[i] && !ft_isparentheses(&str[i]) && (!ft_is_operator(&str[i]) && \
-	!ft_is_redir(&str[i])) && !ft_isspace(str[i]))
+	!ft_is_redir(&str[i])) && !ft_issubspace(str[i]))
 	{
 		if (str[i] == '\'' || str[i] == '"')
 		{

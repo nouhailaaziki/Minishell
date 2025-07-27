@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:08:42 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/19 10:21:37 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/26 09:55:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	skip_spaces(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && ft_isspace(str[i]))
+	while (str[i] && ft_issubspace(str[i]))
 		i++;
 	return (i);
 }

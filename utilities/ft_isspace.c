@@ -6,15 +6,15 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 08:33:38 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/29 12:16:48 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 06:50:46 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-int	ft_isspace(int c)
+int	ft_issubspace(int c)
 {
-	if (c == 32 || (c >= 9 && c <= 13))
+	if (c == ' ' || c == '\t' || c == '\n')
 		return (1);
 	return (0);
 }

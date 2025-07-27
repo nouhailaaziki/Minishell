@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/24 18:36:03 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 06:55:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,9 @@ char	*find_a_key(char *origin, int *quote, int *key_len, int *pos)
 	check_quote(origin, &origin[i], quote);
 	dollar = &origin[i];
 	*pos = i;
-	i = 1;
-	if (dollar[i] == '?' || dollar[i] == '$')
-		i++;
-	else
-	{
-		while (dollar[i] && (ft_isalnum(dollar[i]) || dollar[i] == '_'))
-			i++;
-	}
-	dollar = ft_substr(dollar, 0, i);
+	dollar = make_a_key(dollar, key_len);
 	if (!dollar)
 		return (NULL);
-	*key_len = i;
 	return (dollar);
 }
 
@@ -80,7 +71,10 @@ void	find_all_keys(char *str, t_var **keys)
 		relative_pos = 0;
 		key = create_key(&str[pos], &quote, &relative_pos);
 		if (!key)
-			break ;
+		{
+			pos++;
+			continue ;
+		}
 		link_nodes(keys, key);
 		pos += relative_pos + key->key_len;
 	}
@@ -88,7 +82,12 @@ void	find_all_keys(char *str, t_var **keys)
 
 void	ft_copy_keys(char **dest, t_var *current, int heredoc)
 {
-	if ((current->expandable != '\'' || heredoc) && current->value)
+	if ((current->expandable == '"' || heredoc) && current->value)
+	{
+		ft_memcpy(*dest, current->value, current->value_len);
+		*dest += current->value_len;
+	}
+	else if ((current->expandable == 0 || heredoc) && current->value)
 	{
 		ft_memcpy(*dest, current->value, current->value_len);
 		*dest += current->value_len;
@@ -109,8 +108,6 @@ void	expand_a_key(t_var *current, t_env **env, int stash_status)
 		current->value = ft_itoa(stash_status);
 	else if (!ft_strcmp(current->key, "$$"))
 		current->value = ft_strdup("$$");
-	else if (!ft_strcmp(current->key, "$")) // ? Here first
-		current->value = ft_strdup("$");
 	else
 	{
 		value = get_env_value(env, &(current->key[1]));

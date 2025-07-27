@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:41:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:41:58 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 06:54:39 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*last_rp_token(t_token **head)
 	t_token	*r_parenth;
 
 	if (!head)
-		return (printf("This is not supposed to happen\n"), NULL);
+		return (NULL);
 	current = *head;
 	r_parenth = NULL;
 	while (current && current->position != -1)
@@ -38,7 +38,7 @@ t_redir	*p_redirs_maker(t_token **head)
 	t_redir	*redir_list;
 
 	if (!head || !*head)
-		return (printf("This is not supposed to happen.\n"), NULL);
+		return (NULL);
 	redir_list = NULL;
 	tmp = last_rp_token(head);
 	if (tmp && tmp->next)
@@ -67,7 +67,7 @@ t_token	*find_first_lp(t_token *tokens)
 	t_token	*current;
 
 	if (!tokens)
-		return (printf("This is not supposed to happen.\n"), NULL);
+		return (NULL);
 	current = tokens;
 	while (current && current->position != -1)
 	{

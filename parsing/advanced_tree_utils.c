@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:16:33 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/06/28 18:29:24 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 06:54:20 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_token	*find_pipe(t_token *tokens)
 	int		in_parenthese;
 
 	if (!tokens)
-		return (printf("This is not supposed to happen.\n"), NULL);
+		return (NULL);
 	current = tokens;
 	last_pipe = NULL;
 	in_parenthese = 0;
@@ -108,7 +108,7 @@ t_token	*find_and_or(t_token *head)
 	int		in_parenthese;
 
 	if (!head)
-		return (printf("This is not supposed to happen.\n"), NULL);
+		return (NULL);
 	in_parenthese = 0;
 	current = head;
 	last_and_or = NULL;

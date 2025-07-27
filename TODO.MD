@@ -1,13 +1,9 @@
 
 
 -------------------------------------------
-
+-------------------------------------------
 -------------------------------------------
 
--------------------------------------------
-L33tShell-N.Y$ ls$NEW_LINE-l
-L33tShell: ls
--l: command not found
 -------------------------------------------
 L33tShell-N.Y$ ls$T$H-l
 total 280
@@ -21,10 +17,9 @@ drwxrwxr-x@ 14 yrhandou  2024_khouribga     476 Jul 24 15:53 parsing
 drwxrwxr-x@ 38 yrhandou  2024_khouribga    1292 Jul 24 15:53 utilities
 L33tShell-N.Y$
 -------------------------------------------
-L33tShell-N.Y$ echo $%$rtfd
-$%$rtfd
 
 ---------
-L33tShell-N.Y$ ls^M-l
-L33tShell: syntax error near unexpected token
-L33tShell-N.Y$
+
+---------
+
+---------

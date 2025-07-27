@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:37:17 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/16 11:29:07 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 06:53:47 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_redir	*redir_maker(t_token **data)
 		(*data)->next->position = -1;
 		redir->file = ft_strdup((*data)->next->value);
 		if (!redir->file)
-			return (printf("This is not supposed to happen.\n"), NULL);
+			return (NULL);
 	}
 	redir->index = 0;
 	redir->type = (*data)->type;
@@ -63,10 +63,7 @@ t_redir	*redir_list_maker(t_token **head)
 
 	redir_list = NULL;
 	if (!head || !*head)
-	{
-		printf("This is not supposed to happen.\n");
 		return (NULL);
-	}
 	tmp = *head;
 	while (tmp && tmp->type != TOKEN_AND && tmp->type != TOKEN_OR && \
 		tmp->type != TOKEN_PIPE && \

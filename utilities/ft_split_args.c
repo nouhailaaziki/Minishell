@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 11:49:47 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:26:57 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 08:22:57 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	word_counter(char *str)
 				i++;
 		}
 		else
-			while (str[i] && !ft_isspace(str[i]))
+			while (str[i] && !ft_issubspace(str[i]))
 				i++;
 	}
 	return (counter);
@@ -47,7 +47,7 @@ static int	count_sub_arg(char *str)
 
 	i = 0;
 	quote = 0;
-	while (str[i] && !ft_isspace(str[i]))
+	while (str[i] && !ft_issubspace(str[i]))
 	{
 		if (ft_isquote(str[i]))
 		{
@@ -99,4 +99,24 @@ char	**ft_split_args(char *s)
 		i += arg_len;
 	}
 	return (args[++j] = NULL, args);
+}
+
+char	*make_a_key(char *dollar, int *key_len)
+{
+	int		i;
+	char	*key;
+
+	i = 1;
+	if (dollar[i] == '?' || dollar[i] == '$')
+		i++;
+	else
+	{
+		while (dollar[i] && (ft_isalnum(dollar[i]) || dollar[i] == '_'))
+			i++;
+	}
+	key = ft_substr(dollar, 0, i);
+	if (!key)
+		return (NULL);
+	*key_len = i;
+	return (key);
 }

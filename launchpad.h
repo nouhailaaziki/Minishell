@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/24 14:05:20 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 08:24:38 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,10 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <string.h>
 # include <limits.h>
 # include <signal.h>
 # include <dirent.h>
 # include <stdbool.h>
-# include <fnmatch.h>
 # include <termios.h>
 # include <sys/stat.h>
 # include <readline/history.h>
@@ -75,6 +73,7 @@ typedef struct s_var
 	int				value_len;
 	int				expandable;
 	struct s_var	*next;
+	struct s_var	*prev;
 }	t_var;
 
 /*--------------------Redirection info for a command------------------*/
@@ -246,7 +245,6 @@ void		close_fd(void);
 char		*na_itoa(int n);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
-int			ft_isspace(int c);
 int			ft_isalnum(int c);
 int			ft_isascii(int c);
 int			na_arrlen(char **arr);
@@ -367,6 +365,7 @@ int stash_status);
 void		update_cmd(char *origin, t_var **keys, char **destination, \
 int heredoc);
 void		expand_a_key(t_var *current, t_env **env, int stash_status);
+char		*make_a_key(char *dollar, int *key_len);
 void		ft_copy_keys(char **dest, t_var *current, int heredoc);
 void		expand_cmd(t_tree *ast, t_env **env, int stash_status);
 void		expand_all(t_tree *ast, t_env **env, t_stash *stash);
@@ -403,5 +402,6 @@ char		*ft_strjoin(char const *s1, char const *s2);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 char		**ft_split_args(char *s);
 char		*ft_itoa(int n);
+int			ft_issubspace(int c);
 
 #endif
