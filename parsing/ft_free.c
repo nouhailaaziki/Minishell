@@ -6,16 +6,12 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:08:57 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:44:27 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 09:10:32 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-/**
-* @brief Free The redirections of the Linked List
-* @param redirs
-*/
 void	free_redirs(t_redir **redirs)
 {
 	t_redir	*next;
@@ -36,10 +32,6 @@ void	free_redirs(t_redir **redirs)
 	(*redirs) = NULL;
 }
 
-/**
- * @brief Free the tree's 2d Array of strings
- * @param cmd : Command
- */
 void	free_cmd(char **cmd)
 {
 	int	i;
@@ -57,10 +49,6 @@ void	free_cmd(char **cmd)
 	free(cmd);
 }
 
-/**
- * @brief Free the tree nodes Recursively
- * @param ast tree param
- */
 void	free_tree(t_tree **ast)
 {
 	if (!(*ast) || !ast)

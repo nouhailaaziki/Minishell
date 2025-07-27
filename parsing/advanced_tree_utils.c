@@ -6,18 +6,12 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:16:33 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/27 06:54:20 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 09:09:40 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-/**
- * @brief Creates a tree for content inside parentheses
- * @param ast Root node
- * @param tokens Tokenizer Tokens
- * @param flag Navigation flag for search
- */
 void	create_pseudotree(t_tree **ast, t_token **tokens)
 {
 	t_token	*parentheses;
@@ -38,11 +32,6 @@ void	create_pseudotree(t_tree **ast, t_token **tokens)
 		block_identifier(*tokens));
 }
 
-/**
- * @brief looks if a Pipe is found in tokens
- * @param head Head of tokens list
- * @param nav_flag Navigation flag for search
- */
 t_token	*find_pipe(t_token *tokens)
 {
 	t_token	*current;
@@ -68,13 +57,6 @@ t_token	*find_pipe(t_token *tokens)
 	return (last_pipe);
 }
 
-/**
- * @brief Creates a subtree with a pipe as the root node
- * if a pipe is found in tokens
- * @param ast Root node
- * @param tokens Tokenizer Tokens
- * @param flag Navigation flag for search
- */
 void	create_subtree(t_tree **ast, t_token **tokens)
 {
 	t_token	*last_pipe;
@@ -96,11 +78,6 @@ void	create_subtree(t_tree **ast, t_token **tokens)
 		create_pseudotree(ast, tokens);
 }
 
-/**
- * @brief looks if a {&& , ||} is found in tokens
- * @param head Head of tokens list
- * @param nav_flag Navigation flag for search
- */
 t_token	*find_and_or(t_token *head)
 {
 	t_token	*current;
@@ -126,12 +103,6 @@ t_token	*find_and_or(t_token *head)
 	return (last_and_or);
 }
 
-/**
- * @brief Creates a Tree
- * @param ast Root node
- * @param tokens Tokenizer Tokens
- * @param flag Navigation flag for search
- */
 void	create_one_tree(t_tree **ast, t_token **tokens)
 {
 	t_token	*last_and_or;

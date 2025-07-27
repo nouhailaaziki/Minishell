@@ -6,17 +6,12 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:33:00 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/12 20:44:12 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 09:10:20 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-/**
- * @brief checks the type of token to make
- * @param line
- * @return the length of the tokens
- */
 int	token_lookup(char *line)
 {
 	int	token_len;
@@ -31,11 +26,6 @@ int	token_lookup(char *line)
 	return (token_len);
 }
 
-/**
- * @brief gives the redirection type
- * @param str
- * @return int on success , false on failiure
- */
 int	redir_identifier(char *str)
 {
 	if (ft_strncmp(str, ">>", 2) == 0)
@@ -49,11 +39,6 @@ int	redir_identifier(char *str)
 	return (0);
 }
 
-/**
- * @brief checks if the current string is an operator
- * @param str
- * @return returns the length of the operator on success and false on failure
- */
 int	operator_len(char *str) //
 {
 	int	i;
@@ -70,11 +55,6 @@ int	operator_len(char *str) //
 	return (i);
 }
 
-/**
- * @brief Counts the number of chars excluding operators, pipes and parentheses
- * @param str
- * @return the length of a command or arg, false on failure;
- */
 int	count_chars(char *str)
 {
 	int	i;

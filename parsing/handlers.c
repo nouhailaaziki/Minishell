@@ -6,19 +6,12 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:09:54 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/26 09:57:51 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 09:10:24 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../launchpad.h"
 
-/**
- * @brief Handle quote expansion during tokenization
- * @param str string to check.
- * @param c quote type
- * @return Length of skipped string
- */
-// TODO : Something is off here...
 int	handle_quotes(char *str, char c)
 {
 	int		i;
@@ -48,11 +41,6 @@ int	handle_quotes(char *str, char c)
 	return (i);
 }
 
-/**
- * @brief check if the parenthese count is correct
- * @param head the Node to check for
- * @return Retuns 1 on success , and 0 on Failure
- */
 int	parentheses_counter_v2(t_token *head)
 {
 	int		parentheses;

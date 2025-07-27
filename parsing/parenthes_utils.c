@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:41:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/27 06:54:39 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/27 09:10:37 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,6 @@ t_redir	*p_redirs_maker(t_token **head)
 	return (redir_list);
 }
 
-/**
- * @brief looks if a parentheses is found in tokens
- * @param head Head of tokens list
- * @param nav_flag Navigation flag for search
- */
 t_token	*find_first_lp(t_token *tokens)
 {
 	t_token	*current;
@@ -91,10 +86,6 @@ t_tree	*create_p_block(t_token **head)
 	return (p_block);
 }
 
-/**
- * @brief Checks the tokens created with the tokenizer for syntax errors
- * @param shell shell data
- */
 int	parser(t_shell *shell)
 {
 	t_token	*current;
