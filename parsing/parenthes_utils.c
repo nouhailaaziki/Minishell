@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:41:43 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/27 09:10:37 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/28 10:29:18 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ t_token	*find_first_lp(t_token *tokens)
 t_tree	*create_p_block(t_token **head)
 {
 	t_tree	*p_block;
-	int		i;
 
-	i = 0;
 	p_block = allocate_tree_node(NODE_PARENTHESES, 0);
 	if (!p_block)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:33:00 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/27 09:10:20 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/28 10:30:18 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,11 @@ int	operator_len(char *str) //
 {
 	int	i;
 	int	len;
-	int	type;
 
 	i = 0;
 	len = ft_is_operator(&str[i]);
 	if (!len)
 		return (0);
-	type = token_lexer(&str[i]);
 	i += len;
 	len = i;
 	return (i);

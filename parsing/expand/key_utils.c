@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:05:05 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/27 06:55:07 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/28 10:32:27 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,8 @@ t_var	*create_key(char *origin, int *quote, int *pos)
 	char	*dollar;
 	t_var	*key;
 	int		key_len;
-	int		relative_pos;
 
 	key_len = 0;
-	relative_pos = 0;
 	dollar = find_a_key(origin, quote, &key_len, pos);
 	if (!dollar)
 		return (NULL);

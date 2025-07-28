@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 06:13:39 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/24 13:52:34 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/28 10:37:25 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,7 @@ void	unmask_quotes(char *str)
 void	expand_heredoc(t_redir **head)
 {
 	t_redir	*current;
-	t_var	*keys;
 
-	keys = NULL;
 	current = *head;
 	while (current)
 	{
