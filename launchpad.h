@@ -6,7 +6,7 @@
 /*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/29 08:58:38 by noaziki          ###   ########.fr       */
+/*   Updated: 2025/07/29 09:13:42 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,11 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*na_substr(char const *s, unsigned int start, size_t len);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*get_next_line(int fd);
+char		*ft_strjoin(char const *s1, char const *s2);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
+char		**ft_split_args(char *s);
+char		*ft_itoa(int n);
+int			ft_issubspace(int c);
 
 /*----------------------Redirections && heredoc-----------------------*/
 int			handle_redirs(t_redir *redir, t_stash *stash);
@@ -396,12 +401,5 @@ void		free_keys(t_var **head);
 void		free_redirs(t_redir **redirs);
 void		free_tokens(t_token **head);
 void		clear_memory(t_shell *shell);
-
-/*------------------------------utilities-----------------------------*/
-char		*ft_strjoin(char const *s1, char const *s2);
-void		*ft_memcpy(void *dst, const void *src, size_t n);
-char		**ft_split_args(char *s);
-char		*ft_itoa(int n);
-int			ft_issubspace(int c);
 
 #endif
