@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:19:50 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/20 08:32:53 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/29 08:36:12 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ void	link_token(t_token **head, t_token *node)
 	t_token	*tmp;
 
 	if (!node)
-	{
-		ft_putendl_fd("Error Token is Empty\n", 2);
 		return ;
-	}
 	if (!head || !*head)
 	{
 		*head = node;

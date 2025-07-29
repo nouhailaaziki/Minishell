@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/27 08:24:38 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/29 08:35:22 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,6 @@ char		*na_itoa(int n);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_isalnum(int c);
-int			ft_isascii(int c);
 int			na_arrlen(char **arr);
 int			ft_atoi(const char *str);
 size_t		ft_strlen(const char *s);

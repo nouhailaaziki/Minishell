@@ -6,7 +6,7 @@
 /*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 15:03:37 by yrhandou          #+#    #+#             */
-/*   Updated: 2025/07/28 10:31:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/28 15:14:07 by yrhandou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	is_valid_key(char key)
 
 void	check_quote(char *start, char *end, int *quote)
 {
-
 	while (start != end)
 	{
 		if (*start == '"' || *start == '\'')
