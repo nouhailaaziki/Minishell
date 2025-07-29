@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launchpad.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yrhandou <yrhandou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: noaziki <noaziki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:54:18 by noaziki           #+#    #+#             */
-/*   Updated: 2025/07/29 08:35:22 by yrhandou         ###   ########.fr       */
+/*   Updated: 2025/07/29 08:58:38 by noaziki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,7 +388,8 @@ void		mask_quotes(char *str);
 int			value_scan(char *arg);
 int			key_scan(char *arg);
 void		expand_wild_redirs(t_tree *ast, t_stash *stash);
-/*-----------free-------------*/
+
+/*--------------------------------free--------------------------------*/
 void		free_cmd(char **cmd);
 void		free_tree(t_tree **ast);
 void		free_keys(t_var **head);
