@@ -95,10 +95,3 @@ source ~/.zshrc
 ```
 
 You can now compile and run your Minishell using make.
-
----
-
-## Contributors
-
-- Nouhaila Aziki
-- Youssef Rhandoumi
